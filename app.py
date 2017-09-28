@@ -2,13 +2,13 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from flask import Flask, request, Response, jsonify
 from slackclient import SlackClient
 import os
-
+app = Flask(__name__)
 sched = BlockingScheduler()
 
 slack_token = os.environ["SLACKID"]
 slack_client = SlackClient(slack_token)
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=13, minute=56)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=13, minute=58)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
