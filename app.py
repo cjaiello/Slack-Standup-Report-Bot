@@ -4,9 +4,7 @@ from slackclient import SlackClient
 import os
 app = Flask(__name__)
 sched = BlockingScheduler()
-
-slack_token = os.environ["SLACKID"]
-slack_client = SlackClient(slack_token)
+slack_client = SlackClient(os.environ['SLACKID'])
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=14, minute=12)
 def scheduled_job():
@@ -18,11 +16,11 @@ def scheduled_job():
     print("Standup message sent")
 
 if __name__ == '__main__':
+    print("Is this running?")
     app.run(host='0.0.0.0')
     slack_client.api_call(
       "chat.postMessage",
       channel="#christinastestchannel",
       text="Please reply here with your standup status if you won't be in the office today!"
     )
-    print("Is this running?")
     sched.start()
