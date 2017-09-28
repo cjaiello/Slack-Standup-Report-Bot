@@ -1,4 +1,4 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.blocking import BackgroundScheduler
 from flask import Flask, request, Response, jsonify
 from slackclient import SlackClient
 import os
