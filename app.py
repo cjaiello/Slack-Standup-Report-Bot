@@ -31,7 +31,6 @@ class ReusableForm(Form):
 def homepage():
     form = ReusableForm(request.form)
 
-    print form.errors
     if request.method == 'POST':
         squad_name = request.form['squad_name']
 
