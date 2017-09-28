@@ -17,10 +17,10 @@ def scheduled_job():
       username="Standup Bot",
       icon_emoji=":memo:"
     )
-    print("Standup alert message sent on " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    print("Standup alert message sent on " + strftime("%Y-%m-%d %H:%M:%S", localtime()))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 sched.start()
-print("Standup bot was scheduled on " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+print("Standup bot was scheduled on " + strftime("%Y-%m-%d %H:%M:%S", localtime()))
