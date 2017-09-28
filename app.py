@@ -3,10 +3,10 @@ from flask import Flask, request, Response, jsonify
 from slackclient import SlackClient
 import os
 app = Flask(__name__)
-sched = BlockingScheduler()
+sched = BackgroundScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=5)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=12)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
