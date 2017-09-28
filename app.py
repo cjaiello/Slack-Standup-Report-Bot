@@ -15,6 +15,12 @@ def scheduled_job():
     )
     print("Standup message sent")
 
+@app.route('/')
+def homepage():
+    return """
+    KarmaBot
+    """
+
 if __name__ == '__main__':
     print("Is this running?")
     app.run(host='0.0.0.0')
