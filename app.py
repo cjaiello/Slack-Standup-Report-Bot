@@ -17,7 +17,6 @@ def scheduled_job():
 
 @app.route('/')
 def homepage():
-    sched.start()
     return """
     KarmaBot
     """
