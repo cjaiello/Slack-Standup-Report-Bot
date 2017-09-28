@@ -24,4 +24,5 @@ if __name__ == '__main__':
       channel="#christinastestchannel",
       text="Please reply here with your standup status if you won't be in the office today!"
     )
+    print("Is this running?")
     sched.start()
