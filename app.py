@@ -17,10 +17,11 @@ def scheduled_job():
 
 @app.route('/')
 def homepage():
-    sched.start()
     return """
     KarmaBot
     """
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+    sched.start()
+    print("test")
