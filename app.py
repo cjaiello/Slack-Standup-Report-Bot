@@ -1,12 +1,14 @@
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, request, Response, jsonify
 from slackclient import SlackClient
 import os
 from time import gmtime, strftime
 
+app = Flask(__name__)
 sched = BackgroundScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=39)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=41)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
@@ -15,6 +17,9 @@ def scheduled_job():
       username="Standup Bot"
     )
     print("Standup alert message sent on " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
 
 sched.start()
 print("Standup bot was scheduled on " + strftime("%Y-%m-%d %H:%M:%S", gmtime()))
