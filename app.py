@@ -37,6 +37,7 @@ def homepage():
 
         if form.validate():
             standup_dictionary[squad_name] = request.form['standup_time']
+            print(standup_dictionary[squad_name])
 
     return render_template('homepage.html', form=form)
 
