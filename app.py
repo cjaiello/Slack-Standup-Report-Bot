@@ -6,7 +6,7 @@ app = Flask(__name__)
 sched = BlockingScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=14, minute=35)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=5)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
@@ -14,6 +14,11 @@ def scheduled_job():
       text="Please reply here with your standup status if you won't be in the office today!"
     )
     print("Standup message sent")
+
+@app.route('/run')
+def run_bot():
+    sched.start()
+    print("test")
 
 @app.route('/')
 def homepage():
@@ -23,5 +28,3 @@ def homepage():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-    sched.start()
-    print("test")
