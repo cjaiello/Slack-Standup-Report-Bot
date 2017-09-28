@@ -2,7 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify
 from slackclient import SlackClient
 import os
-from time import gmtime, strftime
+from time import localtime, strftime
 
 app = Flask(__name__)
 sched = BackgroundScheduler()
