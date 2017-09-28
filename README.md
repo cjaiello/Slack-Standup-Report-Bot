@@ -1,7 +1,1 @@
-Simple slack karma bot running on Heroku.
-
-Usage:
-
-++@christina_aiello or ++christina_aiello
-
---@christina_aiello or --christina_aiello
+Pings channel at 9am every day, asking people to report their standup.
