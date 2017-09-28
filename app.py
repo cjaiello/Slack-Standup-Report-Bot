@@ -8,7 +8,7 @@ app = Flask(__name__)
 sched = BackgroundScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=41)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=15, minute=44)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
