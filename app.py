@@ -6,7 +6,7 @@ app = Flask(__name__)
 sched = BlockingScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', seconds=3)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
