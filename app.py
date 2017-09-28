@@ -17,6 +17,11 @@ def scheduled_job():
 
 @app.route('/')
 def homepage():
+    slack_client.api_call(
+      "chat.postMessage",
+      channel="#christinastestchannel",
+      text="Please reply here with your standup status if you won't be in the office today!"
+    )
     return """
     KarmaBot
     """
