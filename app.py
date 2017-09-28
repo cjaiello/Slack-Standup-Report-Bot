@@ -12,7 +12,7 @@ slack_client = SlackClient(os.environ['SLACKID'])
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
-      channel="#christinastestchannel",
+      channel="#stencil",
       text="<!channel> Please reply here with your standup status if you won't be in the office today!",
       username="Standup Bot",
       icon_emoji=":memo:"
