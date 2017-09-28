@@ -6,7 +6,7 @@ app = Flask(__name__)
 sched = BlockingScheduler()
 slack_client = SlackClient(os.environ['SLACKID'])
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=14, minute=35)
+@sched.scheduled_job('interval', minutes=1)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
@@ -17,6 +17,7 @@ def scheduled_job():
 
 @app.route('/')
 def homepage():
+    sched.start()
     return """
     KarmaBot
     """
