@@ -6,11 +6,11 @@ import os
 sched = BlockingScheduler()
 
 slack_token = os.environ["SLACKID"]
-sc = SlackClient(slack_token)
+slack_client = SlackClient(slack_token)
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=13, minute=55)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=13, minute=56)
 def scheduled_job():
-    sc.api_call(
+    slack_client.api_call(
       "chat.postMessage",
       channel="#christinastestchannel",
       text="Please reply here with your standup status if you won't be in the office today!"
