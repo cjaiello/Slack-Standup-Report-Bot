@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>Reusable Form Demo</title>
+    </head>
+    <body>
+        <form action="" method="post">
+            {{ form.csrf }}
+
+            <div class="input text">
+                {{ form.squad_name.label }} {{ form.squad_name }}
+            </div>
+
+            <div class="input text">
+                {{ form.standup_time.label }} {{ form.standup_time }}
+            </div>
+
+            <div class="input submit">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </body>
+</html>
