@@ -8,7 +8,7 @@ sched = BlockingScheduler()
 slack_token = os.environ["SLACKID"]
 slack_client = SlackClient(slack_token)
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=14, minute=1)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=14, minute=5)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
