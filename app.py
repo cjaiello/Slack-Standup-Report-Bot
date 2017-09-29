@@ -7,7 +7,7 @@ from wtforms import Form, TextField, TextAreaField, validators, StringField, Sub
 
 app = Flask(__name__)
 sched = BackgroundScheduler()
-slack_client = SlackClient(os.environ['SLACKID'])
+slack_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 
 standup_dictionary = {'christinastestchannel' : 4}
 
