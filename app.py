@@ -72,7 +72,7 @@ def set_schedules():
         #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, minute=21)
         print("Channel name that we're setting the schedule for: " + channel.channel_name)
         print("Time: " + str(channel.standup_time))
-        sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=22, minute=47)
+        sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=22, minute=50)
 
 
 # Function that triggers the standup call
