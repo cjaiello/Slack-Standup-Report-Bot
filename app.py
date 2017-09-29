@@ -41,6 +41,7 @@ def homepage():
     if request.method == 'POST':
         # Get whatever name they gave us for a channel
         submitted_channel_name = request.form['submitted_channel_name']
+        standup_time = request.form['standup_time']
         # If the form field was valid...
         if form.validate():
             # Look for channel in database
