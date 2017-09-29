@@ -52,33 +52,33 @@ def homepage():
                 db.session.add(channel)
                 db.session.commit()
                 print("Set " + submitted_channel_name + "'s standup time to " + str(standup_time))
-                sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=56, id=channel.channel_name)
+                # Adding this additional job to the queue
+                sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=59, id=channel.channel_name)
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
                 channel.standup_time = standup_time
                 db.session.commit()
                 print("Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
-                # Update job
-                # Format: scheduler.reschedule_job('my_job_id', trigger='cron', minute='*/5') etc
-                sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=23, minute=56)
+                # Updating this job's timing
+                sched.reschedule_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=59, id=channel.channel_name)
         else:
             print("Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
 
     return render_template('homepage.html', form=form)
 
 
-# Setting the standup schedules
-# def set_schedules(channel):
-    # # Get all rows from our table
-    # channels_with_scheduled_standups = Channel.query.all()
-    # # Loop through our results
-    # for channel in channels_with_scheduled_standups:
-    #     # Add a job for each row in the table
-    #     #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, id=channel.id)
-    #     print("Channel name that we're setting the schedule for: " + channel.channel_name)
-    #     print("Time: " + str(channel.standup_time))
-    #     sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=44, id=channel.channel_name)
+# Setting the standup schedules for already-existing jobs
+def set_schedules():
+    # Get all rows from our table
+    channels_with_scheduled_standups = Channel.query.all()
+    # Loop through our results
+    for channel in channels_with_scheduled_standups:
+        # Add a job for each row in the table
+        #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, id=channel.id)
+        print("Channel name that we're setting the schedule for: " + channel.channel_name)
+        print("Time: " + str(channel.standup_time))
+        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=44, id=channel.channel_name)
 
 
 # Function that triggers the standup call
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 # Setting the scheduling
-# set_schedules()
+set_schedules()
 # Running the scheduling
 sched.start()
 print("Standup bot was scheduled on " + strftime("%Y-%m-%d %H:%M:%S", localtime()))
