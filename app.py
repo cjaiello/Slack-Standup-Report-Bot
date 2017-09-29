@@ -91,6 +91,7 @@ def standup_call(channel_name):
       username="Standup Bot",
       icon_emoji=":memo:"
     )
+    print(result)
     print("Standup alert message sent on " + strftime("%Y-%m-%d %H:%M:%S", localtime()))
 
 
