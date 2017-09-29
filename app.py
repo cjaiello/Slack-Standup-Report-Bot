@@ -73,10 +73,10 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
-        #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, minute=21)
+        #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, id=channel.id)
         print("Channel name that we're setting the schedule for: " + channel.channel_name)
         print("Time: " + str(channel.standup_time))
-        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=33)
+        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=33, id=channel.id)
 
 
 # Function that triggers the standup call
@@ -94,6 +94,8 @@ def standup_call(channel_name):
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
+# Shut down scheduler
+sched.shutdown()
 # Setting the scheduling
 set_schedules()
 # Running the scheduling
