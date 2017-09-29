@@ -61,7 +61,7 @@ def homepage():
                 db.session.commit()
                 print("Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 # Updating this job's timing
-                sched.reschedule_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=59, id=channel.channel_name)
+                sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=23, minute=59, id=channel.channel_name)
         else:
             print("Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
 
