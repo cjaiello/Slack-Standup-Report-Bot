@@ -75,7 +75,6 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
-        #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, id=channel.id)
         print("Channel name that we're setting the schedule for: " + channel.channel_name)
         print("Time: " + str(channel.standup_time))
         sched.add_job(standup_call, 'cron', [channel.channel_name], day_of_week='mon-fri', hour=channel.standup_time, id=channel.channel_name)

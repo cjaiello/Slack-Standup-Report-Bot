@@ -7,6 +7,8 @@
         <form action="" method="post">
             {{ form.csrf }}
 
+            Use this form to add or update your standup time. (Note: Hours are in military time, so 1pm = 13, 2pm = 14, etc.)
+
             <div class="input text">
                 {{ form.submitted_channel_name.label }} {{ form.submitted_channel_name }}
             </div>
