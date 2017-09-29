@@ -53,7 +53,7 @@ def homepage():
                 db.session.commit()
                 print("Set " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 # Adding this additional job to the queue
-                sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=0, minute=2, id=channel.channel_name)
+                sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=0, minute=5, id=channel.channel_name)
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
@@ -61,7 +61,7 @@ def homepage():
                 db.session.commit()
                 print("Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 # Updating this job's timing
-                sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=0, minute=2)
+                sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=0, minute=5)
         else:
             print("Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
 
@@ -78,14 +78,15 @@ def set_schedules():
         #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, id=channel.id)
         print("Channel name that we're setting the schedule for: " + channel.channel_name)
         print("Time: " + str(channel.standup_time))
-        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=0, minute=2, id=channel.channel_name)
+        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=0, minute=5, id=channel.channel_name)
 
 
 # Function that triggers the standup call
 def standup_call(channel_name):
+    print(channel_name)
     result = slack_client.api_call(
       "chat.postMessage",
-      channel=channel_name,
+      channel=str(channel_name),
       text="<!channel> Please reply here with your standup status if you won't be in the office today!",
       username="Standup Bot",
       icon_emoji=":memo:"
