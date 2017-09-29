@@ -11,7 +11,7 @@ slack_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 
 standup_dictionary = {'christinastestchannel' : 4}
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=22 minutes=2)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=22, minutes=3)
 def scheduled_job():
     slack_client.api_call(
       "chat.postMessage",
