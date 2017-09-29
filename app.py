@@ -89,7 +89,7 @@ def standup_call(channel_name):
       icon_emoji=":memo:"
     )
     print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup alert message sent to " + channel_name)
-    print("Result of sending standup message to " + channel_name + " was " + result)
+    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Result of sending standup message to " + channel_name + " was " + result)
 
 
 if __name__ == '__main__':
