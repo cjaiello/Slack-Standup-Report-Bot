@@ -1,3 +1,5 @@
+# Standup Bot by Christina Aiello, 2017. cjaiello@wpi.edu
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
 from slackclient import SlackClient
