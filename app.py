@@ -65,7 +65,7 @@ def homepage():
 # Setting the standup schedules
 def set_schedules():
     # Get all rows from our table
-    channels_with_scheduled_standups = Channel.query.all()
+    channels_with_scheduled_standups = channel.query.all()
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
