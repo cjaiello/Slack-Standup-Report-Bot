@@ -76,7 +76,7 @@ def set_schedules():
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
         sched.add_job(standup_call, 'cron', [channel.channel_name], day_of_week='mon-fri', hour=channel.standup_time, id=channel.channel_name)
-        print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Channel name and time that we set the schedule for: " + channel.channel_name + " & " + str(channel.standup_time))
+        print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Channel name and time that we set the schedule for: " + channel.channel_name + " at " + str(channel.standup_time))
 
 
 # Function that triggers the standup call
@@ -88,8 +88,8 @@ def standup_call(channel_name):
       username="Standup Bot",
       icon_emoji=":memo:"
     )
-    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup alert message sent.")
-    print(result)
+    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup alert message sent to " + channel_name)
+    print("Result of sending standup message to " + channel_name + " was " + result)
 
 
 if __name__ == '__main__':
