@@ -9,4 +9,4 @@ flask-sqlalchemy
 psycopg2
 slackclient
 APScheduler==3.0.0
-
+wtforms
