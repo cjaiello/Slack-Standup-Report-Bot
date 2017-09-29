@@ -51,19 +51,19 @@ def homepage():
                 # Add it to the database
                 db.session.add(channel)
                 db.session.commit()
-                print("%Y-%m-%d %H:%M:%S", localtime()) + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 # Adding this additional job to the queue
                 sched.add_job(standup_call, 'cron', [channel.channel_name], day_of_week='mon-fri', hour=standup_time, id=channel.channel_name)
+                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_time))
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
                 channel.standup_time = standup_time
                 db.session.commit()
-                print("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 # Updating this job's timing
                 sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=standup_time)
+                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
         else:
-            print("%Y-%m-%d %H:%M:%S", localtime()) + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
+            print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
 
     return render_template('homepage.html', form=form)
 
@@ -75,8 +75,8 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
-        print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Channel name and time that we're setting the schedule for: " + channel.channel_name + " & " + str(channel.standup_time))
         sched.add_job(standup_call, 'cron', [channel.channel_name], day_of_week='mon-fri', hour=channel.standup_time, id=channel.channel_name)
+        print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Channel name and time that we set the schedule for: " + channel.channel_name + " & " + str(channel.standup_time))
 
 
 # Function that triggers the standup call
