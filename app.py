@@ -24,7 +24,7 @@ class Channel(db.Model):
         self.standup_time = standup_time
 
     def __repr__(self):
-        return '<channel_name %r>' % self.channel_name
+        return '<Channel %r>' % self.channel_name
 
 
 # Our form model
