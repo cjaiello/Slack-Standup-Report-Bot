@@ -11,15 +11,16 @@ slack_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 
 standup_dictionary = {'christinastestchannel' : 4}
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=22, minute=7)
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=22, minute=9)
 def scheduled_job():
-    slack_client.api_call(
+    result = slack_client.api_call(
       "chat.postMessage",
       channel="#christinastestchannel",
       text="<!channel> Please reply here with your standup status if you won't be in the office today!",
       username="Standup Bot",
       icon_emoji=":memo:"
     )
+    print(result)
     print("Standup alert message sent on " + strftime("%Y-%m-%d %H:%M:%S", localtime()))
 
 class ReusableForm(Form):
