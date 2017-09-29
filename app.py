@@ -16,7 +16,8 @@ slack_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 # Create our database model
 class Channel(db.Model):
     __tablename__ = "channel"
-    channel_name = db.Column(db.String(120), unique=True, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    channel_name = db.Column(db.String(120), unique=True)
     standup_time = db.Column(db.Integer)
 
     def __init__(self, channel_name, standup_time):
@@ -65,7 +66,7 @@ def homepage():
 # Setting the standup schedules
 def set_schedules():
     # Get all rows from our table
-    channels_with_scheduled_standups = channel.query.all()
+    channels_with_scheduled_standups = Channel.query.all()
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
