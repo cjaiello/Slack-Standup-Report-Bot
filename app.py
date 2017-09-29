@@ -53,7 +53,6 @@ def homepage():
                 db.session.commit()
                 print("Set " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 set_schedules()
-                sched.start()
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
@@ -61,7 +60,6 @@ def homepage():
                 db.session.commit()
                 print("Updated " + submitted_channel_name + "'s standup time to " + str(standup_time))
                 set_schedules()
-                sched.start()
         else:
             print("Could not update " + submitted_channel_name + "'s standup time to " + str(standup_time))
 
@@ -78,7 +76,7 @@ def set_schedules():
         #sched.add_job(standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=channel.standup_time, minute=21)
         print("Channel name that we're setting the schedule for: " + channel.channel_name)
         print("Time: " + str(channel.standup_time))
-        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=27)
+        sched.add_job(lambda: standup_call(channel.channel_name), 'cron', day_of_week='mon-fri', hour=23, minute=28)
 
 
 # Function that triggers the standup call
