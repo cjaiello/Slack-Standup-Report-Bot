@@ -229,6 +229,13 @@
 		color: #ffffff;
 		font-weight: bold;
 		font-family: "Trebuchet MS", Helvetica, sans-serif;
+		margin-top: 10px;
+		-moz-border-bottom-left-radius: 5px;
+		-moz-border-bottom-right-radius: 5px;
+		-webkit-border-bottom-left-radius: 5px;
+		-webkit-border-bottom-right-radius: 5px;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
 	}
 
 	.navigation { /* Section that contains links to every page */
