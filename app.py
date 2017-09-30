@@ -72,7 +72,8 @@ def homepage():
                 channel.standup_minute = standup_minute
                 db.session.commit()
                 # Updating this job's timing
-                sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=standup_hour, minute=standup_minute)
+                sched.remove_job(submitted_channel_name)
+                sched.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
                 print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute))
         else:
             print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + ". Issue was: " + request)
@@ -101,7 +102,7 @@ def standup_call(channel_name, message):
       icon_emoji=":memo:"
     )
     print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup alert message sent to " + channel_name)
-    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Result of sending standup message to " + channel_name + " was " + result)
+    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Result of sending standup message to " + channel_name + " was " + str(result))
 
 
 if __name__ == '__main__':
