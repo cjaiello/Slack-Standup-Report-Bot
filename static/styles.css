@@ -224,8 +224,11 @@
 		color: #ffffff;
 	}
 
-	.submit {
+	.submitButton {
 		background-color: #30B5C9;
+		color: #ffffff;
+		font-weight: bold;
+		font-family: "Trebuchet MS", Helvetica, sans-serif;
 	}
 
 	.navigation { /* Section that contains links to every page */
