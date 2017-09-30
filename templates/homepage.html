@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- Created by Christina Aiello, 2017 -->
+<!-- Created by Christina Aiello, 2017. cjaiello@wpi.edu -->
 
 <html>
     <head>
@@ -16,19 +16,19 @@
               <li>Note #2: Don't include the # in front of your channel name.</li>
             </ul>
 
-            <div class="input text">
+            <div class="input text" placeholder="Channel name">
                 {{ form.submitted_channel_name.label }} {{ form.submitted_channel_name }}
             </div>
 
-            <div class="input text">
+            <div class="input text" placeholder="Standup Hour">
                 {{ form.standup_hour.label }} {{ form.standup_hour }}
             </div>
 
-            <div class="input text">
+            <div class="input text" placeholder="Standup Minutes">
                 {{ form.standup_minute.label }} {{ form.standup_minute }}
             </div>
 
-            <div class="input text">
+            <div class="input text" placeholder="Standup Message">
                 {{ form.message.label }} {{ form.message }}
             </div>
 
