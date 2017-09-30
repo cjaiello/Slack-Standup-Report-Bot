@@ -108,7 +108,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 # Setting the scheduling
-#set_schedules()
+set_schedules()
 # Running the scheduling
-#sched.start()
+sched.start()
 print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup bot was started up and scheduled.")
