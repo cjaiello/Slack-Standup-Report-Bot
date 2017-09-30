@@ -64,7 +64,7 @@ def homepage():
                 db.session.commit()
                 # Adding this additional job to the queue
                 sched.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
-                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_hour))
+                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute))
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
