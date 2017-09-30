@@ -73,16 +73,12 @@
 		color: #ffffff;
 	}
 
-	.verticallycenter{
-		vertical-align: center;
-	}
-
-	.navigation { /* Section that contains buttons on every page; the navigation */
+	.navigation {
 		background-color: #663096;
 		margin:0 auto;
 	}
 
-	.separator_line { /* Section that adds a line of color, the blue one */
+	.separator_line {
 		background-color: #30B5C9;
 		margin:0 auto;
 		width:1050px;
@@ -91,7 +87,7 @@
 		padding-right: 5px;
 	}
 
-	.second_separator_line { /* Section that adds a line of color, the green one */
+	.second_separator_line {
 		background-color: #92f196;
 		margin:0 auto;
 		width:1050px;
@@ -100,13 +96,13 @@
 		padding-right: 5px;
 	}
 
-	.main_white_textbox, .index_white_textbox{ /* This is the main white text box shown on all pages of Christina's webstie */
+	.main_white_textbox, .index_white_textbox{
 		background-color: #ffffff;
 		margin: 0 auto;
 		overflow: auto;
 	}
 
-	.header_text { /* This is "Christina Aiello" at the top of every page */
+	.header_text {
 		font-family: "Trebuchet MS", Helvetica, sans-serif;
 		color: #ffffff;
 		text-align: center;
@@ -116,29 +112,6 @@
 		text-align: center;
 		padding: 10px;
 		width: 100%;
-	}
-
-	.italic { /* Any text that needs to be italicized */
-		font-style: italic;
-		text-align: center;
-	}
-
-	.left_text{ /* Text that needs to be aligned to the left */
-		text-align: left;
-	}
-
-	.pad_all_sides { /* Padding for all sides of text in this class */
-	padding: 20px 20px 20px 20px;
-	}
-
-	.top_padding{ /* Formatting for my name and email address at bottom of page */
-		padding-top: 10px;
-	}
-
-	.jcarousel-skin-tango .jcarousel-container-horizontal {
-	    width: 950px;
-	    padding: 5px 5px;
-	    text-align: center;
 	}
 
 	@media screen and (max-width: 1000px) {
