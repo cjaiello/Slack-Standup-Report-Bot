@@ -74,12 +74,12 @@
 	}
 
 	.navigation {
-		background-color: #663096;
+		background-color: #2da5d0;
 		margin:0 auto;
 	}
 
 	.separator_line {
-		background-color: #30B5C9;
+		background-color: #68cff0;
 		margin:0 auto;
 		width:600px;
 		height:8px;
@@ -88,7 +88,7 @@
 	}
 
 	.second_separator_line {
-		background-color: #92f196;
+		background-color: #68cff0;
 		margin:0 auto;
 		width:600px;
 		height:5px;
@@ -219,13 +219,13 @@
 		-webkit-border-bottom-right-radius: 20px;
 		border-bottom-left-radius: 20px;
 		border-bottom-right-radius: 20px;
-		background-color: #50368D;
+		background-color: #2da5d0;
 		margin:0 auto;
 		color: #ffffff;
 	}
 
 	.submit {
-		color: #30B5C9;
+		background-color: #30B5C9;
 	}
 
 	.navigation { /* Section that contains links to every page */
