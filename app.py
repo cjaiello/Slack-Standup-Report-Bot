@@ -73,7 +73,7 @@ def homepage():
                 db.session.commit()
                 # Updating this job's timing
                 sched.reschedule_job(channel.channel_name, trigger='cron', day_of_week='mon-fri', hour=standup_hour, minute=standup_minute)
-                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour))
+                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute))
         else:
             print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + ". Issue was: " + request)
 
