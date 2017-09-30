@@ -96,7 +96,7 @@ def standup_call(channel_name, message):
     result = slack_client.api_call(
       "chat.postMessage",
       channel=str(channel_name),
-      text= "<!channel> " + ("Please reply here with your standup status!" if (message == null) else  message),
+      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
       username="Standup Bot",
       icon_emoji=":memo:"
     )
