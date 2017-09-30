@@ -1,0 +1,303 @@
+	A:{ /* Links */
+		font-weight: bold;
+		font-family: "Trebuchet MS", Helvetica, sans-serif;
+	}
+
+	A.navigation_links {
+		color: #91d2ea;
+	}
+
+	A.navigation_links:visited {
+		color: #91d2ea;
+	}
+
+	A.navigation_links:hover {
+		color: #92f196;
+	}
+
+	A.signature_links {
+		font-family: "Trebuchet MS", Helvetica, sans-serif;
+		color: #91d2ea;
+	}
+
+	A.signature_links:visited {
+		color: #91d2ea;
+	}
+
+	A.signature_links:hover {
+		color: #92f196;
+	}
+
+	A:link { /* Regular links */
+		color: #108fa2;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	A:visited { /* Visited links */
+		color: #108fa2;
+	}
+
+	A:hover { /* When you hover over a link */
+		color: #30b5c9;
+		text-decoration: underline
+	}
+
+	body {
+		text-align: left;
+		font-family: "Trebuchet MS", Helvetica, sans-serif;
+		color: #000000;
+	}
+
+	h1,h2,h3,h4{
+		text-align:center;
+	}
+
+	p{
+		color: #1b1b1b;
+	}
+
+
+	img.desaturate {
+		-webkit-filter: grayscale(100%);
+		-moz-filter: grayscale(100%);
+		filter: grayscale(100%);
+	}
+
+	.centered{
+		margin:0 auto;
+		text-align: center;
+	}
+
+	.footer_text {
+		color: #ffffff;
+	}
+
+	.verticallycenter{
+		vertical-align: center;
+	}
+
+	.navigation { /* Section that contains buttons on every page; the navigation */
+		background-color: #663096;
+		margin:0 auto;
+	}
+
+	.separator_line { /* Section that adds a line of color, the blue one */
+		background-color: #30B5C9;
+		margin:0 auto;
+		width:1050px;
+		height:8px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.second_separator_line { /* Section that adds a line of color, the green one */
+		background-color: #92f196;
+		margin:0 auto;
+		width:1050px;
+		height:5px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.main_white_textbox, .index_white_textbox{ /* This is the main white text box shown on all pages of Christina's webstie */
+		background-color: #ffffff;
+		margin: 0 auto;
+		overflow: auto;
+	}
+
+	.header_text { /* This is "Christina Aiello" at the top of every page */
+		font-family: "Trebuchet MS", Helvetica, sans-serif;
+		color: #ffffff;
+		text-align: center;
+	}
+
+	.navigation_section {
+		text-align: center;
+		padding: 10px;
+		width: 100%;
+	}
+
+	.italic { /* Any text that needs to be italicized */
+		font-style: italic;
+		text-align: center;
+	}
+
+	.left_text{ /* Text that needs to be aligned to the left */
+		text-align: left;
+	}
+
+	.pad_all_sides { /* Padding for all sides of text in this class */
+	padding: 20px 20px 20px 20px;
+	}
+
+	.top_padding{ /* Formatting for my name and email address at bottom of page */
+		padding-top: 10px;
+	}
+
+	.jcarousel-skin-tango .jcarousel-container-horizontal {
+	    width: 950px;
+	    padding: 5px 5px;
+	    text-align: center;
+	}
+
+	@media screen and (max-width: 1000px) {
+		.desktop {
+			display: none;
+		}
+
+    .header_text {
+			font-size: 75px;
+		}
+
+		.big_link{
+			font-size: 45px;
+		}
+
+		body { /* Body text */
+			padding: 5px;
+			font-size: 45px;
+			}
+
+		h1{ /* Headings */
+			margin: 5px 5px 5px 5px;
+			font-size: 60px;
+			padding: 5px;
+		}
+
+		h2{ /* Headings */
+			margin: 5px 5px 5px 5px;
+			font-size: 55px;
+			padding: 5px;
+		}
+
+		p{ /* Paragraph */
+			margin: 0px 0px 0px 0px;
+		}
+
+		.footer {
+			font-size: 45px;
+		}
+
+		.signature_links {
+			color: #91d2ea;
+		}
+
+		.signature_links:visited {
+			color: #91d2ea;
+		}
+
+		.signature_links:hover {
+			color: #92f196;
+		}
+	}
+
+	@media screen and (min-width: 1001px) {
+		.mobile {
+			display: none;
+		}
+
+		.navigation_links {
+			font-size: 20px;
+		}
+
+		.header_text {
+			font-size: 35px;
+		}
+
+		.big_link{
+			font-size: 20px;
+		}
+
+		body { /* Body text */
+			padding: 5px;
+			font-size: 16px;
+			}
+
+		h1{ /* Headings */
+			margin: 5px 5px 5px 5px;
+			font-size: 20px;
+			padding: 5px;
+		}
+
+		h2{ /* Headings */
+			margin: 5px 5px 5px 5px;
+			font-size: 18px;
+			padding: 5px;
+		}
+
+		p{ /* Paragraph */
+			margin: 0px 0px 0px 0px;
+		}
+
+		.footer {
+			font-size: 18px;
+		}
+	}
+
+
+	/* ------White Section on Various Pages------ */
+
+	.footer { /* This is "Enter as strangers, leave as friends" bottom banner */
+		width:1060px;
+		-moz-border-bottom-left-radius: 20px;
+		-moz-border-bottom-right-radius: 20px;
+		-webkit-border-bottom-left-radius: 20px;
+		-webkit-border-bottom-right-radius: 20px;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+		background-color: #50368D;
+		margin:0 auto;
+		color: #ffffff;
+	}
+
+	.navigation { /* Section that contains links to every page */
+		width:1050px;
+		color: #ffffff;
+		padding-top: 3px;
+		padding-bottom: 3px;
+		padding-left: 5px;
+		padding-right: 5px;
+		-moz-border-top-left-radius: 20px;
+		-moz-border-top-right-radius: 20px;
+		-webkit-border-top-left-radius: 20px;
+		-webkit-border-top-right-radius: 20px;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+	}
+
+	.index_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
+		width:1000px;
+		padding: 15px 30px 15px 30px;
+		overflow: auto;
+	}
+
+	.main_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
+		width:1000px;
+		padding: 30px 30px 30px 30px;
+		overflow: auto;
+	}
+
+	.padding {
+		padding: 0px 10px 10px 10px;
+	}
+
+	.padding_all_sides {
+		padding: 20px 20px 20px 20px;
+	}
+
+	/* Text and Buttons */
+
+	.center_text{ /* Text that needs to be centered */
+		text-align: center;
+		margin: 0 auto;
+		padding: 10px 10px 10px 10px;
+	}
+
+	.left_text{ /* Text that needs to be aligned to the left */
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+}

@@ -1,11 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <!-- Created by Christina Aiello, 2017. cjaiello@wpi.edu -->
-
 <html>
-    <head>
-        <title>Design Experience Standup Bot Scheduler</title>
-    </head>
-    <body>
+	<head>
+		<title>DX Slack Standup Bot Scheduler</title>
+		<link rel="stylesheet" href="css/styles.css" />
+	</head>
+
+	<body bgcolor="#181818">
+
+		<nav class="navigation">
+			<div class="header_text">
+				DX Slack Standup Bot Scheduler
+			</div>
+		</nav>
+
+		<section class="separator_line">
+		</section>
+		<section class="second_separator_line">
+		</section>
+
+		<section class="index_white_textbox">
         <form action="" method="post">
             {{ form.csrf }}
 
@@ -36,5 +50,17 @@
                 <input type="submit" value="Submit" />
             </div>
         </form>
-    </body>
+		</section> <!-- Closing tag for main white text box -->
+
+		<!-- Adds a bar across the page for colors -->
+		<section class="second_separator_line">
+		</section>
+		<section class="separator_line">
+		</section>
+
+		<!-- Bottom Bar -->
+		<footer class="footer">
+			<br><br>
+		</footer>
+	</body>
 </html>
