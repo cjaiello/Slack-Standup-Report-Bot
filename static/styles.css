@@ -244,6 +244,10 @@
 		border-top-right-radius: 5px;
 	}
 
+	.text {
+		margin: 10px 0px 10px 0px;
+	}
+
 	.navigation { /* Section that contains links to every page */
 		width:600px;
 		color: #ffffff;
