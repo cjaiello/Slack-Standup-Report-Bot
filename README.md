@@ -1,1 +1,1 @@
-Pings channel at 9am every day, asking people to report their standup.
+![alt text](https://raw.githubusercontent.com/cjaiello/standupbot/master/screenshot.png)
