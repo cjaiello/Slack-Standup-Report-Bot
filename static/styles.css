@@ -212,7 +212,7 @@
 	/* ------White Section on Various Pages------ */
 
 	.footer { /* This is "Enter as strangers, leave as friends" bottom banner */
-		width:1060px;
+		width:610px;
 		-moz-border-bottom-left-radius: 20px;
 		-moz-border-bottom-right-radius: 20px;
 		-webkit-border-bottom-left-radius: 20px;
@@ -245,13 +245,13 @@
 	}
 
 	.index_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
-		width:1000px;
+		width:550px;
 		padding: 15px 30px 15px 30px;
 		overflow: auto;
 	}
 
 	.main_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
-		width:1000px;
+		width:550px;
 		padding: 30px 30px 30px 30px;
 		overflow: auto;
 	}
