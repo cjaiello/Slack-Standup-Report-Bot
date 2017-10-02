@@ -8,6 +8,7 @@ from time import localtime, strftime
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -36,16 +37,16 @@ class Channel(db.Model):
 
 
 # Our form model
-class ReusableForm(Form):
+class StandupSignupForm(Form):
     submitted_channel_name = TextField('Channel Name:', validators=[validators.required()])
     standup_hour = TextField('Standup Hour:', validators=[validators.required()])
     standup_minute = TextField('Standup Minute:', validators=[validators.required()])
-    message = TextField('Standup Message:', validators=[validators.required()])
+    message = TextField('Standup Message:')
 
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
-    form = ReusableForm(request.form)
+    form = StandupSignupForm(request.form)
 
     if request.method == 'POST':
         # Get whatever name they gave us for a channel
@@ -64,19 +65,19 @@ def homepage():
                 db.session.commit()
                 # Adding this additional job to the queue
                 sched.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
-                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
+                print(create_logging_label() + ": Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
                 channel.standup_hour = standup_hour
                 channel.standup_minute = standup_minute
                 db.session.commit()
-                # Updating this job's timing
+                # Updating this job's timing (need to delete and readd)
                 sched.remove_job(submitted_channel_name)
                 sched.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
-                print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
+                print(create_logging_label() + ": Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
         else:
-            print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " and message to: " + message + ". Issue was: " + str(request))
+            print(create_logging_label() + ": Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " and message to: " + message + ". Issue was: " + str(request))
 
     return render_template('homepage.html', form=form)
 
@@ -89,10 +90,12 @@ def set_schedules():
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table
         sched.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name)
-        print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Channel name and time that we set the schedule for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
+        print(create_logging_label() + ": Channel name and time that we set the schedule for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
 
 
-# Function that triggers the standup call
+# Function that triggers the standup call.
+# <!channel> will create the @channel call.
+# Sets a default message if the user doesn't provide one.
 def standup_call(channel_name, message):
     result = slack_client.api_call(
       "chat.postMessage",
@@ -101,8 +104,13 @@ def standup_call(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
     )
-    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup alert message sent to " + channel_name)
-    print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Result of sending standup message to " + channel_name + " was " + str(result))
+    print(create_logging_label() + ": Standup alert message sent to " + channel_name)
+    print(create_logging_label() + ": Result of sending standup message to " + channel_name + " was " + str(result))
+
+
+# Used for logging when actions happen
+def create_logging_label():
+    return strftime("%Y-%m-%d %H:%M:%S", localtime())
 
 
 if __name__ == '__main__':
@@ -112,4 +120,4 @@ if __name__ == '__main__':
 set_schedules()
 # Running the scheduling
 sched.start()
-print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + ": Standup bot was started up and scheduled.")
+print(create_logging_label() + ": Standup bot was started up and scheduled.")
