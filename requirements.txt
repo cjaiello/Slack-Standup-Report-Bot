@@ -13,3 +13,4 @@ wtforms
 newrelic
 yagmail
 keyring
+keyrings.alt
