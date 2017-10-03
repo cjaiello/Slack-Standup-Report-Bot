@@ -11,3 +11,4 @@ slackclient
 APScheduler==3.0.0
 wtforms
 newrelic
+yagmail

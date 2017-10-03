@@ -8,6 +8,7 @@ from time import localtime, strftime
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
+import yagmail
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -111,6 +112,14 @@ def standup_call(channel_name, message):
 # Used for logging when actions happen
 def create_logging_label():
     return strftime("%Y-%m-%d %H:%M:%S", localtime())
+
+
+# Emailing standup results to chosen email address
+def send_email(recipient_email_address):
+    email = yagmail.SMTP()
+    contents = ['Hello world']
+    email.send(recipient_email_address, SUBJECT, TEXT)
+
 
 
 if __name__ == '__main__':
