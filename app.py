@@ -10,6 +10,7 @@ import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 import yagmail
 
+# Used to send emails
 yagmail.register(os.environ['USERNAME'], os.environ['PASSWORD'])
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
