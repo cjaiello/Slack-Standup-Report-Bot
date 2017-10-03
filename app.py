@@ -115,15 +115,18 @@ def create_logging_label():
 
 
 # Emailing standup results to chosen email address
-def send_email(recipient_email_address):
-    email = yagmail.SMTP()
-    contents = ['Hello world']
-    email.send(recipient_email_address, SUBJECT, TEXT)
-
+def send_email(squad_name, recipient_email_address):
+    email = yagmail.SMTP("vistaprintdesignexperience")
+    subject_line = "Daily Standup for " squad_name + " on " + strftime("%d-%m-%Y", localtime())
+    contents = ["Hello world"]
+    email.send(recipient_email_address, subject_line, contents)
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+
+# Sending a test email
+send_email("test", "christinajaiello@gmail.com")
 
 # Setting the scheduling
 set_schedules()
