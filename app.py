@@ -126,7 +126,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 # Sending a test email
-#send_email("test", "christinajaiello@gmail.com")
+send_email("test", "christinajaiello@gmail.com")
 
 # Setting the scheduling
 set_schedules()
