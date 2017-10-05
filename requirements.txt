@@ -14,4 +14,3 @@ newrelic
 yagmail
 keyring
 keyrings.alt
-termios
