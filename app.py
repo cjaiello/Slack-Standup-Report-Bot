@@ -120,6 +120,7 @@ def send_email(squad_name, recipient_email_address):
     server.starttls()
     print("Email is:")
     print(os.environ['USERNAME'] + "@gmail.com")
+    print(os.environ['PASSWORD'])
     server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
     msg = "YOUR MESSAGE!"
     server.sendmail("vistaprintdesignexperience@gmail.com", recipient_email_address, msg)
