@@ -119,9 +119,6 @@ def send_email(squad_name, recipient_email_address):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    print("Email is:")
-    print(os.environ['USERNAME'] + "@gmail.com")
-    print(os.environ['PASSWORD'])
     server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
     msg = "YOUR MESSAGE!"
     server.sendmail("vistaprintdesignexperience@gmail.com", recipient_email_address, msg)
@@ -132,7 +129,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 # Sending a test email to myself
-send_email("test", "cjaiello@wpi.edu")
+send_email("test", "christinajaiello@gmail.com")
 
 # Setting the scheduling
 set_schedules()
