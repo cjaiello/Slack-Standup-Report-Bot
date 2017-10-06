@@ -117,6 +117,7 @@ def create_logging_label():
 # Emailing standup results to chosen email address
 def send_email(squad_name, recipient_email_address):
     server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
     server.starttls()
     print("Email is:")
     print(os.environ['USERNAME'] + "@gmail.com")
