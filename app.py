@@ -8,10 +8,8 @@ from time import localtime, strftime
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
-import yagmail
+import smtplib
 
-# Used to send emails
-yagmail.register(os.environ['USERNAME'], os.environ['PASSWORD'])
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -118,17 +116,19 @@ def create_logging_label():
 
 # Emailing standup results to chosen email address
 def send_email(squad_name, recipient_email_address):
-    email = yagmail.SMTP("vistaprintdesignexperience")
-    subject_line = "Daily Standup for " + squad_name + " on " + strftime("%d-%m-%Y", localtime())
-    contents = ["Hello world"]
-    email.send(recipient_email_address, subject_line, contents)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    msg = "YOUR MESSAGE!"
+    server.sendmail("vistaprintdesignexperience@gmail.com", recipient_email_address, msg)
+    server.quit()
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
-# Sending a test email
-# send_email("test", "christinajaiello@gmail.com")
+# Sending a test email to myself
+send_email("test", "cjaiello@wpi.edu")
 
 # Setting the scheduling
 set_schedules()
