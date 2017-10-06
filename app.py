@@ -118,7 +118,7 @@ def create_logging_label():
 def send_email(squad_name, recipient_email_address):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    server.login(os.environ['USERNAME'] + "gmail.com", os.environ['PASSWORD'])
     msg = "YOUR MESSAGE!"
     server.sendmail("vistaprintdesignexperience@gmail.com", recipient_email_address, msg)
     server.quit()
