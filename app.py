@@ -153,7 +153,7 @@ def create_logging_label():
 # Emailing standup results to chosen email address
 # @param channel_name : Name of channel whose standup results we want to email to someone
 # @param recipient_email_address : Where to send the standup results to
-def get_timestamp_and_send_email(channel_name, recipient_email_address):
+# def get_timestamp_and_send_email(channel_name, recipient_email_address):
     # if (STANDUP_TIMESTAMP_MAP[channel_name]):
     #     # First, we need to get this squad's standup message timestamp for the day
     #     standup_message_timestamp = STANDUP_TIMESTAMP_MAP[channel_name]
