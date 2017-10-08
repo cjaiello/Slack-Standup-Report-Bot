@@ -171,7 +171,7 @@ def get_timestamp_and_send_email(channel_name, recipient_email_address):
         server.quit()
     else:
         # Log that it didn't work
-        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere."
+        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere.")
 
 
 # Will fetch all standup message timestamps
