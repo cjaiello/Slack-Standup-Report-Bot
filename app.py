@@ -26,14 +26,14 @@ class Channel(DB.Model):
     standup_hour = DB.Column(DB.Integer)
     standup_minute = DB.Column(DB.Integer)
     message = DB.Column(DB.String(120), unique=False)
-    email = DB.Column(DB.String(120), unique=False)
+    #email = DB.Column(DB.String(120), unique=False)
 
-    def __init__(self, channel_name, standup_hour, standup_minute, message, email):
+    def __init__(self, channel_name, standup_hour, standup_minute, message):
         self.channel_name = channel_name
         self.standup_hour = standup_hour
         self.standup_minute = standup_minute
         self.message = message
-        self.email = email
+        #self.email = email
 
     def __repr__(self):
         return '<Channel %r>' % self.channel_name
@@ -58,12 +58,14 @@ def homepage():
         standup_hour = request.form['standup_hour']
         standup_minute = request.form['standup_minute']
         message = request.form['message']
-        email = request.form['email']
+        #email = request.form['email']
         # If the form field was valid...
         if form.validate():
             # Look for channel in database
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 # Channel isn't in database. Create our channel object
+                # TODO: Uncomment line below
+                # channel = Channel(submitted_channel_name, standup_hour, standup_minute, message, email)
                 channel = Channel(submitted_channel_name, standup_hour, standup_minute, message, email)
                 # Add it to the database
                 DB.session.add(channel)
@@ -72,20 +74,24 @@ def homepage():
                 SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
                 print(create_logging_label() + "Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
-                set_email_job(channel)
+                # TODO: Uncomment line below
+                # set_email_job(channel)
 
             else:
                 # If channel is in database, update channel's standup time
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
                 channel.standup_hour = standup_hour
                 channel.standup_minute = standup_minute
+                # TODO: Uncomment line below
+                # channel.email = email
                 DB.session.commit()
                 # Updating this job's timing (need to delete and readd)
                 SCHEDULER.remove_job(submitted_channel_name)
                 SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
                 print(create_logging_label() + "Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
-                set_email_job(channel)
+                # TODO: Uncomment line below
+                # set_email_job(channel)
         else:
             print(create_logging_label() + "Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " and message to: " + message + ". Issue was: " + str(request))
 
@@ -102,7 +108,8 @@ def set_schedules():
         SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name)
         print(create_logging_label() + "Channel name and time that we set the schedule for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
         # Set email job if requested
-        set_email_job(channel)
+        # TODO: Uncomment line below
+        # set_email_job(channel)
 
 
 # Function that triggers the standup call.
