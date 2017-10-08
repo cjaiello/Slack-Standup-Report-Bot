@@ -9,10 +9,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 
-APP = Flask(__name__)
-APP.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-DB = SQLAlchemy(APP)
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
 SLACK_CLIENT = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 STANDUP_TIMESTAMP_MAP = {} # Holds channel names and their day's timestamp (needed to get replies)
@@ -48,7 +48,7 @@ class StandupSignupForm(Form):
     email = TextField('Email Address to Send Standup Report To (Optional):')
 
 
-@APP.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
 def homepage():
     form = StandupSignupForm(request.form)
 
@@ -200,7 +200,7 @@ def get_daily_standups(timestamp):
 
 
 if __name__ == '__main__':
-    APP.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
 
 # Sending a test email to myself. I swear I have friends.
 get_timestamp_and_send_email("christinastestchannel", "christinajaiello@gmail.com")
