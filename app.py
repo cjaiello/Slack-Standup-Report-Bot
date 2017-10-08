@@ -154,20 +154,24 @@ def create_logging_label():
 # @param channel_name : Name of channel whose standup results we want to email to someone
 # @param recipient_email_address : Where to send the standup results to
 def get_timestamp_and_send_email(channel_name, recipient_email_address):
-    # First, we need to get this squad's standup message timestamp for the day
-    standup_message_timestamp = STANDUP_TIMESTAMP_MAP[channel_name]
+    if (STANDUP_TIMESTAMP_MAP[channel_name]):
+        # First, we need to get this squad's standup message timestamp for the day
+        standup_message_timestamp = STANDUP_TIMESTAMP_MAP[channel_name]
 
-    # Next we need to get all replies to this message:
-    get_daily_standups(standup_message_timestamp)
+        # Next we need to get all replies to this message:
+        get_daily_standups(standup_message_timestamp)
 
-    # Lastly we need to send an email with this information
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
-    server.starttls()
-    server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-    msg = "YOUR MESSAGE!" # TODO: Replace with actual message attached to channel
-    server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, msg)
-    server.quit()
+        # Lastly we need to send an email with this information
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
+        msg = "YOUR MESSAGE!" # TODO: Replace with actual message attached to channel
+        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, msg)
+        server.quit()
+    else:
+        # Log that it didn't work
+        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere."
 
 
 # Will fetch all standup message timestamps
