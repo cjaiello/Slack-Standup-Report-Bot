@@ -139,6 +139,7 @@ def standup_call(channel_name, message):
 def set_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
+        SCHEDULER.remove_job(channel.channel_name)
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=13, id=channel.channel_name)
