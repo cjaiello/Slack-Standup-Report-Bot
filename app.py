@@ -125,7 +125,7 @@ def standup_call(channel_name, message):
     )
     # Evaluating result of call and logging it
     if (result.ok):
-        print(create_logging_label() + "Standup alert message sent to " + channel_name)
+        print(create_logging_label() + "Standup alert message was sent to " + channel_name)
         print(create_logging_label() + "Result of sending standup message to " + channel_name + " was " + str(result))
         # Getting timestamp for today's standup message for this channel
         STANDUP_TIMESTAMP_MAP[channel_name] = result.ts
