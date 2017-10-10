@@ -204,12 +204,13 @@ def get_daily_standups(timestamp):
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
-# Sending a test email to myself. I swear I have friends.
-get_timestamp_and_send_email("stencil", "christinajaiello@gmail.com")
-
 # Setting the scheduling
 set_schedules()
 
 # Running the scheduling
 SCHEDULER.start()
+
+# Sending a test email to myself. I swear I have friends.
+get_timestamp_and_send_email("stencil", "christinajaiello@gmail.com")
+
 print(create_logging_label() + "Standup bot was started up and scheduled.")
