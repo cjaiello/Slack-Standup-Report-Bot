@@ -205,7 +205,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
 # Sending a test email to myself. I swear I have friends.
-get_timestamp_and_send_email("christinastestchannel", "christinajaiello@gmail.com")
+get_timestamp_and_send_email("stencil", "christinajaiello@gmail.com")
 
 # Setting the scheduling
 set_schedules()
