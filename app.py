@@ -207,6 +207,7 @@ if __name__ == '__main__':
 conn = psycopg2.connect(os.environ['DATABASE_URL'])
 cursor = conn.cursor()
 cursor.execute("ALTER TABLE channel ADD COLUMN email character varying(50) ")
+conn.close()
 
 # Setting the scheduling
 set_schedules()
