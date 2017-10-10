@@ -204,6 +204,10 @@ def get_daily_standups(timestamp):
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
 
+conn = psycopg2.connect(os.environ['DATABASE_URL'])
+cursor = conn.cursor()
+cursor.execute("ALTER TABLE channel ADD COLUMN email character varying(50) ")
+
 # Setting the scheduling
 set_schedules()
 
