@@ -1,4 +1,4 @@
-# Standup Bot by Christina Aiello, 2017. cjaiello@wpi.edu
+# Standup Bot by Christina Aiello, 2017
 import os
 import smtplib
 import psycopg2
