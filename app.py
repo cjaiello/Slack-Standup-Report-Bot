@@ -157,7 +157,7 @@ def set_email_job(channel):
 # Used for logging when actions happen
 # @return string with logging time
 def create_logging_label():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "||| "
+    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "] "
 
 
 # Emailing standup results to chosen email address.
