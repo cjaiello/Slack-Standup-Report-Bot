@@ -186,7 +186,8 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         server.ehlo()
         server.starttls()
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        # TODO: Uncomment line below
+        # TODO: Add subject line
+        # TODO: Uncomment line below once I structure the input to not have { in it
         # server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, standups)
         server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, a_channel_name)
         server.quit()
