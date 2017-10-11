@@ -98,7 +98,7 @@ def homepage():
 # Setting the standup schedules for already-existing jobs
 # @return nothing
 def set_schedules():
-    print(create_logging_label() + "Loading previously-submitted standup data."
+    print(create_logging_label() + "Loading previously-submitted standup data.")
     # Get all rows from our table
     channels_with_scheduled_standups = Channel.query.all()
     # Loop through our results
