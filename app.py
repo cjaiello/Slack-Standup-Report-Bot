@@ -188,8 +188,7 @@ def get_daily_standups(timestamp, channel_name):
       "channels.history",
       token=os.environ['SLACK_BOT_TOKEN'],
       channel=str(channel_name),
-      oldest=timestamp,
-      ts="latest",
+      latest=timestamp,
       inclusive=true,
       count=1
     )
