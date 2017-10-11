@@ -150,8 +150,8 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=23, minute=38, id=channel.channel_name + "_sendemail")
-        print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=23, minute=43, id=channel.channel_name + "_sendemail")
+        print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
 
@@ -179,7 +179,6 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     channel = Channel.query.filter_by(channel_name = a_channel_name).first()
     if (channel.timestamp != None):
         # First we need to get all replies to this message:
-        print("!! Params: " + channel.timestamp + channel.channel_name)
         standups = get_standup_replies_for_message(channel.timestamp, channel.channel_name)
 
         # Then we need to send an email with this information
@@ -189,6 +188,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
         server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, standups)
         server.quit()
+        print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups ", to " + recipient_email_address)
 
         # Finally we need to reset the standup timestamp so we don't get a repeat.
         # We also need to cancel the email job.
