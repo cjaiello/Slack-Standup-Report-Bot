@@ -145,7 +145,7 @@ def set_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
         # Cancel already existing job if it's there
-        if channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
+        if channel.channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
             SCHEDULER.remove_job(channel.channel_name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
