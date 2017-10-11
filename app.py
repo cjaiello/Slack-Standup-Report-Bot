@@ -98,13 +98,14 @@ def homepage():
 # Setting the standup schedules for already-existing jobs
 # @return nothing
 def set_schedules():
+    print(create_logging_label() + "Loading previously-submitted standup data."
     # Get all rows from our table
     channels_with_scheduled_standups = Channel.query.all()
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table, sending standup message to channel
         SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name)
-        print(create_logging_label() + "Channel name and time that we set the schedule for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
+        print(create_logging_label() + "Channel name and time that we scheduled standup call for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
         # Set email job if requested
         set_email_job(channel)
 
@@ -156,7 +157,7 @@ def set_email_job(channel):
 # Used for logging when actions happen
 # @return string with logging time
 def create_logging_label():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + " "
+    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "||| "
 
 
 # Emailing standup results to chosen email address.
