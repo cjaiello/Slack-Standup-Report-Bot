@@ -71,7 +71,7 @@ def homepage():
                 DB.session.add(channel)
                 DB.session.commit()
                 # Adding this additional job to the queue
-                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
+                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
                 print(create_logging_label() + "Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
                 set_email_job(channel)
@@ -85,7 +85,7 @@ def homepage():
                 DB.session.commit()
                 # Updating this job's timing (need to delete and readd)
                 SCHEDULER.remove_job(submitted_channel_name)
-                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name)
+                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
                 print(create_logging_label() + "Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + str(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
                 set_email_job(channel)
@@ -104,7 +104,7 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table, sending standup message to channel
-        SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name)
+        SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
         print(create_logging_label() + "Channel name and time that we scheduled standup call for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + str(channel.standup_minute) + " with message: " + channel.message)
         # Set email job if requested
         set_email_job(channel)
@@ -148,7 +148,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=22, id=channel.channel_name)
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=26, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
