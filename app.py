@@ -157,7 +157,7 @@ def set_email_job(channel):
 # Used for logging when actions happen
 # @return string with logging time
 def create_logging_label():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "] "
+    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "| "
 
 
 # Emailing standup results to chosen email address.
@@ -220,8 +220,5 @@ set_schedules()
 
 # Running the scheduling
 SCHEDULER.start()
-
-# Sending a test email to myself. I swear I have friends.
-get_timestamp_and_send_email("christinastestchannel", "christinajaiello@gmail.com")
 
 print(create_logging_label() + "Standup bot was started up and scheduled.")
