@@ -164,11 +164,11 @@ def create_logging_label():
 # @param channel_name : Name of channel whose standup results we want to email to someone
 # @param recipient_email_address : Where to send the standup results to
 # @return nothing
-def get_timestamp_and_send_email(channel_name, recipient_email_address):
-    channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
+def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
+    channel = Channel.query.filter_by(channel_name = a_channel_name).first()
     if (channel.timestamp != None):
         # First we need to get all replies to this message:
-        standups = get_standup_replies_for_message(channel.timestamp, channel_name)
+        standups = get_standup_replies_for_message(channel.timestamp, a_channel_name)
 
         # Then we need to send an email with this information
         server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -184,7 +184,7 @@ def get_timestamp_and_send_email(channel_name, recipient_email_address):
         DB.session.commit()
     else:
         # Log that it didn't work
-        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
+        print(create_logging_label() + "Channel " + a_channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
 
 
 # Will fetch the standup messages for a channel
