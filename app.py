@@ -144,6 +144,7 @@ def standup_call(channel_name, message):
 def set_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
+        SCHEDULER.remove_job(channel.name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
@@ -183,7 +184,6 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         # We also need to cancel the email job.
         channel.timestamp = None;
         DB.session.commit()
-        SCHEDULER.remove_job(channel.a_channel_name + "_sendemail")
     else:
         # Log that it didn't work
         print(create_logging_label() + "Channel " + a_channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
