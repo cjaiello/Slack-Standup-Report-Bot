@@ -144,12 +144,13 @@ def standup_call(channel_name, message):
 def set_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
-        print(SCHEDULER.get_jobs())
-        SCHEDULER.remove_job(channel.channel_name + "_sendemail")
+        # Cancel already existing job if it's there
+        if channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
+            SCHEDULER.remove_job(channel.channel_name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=46, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=49 id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
