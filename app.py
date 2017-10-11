@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=19, minute=30, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=19, minute=32, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -223,7 +223,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
         # TODO: Get the replies from this thread
         print(create_logging_label() + "User standup messages: " + str(result))
         standup_results = []
-        for standup_status in result.get("messages").get("replies"):
+        for standup_status in result.get("messages")[0].get("replies"):
             result = SLACK_CLIENT.api_call(
               "channels.history",
               token=os.environ['SLACK_BOT_TOKEN'],
