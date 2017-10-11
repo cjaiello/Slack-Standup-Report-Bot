@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=22, minute=35, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=22, minute=45, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -186,8 +186,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         server.ehlo()
         server.starttls()
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        msg = standups # TODO: Replace with actual message attached to channel
-        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, msg)
+        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, standups)
         server.quit()
 
         # Finally we need to reset the standup timestamp so we don't get a repeat.
@@ -216,6 +215,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     )
     if ("ok" in result):
         # TODO: Get the replies from this thread
+        print(create_logging_label() + "User standup messages: " + result.get("messages"))
         return result.get("messages")
     else:
         # Log that it didn't work
