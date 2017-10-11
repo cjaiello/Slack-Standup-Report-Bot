@@ -203,13 +203,15 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
 # @return Standup messages in JSON format
 def get_standup_replies_for_message(timestamp, channel_name):
+    channel_id = get_channel_id_via_name(channel_name)
+
     # https://api.slack.com/methods/channels.history
     # "To retrieve a single message, specify its ts value as latest, set
     # inclusive to true, and dial your count down to 1"
     result = SLACK_CLIENT.api_call(
       "channels.history",
       token=os.environ['SLACK_BOT_TOKEN'],
-      channel=channel_name,
+      channel=channel_id,
       latest=timestamp,
       inclusive=True,
       count=1
@@ -221,6 +223,19 @@ def get_standup_replies_for_message(timestamp, channel_name):
     else:
         # Log that it didn't work
         print(create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
+
+
+# Calls API to get channel ID based on name.
+# @param channel_name
+# @return channel ID
+def get_channel_id_via_name(channel_name):
+    channels_list = SLACK_CLIENT.api_call(
+      "channels.info",
+      token=os.environ['SLACK_BOT_TOKEN']
+    )
+    for channel in channels_list.get("channels"):
+        if channel.name == channel_name:
+            return channel.id
 
 
 
