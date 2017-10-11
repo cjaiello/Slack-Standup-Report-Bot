@@ -198,7 +198,7 @@ def get_daily_standups(timestamp, channel_name):
         # TODO: Get the replies from this thread
     else:
         # Log that it didn't work
-        print(create_logging_label() + "Could not email standup results to " + channel_name + " due to: " + str(result))
+        print(create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
 
 
 
@@ -212,6 +212,6 @@ set_schedules()
 SCHEDULER.start()
 
 # Sending a test email to myself. I swear I have friends.
-get_timestamp_and_send_email("stencil", "christinajaiello@gmail.com")
+get_timestamp_and_send_email("christinastestchannel", "christinajaiello@gmail.com")
 
 print(create_logging_label() + "Standup bot was started up and scheduled.")
