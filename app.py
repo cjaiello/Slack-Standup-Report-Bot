@@ -147,7 +147,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=20, minute=47, id=channel.channel_name)
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=20, minute=50, id=channel.channel_name)
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -166,7 +166,7 @@ def create_logging_label():
 # @return nothing
 def get_timestamp_and_send_email(channel_name, recipient_email_address):
     channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
-    if (!(channel.timestamp is None)):
+    if (channel.timestamp != None):
         # First we need to get all replies to this message:
         standups = get_standup_replies_for_message(channel.timestamp, channel_name)
 
