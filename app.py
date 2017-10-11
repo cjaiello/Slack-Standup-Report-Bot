@@ -126,7 +126,7 @@ def standup_call(channel_name, message):
       icon_emoji=":memo:"
     )
     # Evaluating result of call and logging it
-    if (result.ok):
+    if (ok in result):
         print(create_logging_label() + "Standup alert message was sent to " + channel_name)
         print(create_logging_label() + "Result of sending standup message to " + channel_name + " was " + str(result))
         # Getting timestamp for today's standup message for this channel
@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=51, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=56, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -206,7 +206,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
       inclusive=true,
       count=1
     )
-    if (result.ok):
+    if (ok in result):
         # TODO: Get the replies from this thread
         return result.messages
     else:
