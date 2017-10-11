@@ -142,7 +142,7 @@ def set_email_job(channel):
         SCHEDULER.remove_job(channel.channel_name)
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=13, id=channel.channel_name)
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=20, minute=26, id=channel.channel_name)
         print(create_logging_label() + "Channel name and time that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -175,7 +175,7 @@ def get_timestamp_and_send_email(channel_name, recipient_email_address):
         server.quit()
     else:
         # Log that it didn't work
-        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere.")
+        print(create_logging_label() + "Channel " + channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
 
 
 # Will fetch the standup messages for a channel
