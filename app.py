@@ -2,6 +2,7 @@
 import os
 import smtplib
 import psycopg2
+import re
 from slackclient import SlackClient
 from time import localtime, strftime
 from flask_sqlalchemy import SQLAlchemy
@@ -57,8 +58,8 @@ def homepage():
     if request.method == 'POST':
         # Get whatever name they gave us for a channel
         submitted_channel_name = request.form['submitted_channel_name']
-        standup_hour = request.form['standup_hour']
-        standup_minute = request.form['standup_minute'] # TODO: Strip "0" from the front of this
+        standup_hour = (re.search( r'0?(\d+)?', request.form['standup_hour'], re.M|re.I)).group(1)
+        standup_minute = (re.search( r'0?(\d+)?', request.form['standup_minute'], re.M|re.I)).group(1)
         message = request.form['message']
         email = request.form['email']
         # If the form field was valid...
@@ -150,7 +151,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=34, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=36, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -197,7 +198,6 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
 
             # Finally we need to reset the standup timestamp so we don't get a repeat.
-            # We also need to cancel the email job. # TODO: Do we?
             channel.timestamp = None;
             DB.session.commit()
         else:
