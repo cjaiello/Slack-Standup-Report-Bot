@@ -186,7 +186,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         server.ehlo()
         server.starttls()
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        # TODO: Add subject line
+        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", "standups go here")
         # TODO: Uncomment line below once I structure the input to not have { in it
         # server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, standups)
         server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, a_channel_name)
@@ -232,8 +232,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
               inclusive=True,
               count=1
             )
-            standup_results.append(result.get("messages").get("text"))
-            print(esult.get("messages").get("text"))
+            standup_results.append(result.get("messages")[0].get("username") + ": " + result.get("messages")[0].get("text"))
         print(standup_results)
         return standup_results
     else:
