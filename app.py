@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=19, minute=38, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=00, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -186,10 +186,8 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         server.ehlo()
         server.starttls()
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", "standups go here")
-        # TODO: Uncomment line below once I structure the input to not have { in it
-        # server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, standups)
-        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, a_channel_name)
+        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", standups)
+        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
         server.quit()
         print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
 
@@ -214,20 +212,19 @@ def get_standup_replies_for_message(timestamp, channel_name):
     result = SLACK_CLIENT.api_call(
       "channels.history",
       token=os.environ['SLACK_BOT_TOKEN'],
-      channel="C7A16MBB4", # TODO: change back to channel_id
-      latest="1507693919.000178", # TODO: change back to timestamp
+      channel=channel_id,
+      latest=timestamp,
       inclusive=True,
       count=1
     )
     if ("ok" in result):
-        print(create_logging_label() + "User standup messages: " + str(result))
         standup_results = []
         for standup_status in result.get("messages")[0].get("replies"):
             # Getting detailed info about this reply
             reply_result = SLACK_CLIENT.api_call(
               "channels.history",
               token=os.environ['SLACK_BOT_TOKEN'],
-              channel="C7A16MBB4", #TODO: Change back to channel_id
+              channel=channel_id,
               latest=standup_status.get("ts"),
               inclusive=True,
               count=1
@@ -240,7 +237,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
             )
             # Add to our list of standup messages
             standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
-        print(standup_results)
+            print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
         return standup_results
     else:
         # Log that it didn't work
@@ -264,8 +261,6 @@ def get_channel_id_via_name(channel_name):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-
-get_standup_replies_for_message("test", "test");
 
 # Setting the scheduling
 set_schedules()
