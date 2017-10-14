@@ -90,7 +90,7 @@ def homepage():
                 # Set email job if requested
                 set_email_job(channel)
         else:
-            print(create_logging_label() + "Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " and message to: " + message + ". Issue was: " + str(request))
+            print(create_logging_label() + "Could not update standup time. Issue was: " + str(request))
 
     return render_template('homepage.html', form=form)
 
