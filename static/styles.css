@@ -81,7 +81,7 @@
 	.separator_line {
 		background-color: #68cff0;
 		margin:0 auto;
-		width:600px;
+		width:800px;
 		height:8px;
 		padding-left: 5px;
 		padding-right: 5px;
@@ -90,7 +90,7 @@
 	.second_separator_line {
 		background-color: #a1e6f7;
 		margin:0 auto;
-		width:600px;
+		width:800px;
 		height:5px;
 		padding-left: 5px;
 		padding-right: 5px;
@@ -249,7 +249,7 @@
 	}
 
 	.navigation { /* Section that contains links to every page */
-		width:600px;
+		width:800px;
 		color: #ffffff;
 		margin-top: 100px;
 		padding-top: 20px;
