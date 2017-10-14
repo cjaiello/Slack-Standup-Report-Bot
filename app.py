@@ -180,22 +180,28 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     if (channel.timestamp != None):
         # First we need to get all replies to this message:
         standups = get_standup_replies_for_message(channel.timestamp, channel.channel_name)
-        formatted_standup_message = ''.join(map(str, standups))
+        # If we had replies today...
+        if (standups != None):
+            # Join the list together so it's easier to read
+            formatted_standup_message = ''.join(map(str, standups))
 
-        # Then we need to send an email with this information
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.ehlo()
-        server.starttls()
-        server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", formatted_standup_message)
-        server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
-        server.quit()
-        print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
+            # Then we need to send an email with this information
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.ehlo()
+            server.starttls()
+            server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
+            message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", formatted_standup_message)
+            server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
+            server.quit()
 
-        # Finally we need to reset the standup timestamp so we don't get a repeat.
-        # We also need to cancel the email job.
-        channel.timestamp = None;
-        DB.session.commit()
+            print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
+
+            # Finally we need to reset the standup timestamp so we don't get a repeat.
+            # We also need to cancel the email job.
+            channel.timestamp = None;
+            DB.session.commit()
+        else:
+            print(create_logging_label() + "Channel " + a_channel_name + " did not have any standup submissions to email today.")
     else:
         # Log that it didn't work
         print(create_logging_label() + "Channel " + a_channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
