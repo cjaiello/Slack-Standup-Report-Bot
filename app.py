@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=14, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=18, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -180,13 +180,14 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     if (channel.timestamp != None):
         # First we need to get all replies to this message:
         standups = get_standup_replies_for_message(channel.timestamp, channel.channel_name)
+        formatted_standup_message = ''.join(map(str, standups))
 
         # Then we need to send an email with this information
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
         server.starttls()
         server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", standups)
+        message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", formatted_standup_message)
         server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
         server.quit()
         print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
@@ -239,7 +240,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
                   user=reply_result.get("messages")[0].get("user")
                 )
                 # Add to our list of standup messages
-                standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
+                standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; ")
                 print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
             return standup_results
     else:
