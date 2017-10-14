@@ -223,6 +223,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
         print(create_logging_label() + "User standup messages: " + str(result))
         standup_results = []
         for standup_status in result.get("messages")[0].get("replies"):
+            # Getting detailed info about this reply
             reply_result = SLACK_CLIENT.api_call(
               "channels.history",
               token=os.environ['SLACK_BOT_TOKEN'],
@@ -231,18 +232,13 @@ def get_standup_replies_for_message(timestamp, channel_name):
               inclusive=True,
               count=1
             )
-            print("reply_result")
-            print(reply_result)
-            print("reply_result.get(\"messages\")")
-            print(reply_result.get("messages"))
-            print(reply_result.get("messages")[0])
-            print(reply_result.get("messages")[0].get("username"))
-            # Get username of person
+            # Get username of person who made this reply
             user_result = SLACK_CLIENT.api_call(
               "users.info",
               token=os.environ['SLACK_BOT_TOKEN'],
               user=reply_result.get("messages")[0].get("user")
             )
+            # Add to our list of standup messages
             standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
         print(standup_results)
         return standup_results
