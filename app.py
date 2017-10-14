@@ -233,7 +233,6 @@ def get_standup_replies_for_message(timestamp, channel_name):
             for standup_status in replies:
                 # Add to our list of standup messages
                 standup_results.append(create_standup_string(channel_id, standup_status.get("ts")))
-                print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
             return standup_results
     else:
         # Log that it didn't work
@@ -258,6 +257,7 @@ def create_standup_string(channel_id, standup_status_timestamp):
       token=os.environ['SLACK_BOT_TOKEN'],
       user=reply_result.get("messages")[0].get("user")
     )
+    print(create_logging_label() + "Adding standup results for " + user_result.get("user").get("real_name"))
     return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; "
 
 
