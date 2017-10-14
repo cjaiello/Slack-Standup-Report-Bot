@@ -226,7 +226,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
             reply_result = SLACK_CLIENT.api_call(
               "channels.history",
               token=os.environ['SLACK_BOT_TOKEN'],
-              channel=channel_id,
+              channel="C7A16MBB4", #TODO: Change back to channel_id
               latest=standup_status.get("ts"),
               inclusive=True,
               count=1
