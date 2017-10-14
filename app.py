@@ -233,7 +233,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
             )
             print("reply_result")
             print(reply_result)
-            print("reply_result.get(\"messages\"))
+            print("reply_result.get(\"messages\")")
             print(reply_result.get("messages"))
             print(reply_result.get("messages")[0])
             print(reply_result.get("messages")[0].get("username"))
