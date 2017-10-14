@@ -237,7 +237,13 @@ def get_standup_replies_for_message(timestamp, channel_name):
             print(reply_result.get("messages"))
             print(reply_result.get("messages")[0])
             print(reply_result.get("messages")[0].get("username"))
-            standup_results.append(reply_result.get("messages")[0].get("username") + ": " + reply_result.get("messages")[0].get("text"))
+            # Get username of person
+            user_result = SLACK_CLIENT.api_call(
+              "users.info",
+              token=os.environ['SLACK_BOT_TOKEN'],
+              user=reply_result.get("messages")[0].get("user")
+            )
+            standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
         print(standup_results)
         return standup_results
     else:
