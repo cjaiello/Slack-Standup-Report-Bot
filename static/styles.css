@@ -270,12 +270,6 @@
 		overflow: auto;
 	}
 
-	.main_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
-		width:550px;
-		padding: 30px 30px 30px 30px;
-		overflow: auto;
-	}
-
 	.padding {
 		padding: 0px 10px 10px 10px;
 	}
