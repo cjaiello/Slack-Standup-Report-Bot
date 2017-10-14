@@ -58,7 +58,7 @@ def homepage():
         # Get whatever name they gave us for a channel
         submitted_channel_name = request.form['submitted_channel_name']
         standup_hour = request.form['standup_hour']
-        standup_minute = request.form['standup_minute']
+        standup_minute = request.form['standup_minute'] # TODO: Strip "0" from the front of this
         message = request.form['message']
         email = request.form['email']
         # If the form field was valid...
@@ -150,7 +150,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=7, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=12, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
@@ -217,28 +217,31 @@ def get_standup_replies_for_message(timestamp, channel_name):
       inclusive=True,
       count=1
     )
+    # Need to ensure that API call worked
     if ("ok" in result):
-        standup_results = []
-        for standup_status in result.get("messages")[0].get("replies"):
-            # Getting detailed info about this reply
-            reply_result = SLACK_CLIENT.api_call(
-              "channels.history",
-              token=os.environ['SLACK_BOT_TOKEN'],
-              channel=channel_id,
-              latest=standup_status.get("ts"),
-              inclusive=True,
-              count=1
-            )
-            # Get username of person who made this reply
-            user_result = SLACK_CLIENT.api_call(
-              "users.info",
-              token=os.environ['SLACK_BOT_TOKEN'],
-              user=reply_result.get("messages")[0].get("user")
-            )
-            # Add to our list of standup messages
-            standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
-            print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
-        return standup_results
+        # Only do the following if we actually got replies
+        if (result.get("messages")[0].get("replies") is not None)):
+            standup_results = []
+            for standup_status in result.get("messages")[0].get("replies"):
+                # Getting detailed info about this reply
+                reply_result = SLACK_CLIENT.api_call(
+                  "channels.history",
+                  token=os.environ['SLACK_BOT_TOKEN'],
+                  channel=channel_id,
+                  latest=standup_status.get("ts"),
+                  inclusive=True,
+                  count=1
+                )
+                # Get username of person who made this reply
+                user_result = SLACK_CLIENT.api_call(
+                  "users.info",
+                  token=os.environ['SLACK_BOT_TOKEN'],
+                  user=reply_result.get("messages")[0].get("user")
+                )
+                # Add to our list of standup messages
+                standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "\n")
+                print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
+            return standup_results
     else:
         # Log that it didn't work
         print(create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
