@@ -197,7 +197,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
 
             # Finally we need to reset the standup timestamp so we don't get a repeat.
-            # We also need to cancel the email job.
+            # We also need to cancel the email job. # TODO: Do we?
             channel.timestamp = None;
             DB.session.commit()
         else:
@@ -227,31 +227,38 @@ def get_standup_replies_for_message(timestamp, channel_name):
     # Need to ensure that API call worked
     if ("ok" in result):
         # Only do the following if we actually got replies
-        if (result.get("messages")[0].get("replies") is not None):
+        replies = result.get("messages")[0].get("replies")
+        if (replies is not None):
             standup_results = []
-            for standup_status in result.get("messages")[0].get("replies"):
-                # Getting detailed info about this reply
-                reply_result = SLACK_CLIENT.api_call(
-                  "channels.history",
-                  token=os.environ['SLACK_BOT_TOKEN'],
-                  channel=channel_id,
-                  latest=standup_status.get("ts"),
-                  inclusive=True,
-                  count=1
-                )
-                # Get username of person who made this reply
-                user_result = SLACK_CLIENT.api_call(
-                  "users.info",
-                  token=os.environ['SLACK_BOT_TOKEN'],
-                  user=reply_result.get("messages")[0].get("user")
-                )
+            for standup_status in replies:
                 # Add to our list of standup messages
-                standup_results.append(user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; ")
+                standup_results.append(create_standup_string(channel_id, standup_status.get("ts")))
                 print(create_logging_label() + "Added standup results for " + user_result.get("user").get("real_name"))
             return standup_results
     else:
         # Log that it didn't work
         print(create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
+
+
+# Getting detailed info about this reply
+# @param channel_id: ID of the channel whom we're reporting for
+# @param standup_status_timestamp: Timestamp for this message
+def create_standup_string(channel_id, standup_status_timestamp):
+    reply_result = SLACK_CLIENT.api_call(
+      "channels.history",
+      token=os.environ['SLACK_BOT_TOKEN'],
+      channel=channel_id,
+      latest=standup_status_timestamp,
+      inclusive=True,
+      count=1
+    )
+    # Get username of person who made this reply
+    user_result = SLACK_CLIENT.api_call(
+      "users.info",
+      token=os.environ['SLACK_BOT_TOKEN'],
+      user=reply_result.get("messages")[0].get("user")
+    )
+    return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; "
 
 
 # Calls API to get channel ID based on name.
