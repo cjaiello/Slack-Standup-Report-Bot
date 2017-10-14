@@ -48,7 +48,7 @@ class StandupSignupForm(Form):
     standup_hour = TextField('Standup Hour:', validators=[validators.required()])
     standup_minute = TextField('Standup Minute:', validators=[validators.required()])
     message = TextField('Standup Message (Optional. Will use default message if blank.):')
-    email = TextField('Email Address to Send Standup Report To (Optional):')
+    email = TextField('Where should we email your standup reports to? (optional):')
 
 
 @app.route("/", methods=['GET', 'POST'])
