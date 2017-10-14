@@ -195,7 +195,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
             server.quit()
 
-            print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + standups + ", to " + recipient_email_address)
+            print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + formatted_standup_message + ", to " + recipient_email_address)
 
             # Finally we need to reset the standup timestamp so we don't get a repeat.
             channel.timestamp = None;
