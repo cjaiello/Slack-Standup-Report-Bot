@@ -220,7 +220,6 @@ def get_standup_replies_for_message(timestamp, channel_name):
       count=1
     )
     if ("ok" in result):
-        # TODO: Get the replies from this thread
         print(create_logging_label() + "User standup messages: " + str(result))
         standup_results = []
         for standup_status in result.get("messages")[0].get("replies"):
@@ -257,6 +256,8 @@ def get_channel_id_via_name(channel_name):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+
+get_standup_replies_for_message("test", "test");
 
 # Setting the scheduling
 set_schedules()
