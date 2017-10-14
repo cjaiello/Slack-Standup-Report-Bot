@@ -231,7 +231,9 @@ def get_standup_replies_for_message(timestamp, channel_name):
               inclusive=True,
               count=1
             )
+            print("reply_result")
             print(reply_result)
+            print("reply_result.get(\"messages\"))
             print(reply_result.get("messages"))
             print(reply_result.get("messages")[0])
             print(reply_result.get("messages")[0].get("username"))
