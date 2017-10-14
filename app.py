@@ -58,21 +58,20 @@ def homepage():
     if request.method == 'POST':
         # Get whatever name they gave us for a channel
         submitted_channel_name = request.form['submitted_channel_name']
-        standup_hour = (re.search( r'0?(\d+)?', request.form['standup_hour'], re.M|re.I)).group(1)
-        standup_minute = (re.search( r'0?(\d+)?', request.form['standup_minute'], re.M|re.I)).group(1)
+        standup_hour = remove_starting_zeros_from_time(request.form['standup_hour'])
+        standup_minute = remove_starting_zeros_from_time(request.form['standup_minute'])
         message = request.form['message']
         email = request.form['email']
         # If the form field was valid...
         if form.validate():
             # Look for channel in database
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
-                # Channel isn't in database. Create our channel object
+                # Channel isn't in database. Create our channel object and add it to the database
                 channel = Channel(submitted_channel_name, standup_hour, standup_minute, message, email, None)
-                # Add it to the database
                 DB.session.add(channel)
                 DB.session.commit()
                 # Adding this additional job to the queue
-                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
+                SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
                 print(create_logging_label() + "Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
                 set_email_job(channel)
@@ -84,9 +83,9 @@ def homepage():
                 channel.standup_minute = standup_minute
                 channel.email = email
                 DB.session.commit()
-                # Updating this job's timing (need to delete and readd)
+                # Updating this job's timing (need to delete and re-add)
                 SCHEDULER.remove_job(submitted_channel_name + "_standupcall")
-                SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
+                SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
                 print(create_logging_label() + "Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
                 set_email_job(channel)
@@ -94,6 +93,12 @@ def homepage():
             print(create_logging_label() + "Could not update " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " and message to: " + message + ". Issue was: " + str(request))
 
     return render_template('homepage.html', form=form)
+
+
+# Scheduler doesn't like zeros at the start of numbers...
+# @param time: string to remove starting zeros from
+def remove_starting_zeros_from_time(time):
+    return (re.search( r'0?(\d+)?', time, re.M|re.I)).group(1)
 
 
 # Setting the standup schedules for already-existing jobs
@@ -105,7 +110,7 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table, sending standup message to channel
-        SCHEDULER.add_job(standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
+        SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
         print(create_logging_label() + "Channel name and time that we scheduled standup call for: " + channel.channel_name + " at " + str(channel.standup_hour) + ":" + format_minutes_to_have_zero(channel.standup_minute) + " with message: " + channel.message)
         # Set email job if requested
         set_email_job(channel)
@@ -117,15 +122,9 @@ def set_schedules():
 # @param channel_name : name of channel to send standup message to
 # @param message : (optional) standup message that's sent to channel
 # @return nothing
-def standup_call(channel_name, message):
+def trigger_standup_call(channel_name, message):
     # Sending our standup message
-    result = SLACK_CLIENT.api_call(
-      "chat.postMessage",
-      channel=str(channel_name),
-      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-    )
+    result = call_slack_message_api(channel_name, message)
     # Evaluating result of call and logging it
     if ("ok" in result):
         print(create_logging_label() + "Standup alert message was sent to " + channel_name)
@@ -136,6 +135,17 @@ def standup_call(channel_name, message):
         DB.session.commit()
     else:
         print(create_logging_label() + "Could not send standup alert message to " + channel_name)
+
+
+# Will send @param message to @param channel_name
+def call_slack_message_api(channel_name, message):
+    return SLACK_CLIENT.api_call(
+      "chat.postMessage",
+      channel=str(channel_name),
+      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
+      username="Standup Bot",
+      icon_emoji=":memo:"
+    )
 
 
 # Used to set the email jobs for any old or new channels with standup messages
@@ -151,28 +161,14 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         # TODO: Change back to 1pm, not some other random hour and minutes
-        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=21, minute=48, id=channel.channel_name + "_sendemail")
+        SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=13, minute=0, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
         print(create_logging_label() + "Channel " + channel.channel_name + " did not want their standups emailed to them today.")
 
 
-# Used for logging when actions happen
-# @return string with logging time
-def create_logging_label():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "| "
-
-
-# For logging purposes
-def format_minutes_to_have_zero(minutes):
-    if(int(minutes) < 10):
-        return "0" + str(minutes)
-    else:
-        return str(minutes)
-
-
 # Emailing standup results to chosen email address.
-# Timestamp comes in after we make our standup_call.
+# Timestamp comes in after we make our trigger_standup_call.
 # @param channel_name : Name of channel whose standup results we want to email to someone
 # @param recipient_email_address : Where to send the standup results to
 # @return nothing
@@ -232,17 +228,18 @@ def get_standup_replies_for_message(timestamp, channel_name):
             standup_results = []
             for standup_status in replies:
                 # Add to our list of standup messages
-                standup_results.append(create_standup_string(channel_id, standup_status.get("ts")))
+                standup_results.append(retrieve_standup_reply_info(channel_id, standup_status.get("ts")))
             return standup_results
     else:
         # Log that it didn't work
         print(create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
 
 
-# Getting detailed info about this reply
+# Getting detailed info about this reply, since the initial call
+# to the API only gives us the user's ID# and the message's timestamp (ts)
 # @param channel_id: ID of the channel whom we're reporting for
 # @param standup_status_timestamp: Timestamp for this message
-def create_standup_string(channel_id, standup_status_timestamp):
+def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
     reply_result = SLACK_CLIENT.api_call(
       "channels.history",
       token=os.environ['SLACK_BOT_TOKEN'],
@@ -274,6 +271,22 @@ def get_channel_id_via_name(channel_name):
         if channel.get("name") == channel_name:
             return channel.get("id")
 
+
+# ------ Util Functions ------ #
+
+
+# Used for logging when actions happen
+# @return string with logging time
+def create_logging_label():
+    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "| "
+
+
+# For logging purposes
+def format_minutes_to_have_zero(minutes):
+    if(int(minutes) < 10):
+        return "0" + str(minutes)
+    else:
+        return str(minutes)
 
 
 if __name__ == '__main__':
