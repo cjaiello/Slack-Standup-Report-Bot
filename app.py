@@ -45,8 +45,8 @@ class Channel(DB.Model):
 # Our form model
 class StandupSignupForm(Form):
     submitted_channel_name = TextField('Channel Name:', validators=[validators.required()])
-    standup_hour = TextField('Standup Hour:', validators=[validators.required()])
-    standup_minute = TextField('Standup Minute:', validators=[validators.required()])
+    standup_hour = TextField('Standup Hour:')
+    standup_minute = TextField('Standup Minute:')
     message = TextField('Standup Message (optional -- will use default message if blank):')
     email = TextField('Where should we email your standup reports? (optional):')
 
@@ -74,21 +74,26 @@ def homepage():
                 SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
                 print(create_logging_label() + "Set " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
                 # Set email job if requested
-                set_email_job(channel)
+                if (email != None):
+                    set_email_job(channel)
 
             else:
-                # If channel is in database, update channel's standup time
+                # Update channel's standup info (if values weren't empty)
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
-                channel.standup_hour = standup_hour
-                channel.standup_minute = standup_minute
-                channel.email = email
+                channel.standup_hour = if standup_hour != None then standup_hour else channel.standup_hour
+                channel.standup_minute = if standup_minute != None then standup_minute else channel.standup_minute
+                channel.message = if message != None then message else channel.message
+                channel.email = if email != None then email else channel.email
                 DB.session.commit()
-                # Updating this job's timing (need to delete and re-add)
-                SCHEDULER.remove_job(submitted_channel_name + "_standupcall")
-                SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel.channel_name + "_standupcall")
-                print(create_logging_label() + "Updated " + submitted_channel_name + "'s standup time to " + str(standup_hour) + ":" + format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
-                # Set email job if requested
-                set_email_job(channel)
+                # Next we will update the standup message job if one of those values was edited
+                if (message != None or standup_hour != None or standup_minute != None)
+                    # Updating this job's timing (need to delete and re-add)
+                    SCHEDULER.remove_job(submitted_channel_name + "_standupcall")
+                    SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
+                    print(create_logging_label() + "Updated " + submitted_channel_name + "'s standup time to " + str(channel.standup_hour) + ":" + format_minutes_to_have_zero(channel.standup_minute) + " with standup message: " + message)
+                # Lastly, we update the email job if a change was requested
+                if (email != None):
+                    set_email_job(channel)
         else:
             print(create_logging_label() + "Could not update standup time. Issue was: " + str(request))
 
@@ -160,7 +165,6 @@ def set_email_job(channel):
             SCHEDULER.remove_job(channel.channel_name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
-        # TODO: Change back to 1pm, not some other random hour and minutes
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [channel.channel_name, channel.email], day_of_week='mon-fri', hour=13, minute=0, id=channel.channel_name + "_sendemail")
         print(create_logging_label() + "Channel that we set email schedule for: " + channel.channel_name)
     else:
