@@ -80,10 +80,10 @@ def homepage():
             else:
                 # Update channel's standup info (if values weren't empty)
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
-                channel.standup_hour = if standup_hour != None then standup_hour else channel.standup_hour
-                channel.standup_minute = if standup_minute != None then standup_minute else channel.standup_minute
-                channel.message = if message != None then message else channel.message
-                channel.email = if email != None then email else channel.email
+                channel.standup_hour = standup_hour if standup_hour != None else channel.standup_hour
+                channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
+                channel.message = message if message != None else channel.message
+                channel.email = email if email != None else channel.email
                 DB.session.commit()
                 # Next we will update the standup message job if one of those values was edited
                 if (message != None or standup_hour != None or standup_minute != None)
