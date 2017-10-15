@@ -86,7 +86,7 @@ def homepage():
                 channel.email = email if email != None else channel.email
                 DB.session.commit()
                 # Next we will update the standup message job if one of those values was edited
-                if (message != None or standup_hour != None or standup_minute != None)
+                if (message != None or standup_hour != None or standup_minute != None):
                     # Updating this job's timing (need to delete and re-add)
                     SCHEDULER.remove_job(submitted_channel_name + "_standupcall")
                     SCHEDULER.add_job(trigger_standup_call, 'cron', [channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
