@@ -100,12 +100,6 @@ def homepage():
     return render_template('homepage.html', form=form)
 
 
-# Scheduler doesn't like zeros at the start of numbers...
-# @param time: string to remove starting zeros from
-def remove_starting_zeros_from_time(time):
-    return (re.search( r'0?(\d+)?', time, re.M|re.I)).group(1)
-
-
 # Setting the standup schedules for already-existing jobs
 # @return nothing
 def set_schedules():
@@ -129,7 +123,7 @@ def set_schedules():
 # @return nothing
 def trigger_standup_call(channel_name, message):
     # Sending our standup message
-    result = call_slack_message_api(channel_name, message)
+    result = call_slack_messaging_api(channel_name, message)
     # Evaluating result of call and logging it
     if ("ok" in result):
         print(create_logging_label() + "Standup alert message was sent to " + channel_name)
@@ -143,7 +137,7 @@ def trigger_standup_call(channel_name, message):
 
 
 # Will send @param message to @param channel_name
-def call_slack_message_api(channel_name, message):
+def call_slack_messaging_api(channel_name, message):
     return SLACK_CLIENT.api_call(
       "chat.postMessage",
       channel=str(channel_name),
@@ -185,18 +179,9 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
         if (standups != None):
             # Join the list together so it's easier to read
             formatted_standup_message = ''.join(map(str, standups))
-
             # Then we need to send an email with this information
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.ehlo()
-            server.starttls()
-            server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
-            message = 'Subject: {}\n\n{}'.format(a_channel_name + " Standup Report", formatted_standup_message)
-            server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
-            server.quit()
-
+            send_email(a_channel_name, recipient_email_address, formatted_standup_message)
             print(create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " + formatted_standup_message + ", to " + recipient_email_address)
-
             # Finally we need to reset the standup timestamp so we don't get a repeat.
             channel.timestamp = None;
             DB.session.commit()
@@ -205,6 +190,17 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     else:
         # Log that it didn't work
         print(create_logging_label() + "Channel " + a_channel_name + " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
+
+
+# Sends an email via our GMAIL account to the chosen email address
+def send_email(channel_name, recipient_email_address, email_content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
+    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
+    server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
+    server.quit()
 
 
 # Will fetch the standup messages for a channel
@@ -291,6 +287,12 @@ def format_minutes_to_have_zero(minutes):
         return "0" + str(minutes)
     else:
         return str(minutes)
+
+
+# Scheduler doesn't like zeros at the start of numbers...
+# @param time: string to remove starting zeros from
+def remove_starting_zeros_from_time(time):
+    return (re.search( r'0?(\d+)?', time, re.M|re.I)).group(1)
 
 
 if __name__ == '__main__':
