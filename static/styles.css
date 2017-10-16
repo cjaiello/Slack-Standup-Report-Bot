@@ -1,4 +1,4 @@
-input {
+input[type=text] {
   border-radius: 4px;
   width: 200px;
   height: 25px;
@@ -6,9 +6,9 @@ input {
 	color: #186cab;
 	padding: 0px 5px 0px 5px;
 	margin-top: 5px;
-	background-color: #a3e6f6;
+	background-color: #b7edfa;
 	border-style:solid;
-	border-color: #a3e6f6;
+	border-color: #b7edfa;
 }
 
 body {
