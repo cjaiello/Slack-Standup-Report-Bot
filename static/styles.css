@@ -39,8 +39,7 @@ p {
 .directions {
 	margin-bottom: 75px;
 	width: 40%;
-	padding: 20px;
-	padding-right: 40px;
+	padding: 10px 30px 10px 20px;
 	float: left;
 	height: 100%;
 }
