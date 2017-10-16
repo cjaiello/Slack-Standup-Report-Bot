@@ -23,6 +23,38 @@ p{
 	color: #1b1b1b;
 }
 
+.centered{
+	margin:0 auto;
+	text-align: center;
+}
+
+.footer_text {
+	color: #ffffff;
+}
+
+.navigation {
+	background-color: #186cab;
+	margin:0 auto;
+}
+
+.separator_line {
+	background-color: #68cff0;
+	margin:0 auto;
+	width:800px;
+	height:8px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.second_separator_line {
+	background-color: #a1e6f7;
+	margin:0 auto;
+	width:800px;
+	height:5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 .index_white_textbox{
 	background-color: #f8fafc;
 	margin: 0 auto;
@@ -39,6 +71,10 @@ p{
 	text-align: center;
 	padding: 10px;
 	width: 100%;
+}
+
+.navigation_links {
+	font-size: 20px;
 }
 
 .header_text {
@@ -70,11 +106,12 @@ p{ /* Paragraph */
 	margin: 0px 0px 0px 0px;
 }
 
-/* ------White Section on Various Pages------ */
+.footer {
+	font-size: 18px;
+}
 
 .footer { /* This is "Enter as strangers, leave as friends" bottom banner */
 	width:810px;
-	font-size: 18px;
 	-moz-border-bottom-left-radius: 20px;
 	-moz-border-bottom-right-radius: 20px;
 	-webkit-border-bottom-left-radius: 20px;
@@ -108,6 +145,10 @@ p{ /* Paragraph */
 	border-top-right-radius: 5px;
 }
 
+.text {
+	margin: 20px 0px 20px 0px;
+}
+
 .navigation { /* Section that contains links to every page */
 	width:800px;
 	color: #ffffff;
@@ -129,6 +170,16 @@ p{ /* Paragraph */
 	padding: 15px 30px 15px 30px;
 	overflow: auto;
 }
+
+.padding {
+	padding: 0px 10px 10px 10px;
+}
+
+.padding_all_sides {
+	padding: 20px 20px 20px 20px;
+}
+
+/* Text and Buttons */
 
 .center_text{ /* Text that needs to be centered */
 	text-align: center;
