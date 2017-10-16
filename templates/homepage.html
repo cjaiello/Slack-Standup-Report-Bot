@@ -1,74 +1,78 @@
 <!DOCTYPE html>
 <!-- Standup Bot by Christina Aiello, 2017 -->
 <html>
-	<head>
-		<title>DX Slack Standup Bot Scheduler</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
-	</head>
 
-	<body bgcolor="#181818">
+<head>
+	<title>DX Slack Standup Bot Scheduler</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
 
-		<nav class="navigation">
-			<div class="header_text">
-				DX Slack Standup Bot Scheduler
+<body bgcolor="#181818">
+
+	<nav class="navigation">
+		<div class="header_text">
+			DX Slack Standup Bot Scheduler
+		</div>
+	</nav>
+
+	<section class="separator_line">
+	</section>
+	<section class="second_separator_line">
+	</section>
+
+	<section class="index_white_textbox">
+		<form action="" method="post">
+			{{ form.csrf }}
+			<div>
+				<img src="static/logo.svg" align="left">
+
+				<p>Use this form to add or update your standup time and message.</p>
+
+				<ol>
+					<li>Hours are in military time, so 1pm == 13, 2pm == 14, etc.</li>
+					<li>Don't include the # in front of your channel name.</li>
+					<li>Channel name is the only field that isn't optional.</li>
+					<li>Standup results are emailed out at 1pm every day (if you requested emails).</li>
+				</ol>
 			</div>
-		</nav>
 
-		<section class="separator_line">
-		</section>
-		<section class="second_separator_line">
-		</section>
+			<div class="input text">
+				{{ form.submitted_channel_name.label }} {{ form.submitted_channel_name }}
+			</div>
 
-		<section class="index_white_textbox">
-        <form action="" method="post">
-            {{ form.csrf }}
+			<div class="input text">
+				{{ form.standup_hour.label }} {{ form.standup_hour }}
+			</div>
 
-						<img src="static/logo.svg" align="left">
+			<div class="input text">
+				{{ form.standup_minute.label }} {{ form.standup_minute }}
+			</div>
 
-            <p>Use this form to add or update your standup time and message.</p>
+			<div class="input text">
+				{{ form.message.label }} {{ form.message }}
+			</div>
 
-            <ol>
-              <li>Hours are in military time, so 1pm == 13, 2pm == 14, etc.</li>
-              <li>Don't include the # in front of your channel name.</li>
-              <li>Channel name is the only field that isn't optional.</li>
-              <li>Standup results are emailed out at 1pm every day (if you requested emails).</li>
-            </ol>
+			<div class="input text">
+				{{ form.email.label }} {{ form.email }}
+			</div>
 
-            <div class="input text">
-                {{ form.submitted_channel_name.label }} {{ form.submitted_channel_name }}
-            </div>
+			<div class="input submit">
+				<input class="submitButton" type="submit" value="Submit" />
+			</div>
+		</form>
+	</section>
+	<!-- Closing tag for main white text box -->
 
-            <div class="input text">
-                {{ form.standup_hour.label }} {{ form.standup_hour }}
-            </div>
+	<!-- Adds a bar across the page for colors -->
+	<section class="second_separator_line">
+	</section>
+	<section class="separator_line">
+	</section>
 
-            <div class="input text">
-                {{ form.standup_minute.label }} {{ form.standup_minute }}
-            </div>
+	<!-- Bottom Bar -->
+	<footer class="footer">
+		<br><br>
+	</footer>
+</body>
 
-            <div class="input text">
-                {{ form.message.label }} {{ form.message }}
-            </div>
-
-            <div class="input text">
-                {{ form.email.label }} {{ form.email }}
-            </div>
-
-            <div class="input submit">
-                <input class="submitButton" type="submit" value="Submit" />
-            </div>
-        </form>
-		</section> <!-- Closing tag for main white text box -->
-
-		<!-- Adds a bar across the page for colors -->
-		<section class="second_separator_line">
-		</section>
-		<section class="separator_line">
-		</section>
-
-		<!-- Bottom Bar -->
-		<footer class="footer">
-			<br><br>
-		</footer>
-	</body>
 </html>

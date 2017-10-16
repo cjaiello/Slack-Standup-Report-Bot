@@ -1,195 +1,180 @@
 input {
-	border-radius: 4px;
-	width: 200px;
-	height: 30px;
+  border-radius: 4px;
+  width: 200px;
+  height: 30px;
+	font-size: 16px;
 }
 
-A:{ /* Links */
-	font-weight: bold;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
+A: {
+  /* Links */
+  font-weight: bold;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 body {
-	text-align: left;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	color: #000000;
+  text-align: left;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: #000000;
 }
 
-h1,h2,h3,h4{
-	text-align:center;
+h1, h2, h3, h4 {
+  text-align: center;
 }
 
-p{
-	color: #1b1b1b;
+p {
+  color: #1b1b1b;
 }
 
-.centered{
-	margin:0 auto;
-	text-align: center;
+.centered {
+  margin: 0 auto;
+  text-align: center;
 }
 
 .footer_text {
-	color: #ffffff;
+  color: #ffffff;
 }
 
 .navigation {
-	background-color: #186cab;
-	margin:0 auto;
+  background-color: #186cab;
+  margin: 0 auto;
 }
 
 .separator_line {
-	background-color: #68cff0;
-	margin:0 auto;
-	width:800px;
-	height:8px;
-	padding-left: 5px;
-	padding-right: 5px;
+  background-color: #68cff0;
+  margin: 0 auto;
+  width: 800px;
+  height: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .second_separator_line {
-	background-color: #a1e6f7;
-	margin:0 auto;
-	width:800px;
-	height:5px;
-	padding-left: 5px;
-	padding-right: 5px;
+  background-color: #a1e6f7;
+  margin: 0 auto;
+  width: 800px;
+  height: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-.index_white_textbox{
-	background-color: #f8fafc;
-	margin: 0 auto;
-	overflow: auto;
+.index_white_textbox {
+  background-color: #f8fafc;
+  margin: 0 auto;
+  overflow: auto;
 }
 
 .header_text {
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	color: #ffffff;
-	text-align: center;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: #ffffff;
+  text-align: center;
 }
 
 .navigation_section {
-	text-align: center;
-	padding: 10px;
-	width: 100%;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
 }
 
 .navigation_links {
-	font-size: 20px;
+  font-size: 20px;
 }
 
 .header_text {
-	font-size: 35px;
+  font-size: 35px;
 }
 
-.big_link{
-	font-size: 20px;
+.big_link {
+  font-size: 20px;
 }
 
-body { /* Body text */
-	padding: 5px;
-	font-size: 16px;
-	}
-
-h1{ /* Headings */
-	margin: 5px 5px 5px 5px;
-	font-size: 20px;
-	padding: 5px;
+body {
+  /* Body text */
+  padding: 5px;
+  font-size: 16px;
 }
 
-h2{ /* Headings */
-	margin: 5px 5px 5px 5px;
-	font-size: 18px;
-	padding: 5px;
+h1 {
+  /* Headings */
+  margin: 5px 5px 5px 5px;
+  font-size: 20px;
+  padding: 5px;
 }
 
-p{ /* Paragraph */
-	margin: 0px 0px 0px 0px;
+h2 {
+  /* Headings */
+  margin: 5px 5px 5px 5px;
+  font-size: 18px;
+  padding: 5px;
+}
+
+p {
+  /* Paragraph */
+  margin: 0px 0px 0px 0px;
 }
 
 .footer {
-	font-size: 18px;
+  font-size: 18px;
 }
 
-.footer { /* This is "Enter as strangers, leave as friends" bottom banner */
-	width:810px;
-	-moz-border-bottom-left-radius: 20px;
-	-moz-border-bottom-right-radius: 20px;
-	-webkit-border-bottom-left-radius: 20px;
-	-webkit-border-bottom-right-radius: 20px;
-	border-bottom-left-radius: 20px;
-	border-bottom-right-radius: 20px;
-	background-color: #186cab;
-	margin:0 auto;
-	color: #ffffff;
+.footer {
+  /* This is "Enter as strangers, leave as friends" bottom banner */
+  width: 810px;
+  -moz-border-bottom-left-radius: 20px;
+  -moz-border-bottom-right-radius: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+  -webkit-border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #186cab;
+  margin: 0 auto;
+  color: #ffffff;
 }
 
 .submitButton {
-	background-color: #2da5d0;
-	color: #ffffff;
-	font-weight: bold;
-	font-size: 18px;
-	padding: 10px;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	margin-top: 10px;
-	-moz-border-bottom-left-radius: 5px;
-	-moz-border-bottom-right-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	-webkit-border-bottom-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	-moz-border-top-left-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+  background-color: #2da5d0;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  margin-top: 10px;
+  -moz-border-bottom-left-radius: 5px;
+  -moz-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .text {
-	margin: 20px 0px 20px 0px;
+  margin: 20px 0px 20px 0px;
 }
 
-.navigation { /* Section that contains links to every page */
-	width:800px;
-	color: #ffffff;
-	margin-top: 50px;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	padding-left: 5px;
-	padding-right: 5px;
-	-moz-border-top-left-radius: 20px;
-	-moz-border-top-right-radius: 20px;
-	-webkit-border-top-left-radius: 20px;
-	-webkit-border-top-right-radius: 20px;
-	border-top-left-radius: 20px;
-	border-top-right-radius: 20px;
+.navigation {
+  /* Section that contains links to every page */
+  width: 800px;
+  color: #ffffff;
+  margin-top: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  -moz-border-top-left-radius: 20px;
+  -moz-border-top-right-radius: 20px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
-.index_white_textbox { /* This is the main white text box shown on all pages of Christina's webstie */
-	width:750px;
-	padding: 15px 30px 15px 30px;
-	overflow: auto;
-}
-
-.padding {
-	padding: 0px 10px 10px 10px;
-}
-
-.padding_all_sides {
-	padding: 20px 20px 20px 20px;
-}
-
-/* Text and Buttons */
-
-.center_text{ /* Text that needs to be centered */
-	text-align: center;
-	margin: 0 auto;
-	padding: 10px 10px 10px 10px;
-}
-
-.left_text{ /* Text that needs to be aligned to the left */
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-top: 8px;
-	padding-bottom: 8px;
+.index_white_textbox {
+  width: 750px;
+  padding: 15px 30px 15px 30px;
+  overflow: auto;
 }
