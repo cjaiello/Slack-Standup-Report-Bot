@@ -44,7 +44,7 @@ class Channel(DB.Model):
 
 # Our form model
 class StandupSignupForm(Form):
-    submitted_channel_name = TextField('Channel Name:', validators=[validators.required()])
+    submitted_channel_name = TextField('Channel Name (Required):', validators=[validators.required()])
     standup_hour = TextField('Standup Hour:')
     standup_minute = TextField('Standup Minute:')
     message = TextField('Standup Message (Will use default message if blank):')
