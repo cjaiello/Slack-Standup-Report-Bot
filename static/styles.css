@@ -93,6 +93,7 @@ p {
   border-bottom-right-radius: 20px;
   background-color: #186cab;
   margin: 0 auto;
+	padding: 5px;
   color: #ffffff;
 	text-align: center;
 }
