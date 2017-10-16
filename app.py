@@ -255,7 +255,7 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
       user=reply_result.get("messages")[0].get("user")
     )
     print(create_logging_label() + "Adding standup results for " + user_result.get("user").get("real_name"))
-    return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; "
+    return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; \n"
 
 
 # Calls API to get channel ID based on name.
