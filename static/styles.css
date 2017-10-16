@@ -2,8 +2,13 @@ input {
   border-radius: 4px;
   width: 200px;
   height: 30px;
-	font-size: 12px;
+	font-size: 14px;
 	color: #186cab;
+}
+
+body {
+  padding: 5px;
+  font-size: 14px;
 }
 
 A: {
@@ -24,6 +29,10 @@ h1, h2, h3, h4 {
 
 p {
   color: #1b1b1b;
+}
+
+.directions {
+	margin-bottom: 50px;
 }
 
 .centered {
@@ -86,12 +95,6 @@ p {
 
 .big_link {
   font-size: 20px;
-}
-
-body {
-  /* Body text */
-  padding: 5px;
-  font-size: 12px;
 }
 
 p {
