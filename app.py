@@ -283,10 +283,13 @@ def create_logging_label():
 
 # For logging purposes
 def format_minutes_to_have_zero(minutes):
-    if(int(minutes) < 10):
-        return "0" + str(minutes)
+    if minutes == None:
+        return "00"
     else:
-        return str(minutes)
+        if(int(minutes) < 10):
+            return "0" + str(minutes)
+        else:
+            return str(minutes)
 
 
 # Scheduler doesn't like zeros at the start of numbers...
