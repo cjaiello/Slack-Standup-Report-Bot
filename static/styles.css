@@ -32,7 +32,7 @@ p {
 }
 
 .directions {
-	margin-bottom: 50px;
+	margin-bottom: 75px;
 }
 
 .centered {
@@ -49,8 +49,7 @@ p {
   margin: 0 auto;
 }
 
-.separator_line {
-  background-color: #68cff0;
+.separator_line, .second_separator_line {
   margin: 0 auto;
   width: 800px;
   height: 8px;
@@ -58,13 +57,12 @@ p {
   padding-right: 5px;
 }
 
+.separator_line {
+  background-color: #68cff0;
+}
+
 .second_separator_line {
   background-color: #a1e6f7;
-  margin: 0 auto;
-  width: 800px;
-  height: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 .index_white_textbox {
@@ -77,6 +75,7 @@ p {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: #ffffff;
   text-align: center;
+  font-size: 25px;
 }
 
 .navigation_section {
@@ -85,29 +84,8 @@ p {
   width: 100%;
 }
 
-.navigation_links {
-  font-size: 20px;
-}
-
-.header_text {
-  font-size: 25px;
-}
-
-.big_link {
-  font-size: 20px;
-}
-
-p {
-  /* Paragraph */
-  margin: 0px 0px 0px 0px;
-}
-
 .footer {
   font-size: 18px;
-}
-
-.footer {
-  /* This is "Enter as strangers, leave as friends" bottom banner */
   width: 810px;
   -moz-border-bottom-left-radius: 20px;
   -moz-border-bottom-right-radius: 20px;
