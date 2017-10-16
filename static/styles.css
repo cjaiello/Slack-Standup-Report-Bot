@@ -34,7 +34,9 @@ p {
 
 .directions {
 	margin-bottom: 75px;
+	width: 400px;
 	float: left;
+	height: 100%;
 }
 
 .centered {
