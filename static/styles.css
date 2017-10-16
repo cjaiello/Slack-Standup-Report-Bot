@@ -83,7 +83,7 @@ p {
 }
 
 .footer {
-  height: 30px;
+  height: 20px;
   width: 810px;
   -moz-border-bottom-left-radius: 20px;
   -moz-border-bottom-right-radius: 20px;
@@ -93,7 +93,6 @@ p {
   border-bottom-right-radius: 20px;
   background-color: #186cab;
   margin: 0 auto;
-	padding: 5px;
   color: #ffffff;
 	text-align: center;
 }
