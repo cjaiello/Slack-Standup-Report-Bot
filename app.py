@@ -2,13 +2,12 @@
 import os
 import smtplib
 import psycopg2
-import re
-from slackclient import SlackClient
 from flask_sqlalchemy import SQLAlchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import util
+import slack_client
 from .channel import Channel
 
 app = Flask(__name__)
@@ -17,7 +16,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
-SLACK_CLIENT = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
 
 
@@ -105,7 +103,7 @@ def set_schedules():
 # @return nothing
 def trigger_standup_call(channel_name, message):
     # Sending our standup message
-    result = call_slack_messaging_api(channel_name, message)
+    result = slack_client.call_slack_messaging_api(channel_name, message)
     # Evaluating result of call and logging it
     if ("ok" in result):
         print(util.create_logging_label() + "Standup alert message was sent to " + channel_name)
@@ -116,17 +114,6 @@ def trigger_standup_call(channel_name, message):
         DB.session.commit()
     else:
         print(util.create_logging_label() + "Could not send standup alert message to " + channel_name)
-
-
-# Will send @param message to @param channel_name
-def call_slack_messaging_api(channel_name, message):
-    return SLACK_CLIENT.api_call(
-      "chat.postMessage",
-      channel=str(channel_name),
-      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-    )
 
 
 # Used to set the email jobs for any old or new channels with standup messages
@@ -156,7 +143,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     channel = Channel.query.filter_by(channel_name = a_channel_name).first()
     if (channel.timestamp != None):
         # First we need to get all replies to this message:
-        standups = get_standup_replies_for_message(channel.timestamp, channel.channel_name)
+        standups = slack_client.get_standup_replies_for_message(channel.timestamp, channel.channel_name)
         # If we had replies today...
         if (standups != None):
             # Join the list together so it's easier to read
@@ -183,75 +170,6 @@ def send_email(channel_name, recipient_email_address, email_content):
     message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
     server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS, recipient_email_address, message)
     server.quit()
-
-
-# Will fetch the standup messages for a channel
-# @param timestamp : A channel's standup message's timestamp (acquired via API)
-# @return Standup messages in JSON format
-def get_standup_replies_for_message(timestamp, channel_name):
-    channel_id = get_channel_id_via_name(channel_name)
-
-    # https://api.slack.com/methods/channels.history
-    # "To retrieve a single message, specify its ts value as latest, set
-    # inclusive to true, and dial your count down to 1"
-    result = SLACK_CLIENT.api_call(
-      "channels.history",
-      token=os.environ['SLACK_BOT_TOKEN'],
-      channel=channel_id,
-      latest=timestamp,
-      inclusive=True,
-      count=1
-    )
-    # Need to ensure that API call worked
-    if ("ok" in result):
-        # Only do the following if we actually got replies
-        replies = result.get("messages")[0].get("replies")
-        if (replies is not None):
-            standup_results = []
-            for standup_status in replies:
-                # Add to our list of standup messages
-                standup_results.append(retrieve_standup_reply_info(channel_id, standup_status.get("ts")))
-            return standup_results
-    else:
-        # Log that it didn't work
-        print(util.create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
-
-
-# Getting detailed info about this reply, since the initial call
-# to the API only gives us the user's ID# and the message's timestamp (ts)
-# @param channel_id: ID of the channel whom we're reporting for
-# @param standup_status_timestamp: Timestamp for this message
-def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
-    reply_result = SLACK_CLIENT.api_call(
-      "channels.history",
-      token=os.environ['SLACK_BOT_TOKEN'],
-      channel=channel_id,
-      latest=standup_status_timestamp,
-      inclusive=True,
-      count=1
-    )
-    # Get username of person who made this reply
-    user_result = SLACK_CLIENT.api_call(
-      "users.info",
-      token=os.environ['SLACK_BOT_TOKEN'],
-      user=reply_result.get("messages")[0].get("user")
-    )
-    print(util.create_logging_label() + "Adding standup results for " + user_result.get("user").get("real_name"))
-    return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; \n"
-
-
-# Calls API to get channel ID based on name.
-# @param channel_name
-# @return channel ID
-def get_channel_id_via_name(channel_name):
-    channels_list = SLACK_CLIENT.api_call(
-      "channels.list",
-      token=os.environ['SLACK_BOT_TOKEN']
-    )
-    print("get_channel_id_via_name " + str(channels_list))
-    for channel in channels_list.get("channels"):
-        if channel.get("name") == channel_name:
-            return channel.get("id")
 
 
 if __name__ == '__main__':
