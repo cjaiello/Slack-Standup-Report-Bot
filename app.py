@@ -148,7 +148,7 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         # Sending this at 1pm every day
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
-                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=13, minute=0, id=channel.channel_name + "_sendemail")
+                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour) + 6, minute=0, id=channel.channel_name + "_sendemail")
         print(util.create_logging_label() +
               "Channel that we set email schedule for: " + channel.channel_name)
     else:
