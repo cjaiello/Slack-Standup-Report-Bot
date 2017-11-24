@@ -73,9 +73,12 @@ p {
   background-color: #a1e6f7;
 }
 
-.index_white_textbox {
+.white_textbox {
   background-color: #ffffff;
   margin: 0 auto;
+  overflow: auto;
+  width: 750px;
+  padding: 15px 30px 15px 30px;
   overflow: auto;
 }
 
@@ -148,12 +151,6 @@ p {
   -webkit-border-top-right-radius: 20px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-}
-
-.index_white_textbox {
-  width: 750px;
-  padding: 15px 30px 15px 30px;
-  overflow: auto;
 }
 
 .time {
