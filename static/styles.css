@@ -1,8 +1,8 @@
 input[type=text] {
   border-radius: 4px;
-  width: 350px;
+  width: 375px;
   height: 25px;
-	font-size: 14px;
+	font-size: 16px;
 	color: #186cab;
 	padding: 0px 5px 0px 5px;
 	margin-top: 5px;
@@ -13,7 +13,7 @@ input[type=text] {
 
 select {
    background: #b7edfa;
-   font-size: 15px;
+   font-size: 16px;
    height: 25px;
    border: none;
    color: #186cab;
@@ -21,7 +21,7 @@ select {
 
 body {
   margin: 5px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 A: {
