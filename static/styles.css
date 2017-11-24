@@ -159,11 +159,18 @@ p {
   width: 50px !important;
 }
 
+input::-webkit-input-placeholder {
+  color: #75c1d3 !important;
+}
 
+input:-moz-placeholder {
+  color: #75c1d3 !important;
+}
 
-input::-webkit-input-placeholder,
-input:-moz-placeholder,
-input::-moz-placeholder,
+input::-moz-placeholder {
+  color: #75c1d3 !important;
+}
+
 input:-ms-input-placeholder {
   color: #75c1d3 !important;
 }
