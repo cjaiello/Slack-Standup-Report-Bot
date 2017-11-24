@@ -146,3 +146,7 @@ p {
   padding: 15px 30px 15px 30px;
   overflow: auto;
 }
+
+.time {
+  width: 50px !important;
+}

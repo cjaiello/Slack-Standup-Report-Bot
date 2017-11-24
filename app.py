@@ -24,6 +24,7 @@ class StandupSignupForm(Form):
     submitted_channel_name = TextField('Channel Name (Required):', validators=[validators.required()])
     standup_hour = TextField('Standup Hour:')
     standup_minute = TextField('Standup Minute:')
+    am_or_pm = ['am', 'pm']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField('Where should we email your standup reports? (optional):')
 
@@ -39,16 +40,17 @@ def homepage():
         standup_minute = util.remove_starting_zeros_from_time(request.form['standup_minute'])
         message = request.form['message']
         email = request.form['email']
+        am_or_pm = request.form['am_or_pm']
         # If the form field was valid...
         if form.validate():
             # Look for channel in database
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 # Channel isn't in database. Create our channel object and add it to the database
-                channel = Channel(submitted_channel_name, standup_hour, standup_minute, message, email, None)
+                channel = Channel(submitted_channel_name, util.calculate_am_or_pm(standup_hour, am_or_pm), standup_minute, message, email, None)
                 DB.session.add(channel)
                 DB.session.commit()
                 # Adding this additional job to the queue
-                add_standup_job(submitted_channel_name, message, standup_hour, standup_minute)
+                add_standup_job(submitted_channel_name, message, util.calculate_am_or_pm(standup_hour, am_or_pm), standup_minute)
                 # Set email job if requested
                 if (email != None):
                     set_email_job(channel)
@@ -56,7 +58,7 @@ def homepage():
             else:
                 # Update channel's standup info (if values weren't empty)
                 channel = Channel.query.filter_by(channel_name = submitted_channel_name).first()
-                channel.standup_hour = standup_hour if standup_hour != None else channel.standup_hour
+                channel.standup_hour = util.calculate_am_or_pm(standup_hour, am_or_pm) if standup_hour != None else channel.standup_hour
                 channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
                 channel.message = message if message != None else channel.message
                 channel.email = email if email != None else channel.email

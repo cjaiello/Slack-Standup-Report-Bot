@@ -39,33 +39,25 @@
 			</div>
 
 			<div class="input text">
-				{{ form.submitted_channel_name.label }}
-				<br>
-				{{ form.submitted_channel_name }}
+				{{ form.submitted_channel_name(placeholder=form.submitted_channel_name.label) }}
 			</div>
 
 			<div class="input text">
-				{{ form.standup_hour.label }}
-				<br>
-				{{ form.standup_hour }}
+				{{ form.reminder_hour.label }}
+				<br> {{ form.reminder_hour(class_="time", placeholder="00") }} {{ form.reminder_minute(class_="time", placeholder="00") }}
+				<select name="am_or_pm" method="GET" action="/">
+				    {% for option in form.am_or_pm %}
+				    <option value= "{{option}}" SELECTED>{{option}}</option>"
+				    {% endfor %}
+				</select>
 			</div>
 
 			<div class="input text">
-				{{ form.standup_minute.label }}
-				<br>
-				{{ form.standup_minute }}
+				{{ form.message(placeholder=form.message.label) }}
 			</div>
 
 			<div class="input text">
-				{{ form.message.label }}
-				<br>
-				{{ form.message }}
-			</div>
-
-			<div class="input text">
-				{{ form.email.label }}
-				<br>
-				{{ form.email }}
+				{{ form.email(placeholder=form.email.label) }}
 			</div>
 
 			<div class="input submit">
