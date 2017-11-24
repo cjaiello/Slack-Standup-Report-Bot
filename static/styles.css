@@ -156,17 +156,17 @@ p {
 }
 
 input::-webkit-input-placeholder {
-  color: #75c1d3 !important;
+  color: #42b4cf !important;
 }
 
 input:-moz-placeholder {
-  color: #75c1d3 !important;
+  color: #42b4cf !important;
 }
 
 input::-moz-placeholder {
-  color: #75c1d3 !important;
+  color: #42b4cf !important;
 }
 
 input:-ms-input-placeholder {
-  color: #75c1d3 !important;
+  color: #42b4cf !important;
 }
