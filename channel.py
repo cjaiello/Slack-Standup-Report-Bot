@@ -1,4 +1,5 @@
 # Standup Bot by Christina Aiello, 2017
+DB = SQLAlchemy(app)
 
 # Create our database model
 class Channel(DB.Model):
