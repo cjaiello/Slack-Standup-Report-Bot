@@ -35,8 +35,8 @@ def homepage():
     form = StandupSignupForm(request.form)
 
     if request.method == 'POST':
-        # Get whatever name they gave us for a channel
-        submitted_channel_name = request.form['submitted_channel_name']
+        # Get whatever info they gave us for their channel
+        submitted_channel_name = request.form['submitted_channel_name'].replace("#","")
         standup_hour = util.remove_starting_zeros_from_time(
             request.form['standup_hour'])
         standup_minute = util.remove_starting_zeros_from_time(
