@@ -1,6 +1,6 @@
 input[type=text] {
   border-radius: 4px;
-  width: 200px;
+  width: 350px;
   height: 25px;
 	font-size: 14px;
 	color: #186cab;
@@ -149,4 +149,13 @@ p {
 
 .time {
   width: 50px !important;
+}
+
+
+
+input::-webkit-input-placeholder,
+input:-moz-placeholder,
+input::-moz-placeholder,
+input:-ms-input-placeholder {
+  color: #75c1d3 !important;
 }
