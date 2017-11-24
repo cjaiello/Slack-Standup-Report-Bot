@@ -11,6 +11,14 @@ input[type=text] {
 	border-color: #b7edfa;
 }
 
+select {
+   background: #b7edfa;
+   font-size: 15px;
+   height: 25px;
+   border: none;
+   color: #186cab;
+}
+
 body {
   margin: 5px;
   font-size: 14px;
