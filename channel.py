@@ -1,5 +1,6 @@
 # Standup Bot by Christina Aiello, 2017
 from flask_sqlalchemy import SQLAlchemy
+app = Flask(__name__)
 DB = SQLAlchemy(app)
 
 # Create our database model
