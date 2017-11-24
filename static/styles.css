@@ -75,8 +75,8 @@ p {
   background-color: #ffffff;
   margin: 0 auto;
   overflow: auto;
-  width: 900px;
-  margin: 15px 30px 15px 30px;
+  width: 890px;
+  padding: 15px 0px;
   overflow: auto;
 }
 
@@ -139,10 +139,10 @@ p {
 .navigation {
   background-color: #186cab;
   margin: 0 auto;
-  width: 900px;
+  width: 890px;
   color: #ffffff;
   margin-top: 50px;
-  margin: 10px 5px 10px 5px;
+  padding: 10px 5px 10px 5px;
   -moz-border-top-left-radius: 20px;
   -moz-border-top-right-radius: 20px;
   -webkit-border-top-left-radius: 20px;
