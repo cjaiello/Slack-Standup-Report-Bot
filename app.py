@@ -8,7 +8,7 @@ from flask import Flask, request, Response, jsonify, render_template
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import util
 import slack_client
-from .channel import Channel
+from channel import Channel
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
