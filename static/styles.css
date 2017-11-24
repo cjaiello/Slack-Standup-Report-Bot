@@ -76,7 +76,7 @@ p {
   margin: 0 auto;
   overflow: auto;
   width: 900px;
-  padding: 15px 30px 15px 30px;
+  margin: 15px 30px 15px 30px;
   overflow: auto;
 }
 
