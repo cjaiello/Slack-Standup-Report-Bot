@@ -43,8 +43,8 @@
 			</div>
 
 			<div class="input text">
-				{{ form.reminder_hour.label }}
-				<br> {{ form.reminder_hour(class_="time", placeholder="00") }} {{ form.reminder_minute(class_="time", placeholder="00") }}
+				{{ form.standup_hour.label }}
+				<br> {{ form.standup_hour(class_="time", placeholder="00") }} {{ form.standup_minute(class_="time", placeholder="00") }}
 				<select name="am_or_pm" method="GET" action="/">
 				    {% for option in form.am_or_pm %}
 				    <option value= "{{option}}" SELECTED>{{option}}</option>"
