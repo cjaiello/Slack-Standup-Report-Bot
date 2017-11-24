@@ -1,5 +1,6 @@
 # Standup Bot by Christina Aiello, 2017
 from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 app = Flask(__name__)
 DB = SQLAlchemy(app)
 
