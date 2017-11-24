@@ -93,6 +93,7 @@ p {
 }
 
 .footer {
+  padding: 10px 0px;
   height: 20px;
   width: 810px;
   -moz-border-bottom-left-radius: 20px;
