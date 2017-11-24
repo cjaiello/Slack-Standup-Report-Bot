@@ -31,15 +31,13 @@
 				<p>Use this form to add or update your standup information.</p>
 
 				<ol>
-					<li>Hours are in military time, so 1pm == 13, 2pm == 14, etc.</li>
 					<li>Channel name is the only required field.</li>
-					<li>Don't include the # in front of your channel name.</li>
 					<li>Standup results are emailed out at 1pm every day (if you requested emails).</li>
 				</ol>
 			</div>
 
 			<div class="input text">
-				{{ form.submitted_channel_name(placeholder="Channel Name (Without #)") }}
+				{{ form.submitted_channel_name(placeholder="(REQUIRED) Channel name, without #") }}
 			</div>
 
 			<div class="input text">
@@ -53,11 +51,11 @@
 			</div>
 
 			<div class="input text">
-				{{ form.message(placeholder="Standup message") }}
+				{{ form.message(placeholder="Standup Message (Will use default message if blank)") }}
 			</div>
 
 			<div class="input text">
-				{{ form.email(placeholder="Email address to send standup reports to") }}
+				{{ form.email(placeholder="Where should we email your standup reports?") }}
 			</div>
 
 			<div class="input submit">
