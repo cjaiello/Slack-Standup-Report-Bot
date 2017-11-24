@@ -24,7 +24,7 @@ class StandupSignupForm(Form):
         'Channel Name (Required):', validators=[validators.required()])
     standup_hour = TextField('Standup Hour:')
     standup_minute = TextField('Standup Minute:')
-    am_or_pm = ['am', 'pm']
+    am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField(
         'Where should we email your standup reports? (optional):')
