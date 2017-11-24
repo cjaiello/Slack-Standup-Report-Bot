@@ -2,21 +2,21 @@ input[type=text] {
   border-radius: 4px;
   width: 400px;
   height: 25px;
-	font-size: 16px;
-	color: #186cab;
-	padding: 0px 5px 0px 5px;
-	margin-top: 5px;
-	background-color: #b7edfa;
-	border-style:solid;
-	border-color: #b7edfa;
+  font-size: 16px;
+  color: #186cab;
+  padding: 0px 5px 0px 5px;
+  margin-top: 5px;
+  background-color: #b7edfa;
+  border-style: solid;
+  border-color: #b7edfa;
 }
 
 select {
-   background: #b7edfa;
-   font-size: 16px;
-   height: 25px;
-   border: none;
-   color: #186cab;
+  background: #b7edfa;
+  font-size: 16px;
+  height: 25px;
+  border: none;
+  color: #186cab;
 }
 
 body {
@@ -45,11 +45,11 @@ p {
 }
 
 .directions {
-	margin-bottom: 75px;
-	width: 40%;
-	padding: 10px 30px 10px 20px;
-	float: left;
-	height: 100%;
+  margin-bottom: 75px;
+  width: 40%;
+  padding: 10px 30px 10px 20px;
+  float: left;
+  height: 100%;
 }
 
 .centered {
@@ -108,13 +108,13 @@ p {
   background-color: #186cab;
   margin: 0 auto;
   color: #ffffff;
-	text-align: center;
+  text-align: center;
 }
 
 .submitButton {
   background-color: #2da5d0;
   color: #ffffff;
-	height: 40px;
+  height: 40px;
   font-weight: bold;
   font-size: 18px;
   padding: 5px;
