@@ -89,7 +89,7 @@ def homepage():
                     set_email_job(channel)
         else:
             print(util.create_logging_label() +
-                  "Could not update standup time. Issue was: " + str(request.body))
+                  "Could not update standup time.")
 
     return render_template('homepage.html', form=form)
 
