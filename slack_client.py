@@ -11,13 +11,13 @@ def call_slack_messaging_api(channel_name, message):
   # response = requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], json = text)
   # print(util.create_logging_label() + "Result of call to slack was: " + response.text)
   # return response
-return SLACK_CLIENT.api_call(
-      "chat:write.customize",
-      channel=str(channel_name),
-      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-    )
+  return SLACK_CLIENT.api_call(
+    "chat:write.customize",
+    channel=str(channel_name),
+    text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
+    username="Standup Bot",
+    icon_emoji=":memo:"
+  )
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
