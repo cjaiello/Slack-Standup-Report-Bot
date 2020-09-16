@@ -8,7 +8,7 @@ from flask import Flask, request, Response, jsonify, render_template
 from wtforms import TextField, TextAreaField, validators, StringField, SubmitField
 import util
 import slack_client
-from flask_wtf import Form, RecaptchaField
+from flask_wtf import FlaskForm, RecaptchaField
 import os
 
 app = Flask(__name__)
@@ -153,7 +153,6 @@ def set_email_job(channel):
         if channel.channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
             SCHEDULER.remove_job(channel.channel_name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
-        # Sending this at 1pm every day
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
                           channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour) + 4, minute=0, id=channel.channel_name + "_sendemail")
         print(util.create_logging_label() +
