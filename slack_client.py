@@ -12,7 +12,7 @@ def call_slack_messaging_api(channel_name, message):
   # print(util.create_logging_label() + "Result of call to slack was: " + response.text)
   # return response
   return SLACK_CLIENT.api_call(
-    "chat:write.customize", 
+    "chat:write", 
     json={
       'channel' : str(channel_name),
       'text' : "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
