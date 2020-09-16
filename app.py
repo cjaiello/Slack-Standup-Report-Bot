@@ -41,7 +41,7 @@ class StandupSignupForm(FlaskForm):
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form = StandupSignupForm()
-    message = null
+    message = None
 
     if request.method == 'POST':
         form = StandupSignupForm(request.form)
