@@ -35,6 +35,9 @@
 			</div>
 
 			<div class="input text">
+				{% if message %}
+					{{ message }}
+				{% endif %}
 				{{ form.submitted_channel_name(placeholder="(REQUIRED) Channel name without #") }}
 				{% for error in form.submitted_channel_name.errors %}
 				  <li class="error">{{ error }}</li>

@@ -60,7 +60,7 @@ p {
 
 .separator_line, .second_separator_line {
   margin: 0 auto;
-  width: 90%;
+  width: 75%;
   height: 8px;
 }
 
@@ -76,7 +76,7 @@ p {
   background-color: #ffffff;
   margin: 0 auto;
   overflow: auto;
-  width: 90%;
+  width: 75%;
   overflow: auto;
 }
 
@@ -101,7 +101,7 @@ p {
 
 .footer {
   height: 20px;
-  width: 90%;
+  width: 75%;
   -moz-border-bottom-left-radius: 20px;
   -moz-border-bottom-right-radius: 20px;
   -webkit-border-bottom-left-radius: 20px;
@@ -144,7 +144,7 @@ p {
 .navigation {
   background-color: #186cab;
   margin: 0 auto;
-  width: 90%;
+  width: 75%;
   color: #ffffff;
   margin-top: 25px;
   -moz-border-top-left-radius: 20px;

@@ -41,6 +41,7 @@ class StandupSignupForm(FlaskForm):
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form = StandupSignupForm()
+    message = null
 
     if request.method == 'POST':
         form = StandupSignupForm(request.form)
@@ -89,13 +90,16 @@ def homepage():
                 # Lastly, we update the email job if a change was requested
                 if (email != None):
                     set_email_job(channel)
+
+            message = "Standup bot scheduling set for " + submitted_channel_name
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
             print(util.create_logging_label() +
                   str(form.errors))
+            message = "Please fix the error(s) below"
 
-    return render_template('homepage.html', form=form)
+    return render_template('homepage.html', form=form, message=message)
 
 
 # Adds standup job and logs it
