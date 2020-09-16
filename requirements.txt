@@ -7,7 +7,7 @@ MarkupSafe==0.23
 Werkzeug==0.11.11
 flask-sqlalchemy
 psycopg2
-slackclient
+slackclient==1.2.0
 APScheduler==3.0.0
 wtforms
 newrelic
