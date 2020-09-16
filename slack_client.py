@@ -3,11 +3,13 @@ import util
 import os
 import requests
 
+SLACK_CLIENT = SlackClient(os.environ['SLACK_BOT_CHANNEL_URL'])
+
 # Will send @param message to @param channel_name
 def call_slack_messaging_api(channel_name, message):
   text = "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message)
-  result = requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], data = text)
-  print(util.create_logging_label() + "Result of call to slack was: " + result)
+  response = requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], data = text)
+  print(util.create_logging_label() + "Result of call to slack was: " + response.text)
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
