@@ -25,7 +25,7 @@ STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
 
 
 # Our form model
-class StandupSignupForm(Form):
+class StandupSignupForm(FlaskForm):
     submitted_channel_name = TextField(
         'Channel Name (Required):', validators=[validators.required()])
     standup_hour = TextField('Standup Hour:')
@@ -90,6 +90,8 @@ def homepage():
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
+            print(util.create_logging_label() +
+                  str(form.errors))
 
     return render_template('homepage.html', form=form)
 
