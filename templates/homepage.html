@@ -51,14 +51,18 @@
 				    <option value= "{{option}}" SELECTED>{{option}}</option>"
 				    {% endfor %}
 				</select>
-				{% for error in form.standup_hour.errors %}
-					<span class="error bold">Hours Error</span>
-				    <span class="error">{{ error }}</span>
-				{% endfor %}
-				{% for error in form.standup_minute.errors %}
-					<span class="error bold">Minutes Error</span>
-				    <span class="error">{{ error }}</span>
-				{% endfor %}
+				{% if form.standup_hour.errors %}
+				<span class="error bold">Hours Error{% if form.standup_hour.errors.length > 1 %}s{% endif %}</span>
+					{% for error in form.standup_hour.errors %}
+						<span class="error">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+				{% if form.standup_minute.errors %}
+					<span class="error bold">Minutes Error{% if form.standup_minute.errors.length > 1 %}s{% endif %}</span>
+					{% for error in form.standup_minute.errors %}
+						<span class="error">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
 			</div>
 
 			<div class="input text">
