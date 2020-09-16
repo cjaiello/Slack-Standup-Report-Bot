@@ -27,10 +27,10 @@ STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
 # Our form model
 class StandupSignupForm(FlaskForm):
     submitted_channel_name = TextField(
-        'Channel Name (Required):', validators=[validators.required()])
+        'Channel Name:', validators=[validators.required()])
     standup_hour = IntegerField('Standup Hour:', validators=[validators.required(), validators.NumberRange(min=0, max=12)])
     standup_minute = IntegerField('Standup Minute:', validators=[validators.required(), validators.NumberRange(min=0, max=59)])
-    am_or_pm = ['pm', 'am', validators=[validators.required()]]
+    am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField(
         'Where should we email your standup reports? (optional):')
