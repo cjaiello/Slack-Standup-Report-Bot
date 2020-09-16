@@ -190,3 +190,7 @@ input::-moz-placeholder {
 input:-ms-input-placeholder {
   color: #42b4cf !important;
 }
+
+.footer_text {
+  padding: 5px;
+}

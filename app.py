@@ -91,7 +91,7 @@ def homepage():
                 if (email != None):
                     set_email_job(channel)
 
-            message = "Standup bot scheduling set for " + submitted_channel_name
+            message = "Success! Standup bot scheduling set for " + submitted_channel_name
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
