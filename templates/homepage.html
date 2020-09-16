@@ -58,7 +58,7 @@
 					{% endfor %}
 				{% endif %}
 				{% if form.standup_minute.errors %}
-					<span class="error error_details bold">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+					<span class="error error_details bold {% if form.standup_hour.errors %}extra_top_padding{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
 					{% for error in form.standup_minute.errors %}
 						<span class="error error_details">{{ error }}</span>
 					{% endfor %}
@@ -76,7 +76,7 @@
 			<div class="input submit">
 				{{ form.recaptcha }}
 				{% for error in form.recaptcha.errors %}
-				  <span class="error">You must fill out the reCAPTCHA!</span>
+				  <span class="error error_details bold">You must fill out the reCAPTCHA!</span>
 				{% endfor %}
 				<input class="submitButton" type="submit" value="Submit" />
 			</div>

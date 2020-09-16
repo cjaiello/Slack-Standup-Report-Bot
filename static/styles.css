@@ -173,6 +173,10 @@ p {
   display: block;
 }
 
+.extra_top_padding {
+  padding-top: 5px;
+}
+
 .error_details {
   font-size: 10px;
   line-height: 0.2;
