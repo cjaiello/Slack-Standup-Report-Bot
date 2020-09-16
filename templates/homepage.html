@@ -37,6 +37,9 @@
 
 			<div class="input text">
 				{{ form.submitted_channel_name(placeholder="(REQUIRED) Channel name without #") }}
+				{% for error in form.submitted_channel_name.errors %}
+				  <li>{{ error }}</li>
+				{% endfor %}
 			</div>
 
 			<div class="input text">
@@ -46,6 +49,12 @@
 				    <option value= "{{option}}" SELECTED>{{option}}</option>"
 				    {% endfor %}
 				</select>
+				{% for error in form.standup_hour.errors %}
+				  <li>{{ error }}</li>
+				{% endfor %}
+				{% for error in form.standup_minute.errors %}
+				  <li>{{ error }}</li>
+				{% endfor %}
 			</div>
 
 			<div class="input text">
@@ -54,10 +63,6 @@
 
 			<div class="input text">
 				{{ form.email(placeholder="Where should we email your standup reports?") }}
-			</div>
-
-			<div class="errors">
-				{{ form.errors }}
 			</div>
 
 			<div class="input submit">
