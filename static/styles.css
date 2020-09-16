@@ -85,6 +85,7 @@ p {
   color: #ffffff;
   text-align: center;
   font-size: 30px;
+  padding: 5px;
 }
 
 .form {
@@ -161,6 +162,7 @@ p {
 .error {
   font-size: 10px;
   color: #c70505;
+  padding: 5px;
 }
 
 input::-webkit-input-placeholder {
