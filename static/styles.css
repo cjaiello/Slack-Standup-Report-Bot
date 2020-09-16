@@ -79,7 +79,6 @@ p {
   margin: 0 auto;
   overflow: auto;
   width: 90%;
-  padding: 15px 30px;
   overflow: auto;
 }
 
@@ -97,7 +96,6 @@ p {
 }
 
 .footer {
-  padding: 10px 0px;
   height: 20px;
   width: 90%;
   -moz-border-bottom-left-radius: 20px;
@@ -145,7 +143,6 @@ p {
   width: 90%;
   color: #ffffff;
   margin-top: 25px;
-  padding: 10px 5px 10px 5px;
   -moz-border-top-left-radius: 20px;
   -moz-border-top-right-radius: 20px;
   -webkit-border-top-left-radius: 20px;
