@@ -89,6 +89,10 @@ p {
   font-size: 30px;
 }
 
+.form {
+  margin: 20px;
+}
+
 .navigation_section {
   text-align: center;
   margin: 5px;
