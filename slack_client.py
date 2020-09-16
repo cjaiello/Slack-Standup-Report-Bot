@@ -10,7 +10,7 @@ def call_slack_messaging_api(channel_name, message):
   text = {"text" : message}
   response = requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], json = text)
   print(util.create_logging_label() + "Result of call to slack was: " + response.text)
-  print(util.create_logging_label() + "Result of call to slack was: " + response.json())
+  print(response.json())
   print(util.create_logging_label() + "Result of call to slack was all printed.")
 
 # Will fetch the standup messages for a channel
