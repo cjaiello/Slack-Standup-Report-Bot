@@ -52,7 +52,7 @@ def homepage():
         email = request.form['email']
         am_or_pm = request.form['am_or_pm']
         # If the form field was valid...
-        if form.validate():
+        if form.validate_on_submit():
             # Look for channel in database
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 # Channel isn't in database. Create our channel object and add it to the database
@@ -89,7 +89,7 @@ def homepage():
                     set_email_job(channel)
         else:
             print(util.create_logging_label() +
-                  "Could not update standup time. Issue was: " + str(request))
+                  "Could not update standup time. Issue was: " + str(request.body))
 
     return render_template('homepage.html', form=form)
 
