@@ -175,6 +175,7 @@ p {
 
 .error_details {
   font-size: 10px;
+  line-height: 0.2;
 }
 
 .success {
