@@ -67,7 +67,7 @@
 			<div class="input submit">
 				{{ form.recaptcha }}
 				{% for error in form.recaptcha.errors %}
-				  <li class="error">{{ error }}</li>
+				  You must fill out the reCAPTCHA!
 				{% endfor %}
 				<input class="submitButton" type="submit" value="Submit" />
 			</div>

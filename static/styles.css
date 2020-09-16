@@ -24,8 +24,7 @@ body {
   font-size: 16px;
 }
 
-A: {
-  /* Links */
+A {
   font-weight: bold;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
@@ -51,10 +50,9 @@ p {
 
 .directions {
   margin-bottom: 30px;
-  width: 40%;
-  padding: 10px 30px 10px 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   float: left;
-  height: 100%;
 }
 
 .centered {
@@ -64,7 +62,7 @@ p {
 
 .separator_line, .second_separator_line {
   margin: 0 auto;
-  width: 900px;
+  width: 90%;
   height: 8px;
 }
 
@@ -80,8 +78,8 @@ p {
   background-color: #ffffff;
   margin: 0 auto;
   overflow: auto;
-  width: 900px;
-  padding: 15px 0px;
+  width: 90%;
+  padding: 15px 30px;
   overflow: auto;
 }
 
@@ -101,7 +99,7 @@ p {
 .footer {
   padding: 10px 0px;
   height: 20px;
-  width: 900px;
+  width: 90%;
   -moz-border-bottom-left-radius: 20px;
   -moz-border-bottom-right-radius: 20px;
   -webkit-border-bottom-left-radius: 20px;
@@ -144,7 +142,7 @@ p {
 .navigation {
   background-color: #186cab;
   margin: 0 auto;
-  width: 890px;
+  width: 90%;
   color: #ffffff;
   margin-top: 25px;
   padding: 10px 5px 10px 5px;
