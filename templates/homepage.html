@@ -52,13 +52,13 @@
 				    {% endfor %}
 				</select>
 				{% if form.standup_hour.errors %}
-				<span class="error bold">Hours Error{% if len(form.standup_hour.errors) > 1 %}s{% endif %}</span>
+				<span class="error bold">Hours Error{% if form.standup_hour.errors |length > 1 %}s{% endif %}</span>
 					{% for error in form.standup_hour.errors %}
 						<span class="error error_details">{{ error }}</span>
 					{% endfor %}
 				{% endif %}
 				{% if form.standup_minute.errors %}
-					<span class="error bold">Minutes Error{% if len(form.standup_minute.errors) > 1 %}s{% endif %}</span>
+					<span class="error bold">Minutes Error{% if form.standup_minute.errors |length) > 1 %}s{% endif %}</span>
 					{% for error in form.standup_minute.errors %}
 						<span class="error error_details">{{ error }}</span>
 					{% endfor %}
