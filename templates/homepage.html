@@ -52,10 +52,12 @@
 				    {% endfor %}
 				</select>
 				{% for error in form.standup_hour.errors %}
-				  <li class="error">{{ error }}</li>
+					<span class="error bold">Hours Error</span>
+				    <span class="error">{{ error }}</span>
 				{% endfor %}
 				{% for error in form.standup_minute.errors %}
-				  <li class="error">{{ error }}</li>
+					<span class="error bold">Minutes Error</span>
+				    <span class="error">{{ error }}</span>
 				{% endfor %}
 			</div>
 

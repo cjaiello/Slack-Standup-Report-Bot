@@ -163,6 +163,10 @@ p {
   width: 50px !important;
 }
 
+.bold {
+  font-weight: 800;
+}
+
 .error {
   color: #c70505;
   padding: 5px;
