@@ -40,9 +40,10 @@ class StandupSignupForm(FlaskForm):
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
-    form = StandupSignupForm(request.form)
+    form = StandupSignupForm()
 
     if request.method == 'POST':
+        form = StandupSignupForm(request.form)
         # Get whatever info they gave us for their channel
         submitted_channel_name = escape(request.form['submitted_channel_name'].replace("#",""))
         standup_hour = util.remove_starting_zeros_from_time(
