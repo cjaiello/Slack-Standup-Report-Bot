@@ -92,6 +92,7 @@ def homepage():
                     set_email_job(channel)
 
             message = "Success! Standup bot scheduling set for " + submitted_channel_name
+            slack_client.call_slack_messaging_api(submitted_channel_name, message)
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")

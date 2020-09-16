@@ -1,23 +1,18 @@
 from slackclient import SlackClient
 import util
 import os
-
-SLACK_CLIENT = SlackClient(os.environ['SLACK_BOT_TOKEN'])
+import requests
 
 # Will send @param message to @param channel_name
 def call_slack_messaging_api(channel_name, message):
-    return SLACK_CLIENT.api_call(
-      "chat.postMessage",
-      channel=str(channel_name),
-      text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-    )
-
+  url = 'https://www.w3schools.com/python/demopage.php'
+  text = "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message)
+  return requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], data = text)
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
 # @return Standup messages in JSON format
+# TODO: DOES THIS STILL WORK?
 def get_standup_replies_for_message(timestamp, channel_name):
     channel_id = get_channel_id_via_name(channel_name)
 
