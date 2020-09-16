@@ -164,8 +164,13 @@ p {
 }
 
 .error {
-  font-size: 10px;
   color: #c70505;
+  padding: 5px;
+  display: block;
+}
+
+.success {
+  color: #0543ca;
   padding: 5px;
   display: block;
 }
