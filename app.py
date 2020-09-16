@@ -9,6 +9,7 @@ from wtforms import TextField, TextAreaField, validators, StringField, SubmitFie
 import util
 import slack_client
 from flask_wtf import Form, RecaptchaField
+import os
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
@@ -17,6 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['RECAPTCHA_USE_SSL'] = False
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6LdJs8wZAAAAAPkugVaIwSgJwuq6yY-Tz7C1FFbu'
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
+app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
 STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
