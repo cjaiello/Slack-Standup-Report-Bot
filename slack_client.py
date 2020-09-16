@@ -17,8 +17,9 @@ def call_slack_messaging_api(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  print(response.text)
-  print(response.json())
+  print(util.create_logging_label() + response.headers)
+  print(util.create_logging_label() + response.data)
+  return response.data
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
