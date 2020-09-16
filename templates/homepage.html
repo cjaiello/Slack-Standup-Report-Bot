@@ -56,6 +56,10 @@
 				{{ form.email(placeholder="Where should we email your standup reports?") }}
 			</div>
 
+			<div class="errors">
+				{{ form.errors }}
+			</div>
+
 			<div class="input submit">
 				{{ form.recaptcha }}
 				<input class="submitButton" type="submit" value="Submit" />
