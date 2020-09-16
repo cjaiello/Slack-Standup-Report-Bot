@@ -58,6 +58,10 @@ p {
   text-align: center;
 }
 
+.message {
+  display: block;
+}
+
 .separator_line, .second_separator_line {
   margin: 0 auto;
   width: 75%;
@@ -163,6 +167,7 @@ p {
   font-size: 10px;
   color: #c70505;
   padding: 5px;
+  display: block;
 }
 
 input::-webkit-input-placeholder {
