@@ -29,7 +29,6 @@
 				<p>Use this form to add or update your standup information.</p>
 
 				<ol>
-					<li>Channel name is the only required field.</li>
 					<li>You don't need to include @channel in your standup message.</li>
 					<li>Standup results are emailed to you four hours after your standup alert is sent.</li>
 				</ol>
@@ -38,7 +37,7 @@
 			<div class="input text">
 				{{ form.submitted_channel_name(placeholder="(REQUIRED) Channel name without #") }}
 				{% for error in form.submitted_channel_name.errors %}
-				  <li>{{ error }}</li>
+				  <li class="error">{{ error }}</li>
 				{% endfor %}
 			</div>
 
@@ -50,10 +49,10 @@
 				    {% endfor %}
 				</select>
 				{% for error in form.standup_hour.errors %}
-				  <li>{{ error }}</li>
+				  <li class="error">{{ error }}</li>
 				{% endfor %}
 				{% for error in form.standup_minute.errors %}
-				  <li>{{ error }}</li>
+				  <li class="error">{{ error }}</li>
 				{% endfor %}
 			</div>
 
@@ -67,6 +66,9 @@
 
 			<div class="input submit">
 				{{ form.recaptcha }}
+				{% for error in form.recaptcha.errors %}
+				  <li class="error">{{ error }}</li>
+				{% endfor %}
 				<input class="submitButton" type="submit" value="Submit" />
 			</div>
 			</div>

@@ -161,6 +161,10 @@ p {
   width: 50px !important;
 }
 
+.error {
+  color: #c70505;
+}
+
 input::-webkit-input-placeholder {
   color: #42b4cf !important;
 }
