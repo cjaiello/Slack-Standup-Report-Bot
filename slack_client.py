@@ -1,9 +1,9 @@
-from slackbot.slackclient import SlackClient
 import util
 import os
 import requests
+import slack
 
-SLACK_CLIENT = SlackClient(os.environ['SLACK_BOT_TOKEN'])
+SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 
 # Will send @param message to @param channel_name
 def call_slack_messaging_api(channel_name, message):
@@ -12,11 +12,13 @@ def call_slack_messaging_api(channel_name, message):
   # print(util.create_logging_label() + "Result of call to slack was: " + response.text)
   # return response
   return SLACK_CLIENT.api_call(
-    "chat:write.customize",
-    channel=str(channel_name),
-    text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
-    username="Standup Bot",
-    icon_emoji=":memo:"
+    "chat:write.customize", 
+    json={
+      'channel' : str(channel_name),
+      'text' : "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
+      'username' : "Standup Bot",
+      'icon_emoji' : ":memo:"
+    }
   )
 
 # Will fetch the standup messages for a channel
