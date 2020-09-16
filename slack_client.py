@@ -1,4 +1,4 @@
-from slackclient import SlackClient
+from slackbot.slackclient import SlackClient
 import util
 import os
 import requests
