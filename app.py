@@ -5,11 +5,11 @@ import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
-from wtforms import TextField, TextAreaField, validators, StringField, SubmitField
+from wtforms import TextField, TextAreaField, IntegerField, validators, StringField, SubmitField
 import util
 import slack_client
 from flask_wtf import FlaskForm, RecaptchaField
-import os
+from flask import escape
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
@@ -28,9 +28,9 @@ STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
 class StandupSignupForm(FlaskForm):
     submitted_channel_name = TextField(
         'Channel Name (Required):', validators=[validators.required()])
-    standup_hour = TextField('Standup Hour:')
-    standup_minute = TextField('Standup Minute:')
-    am_or_pm = ['pm', 'am']
+    standup_hour = IntegerField('Standup Hour:', validators=[validators.required(), validators.NumberRange(min=0, max=12)])
+    standup_minute = IntegerField('Standup Minute:', validators=[validators.required(), validators.NumberRange(min=0, max=59)])
+    am_or_pm = ['pm', 'am', validators=[validators.required()]]
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField(
         'Where should we email your standup reports? (optional):')
@@ -44,14 +44,14 @@ def homepage():
 
     if request.method == 'POST':
         # Get whatever info they gave us for their channel
-        submitted_channel_name = request.form['submitted_channel_name'].replace("#","")
+        submitted_channel_name = escape(request.form['submitted_channel_name'].replace("#",""))
         standup_hour = util.remove_starting_zeros_from_time(
-            request.form['standup_hour'])
+            escape(request.form['standup_hour']))
         standup_minute = util.remove_starting_zeros_from_time(
-            request.form['standup_minute'])
-        message = request.form['message']
-        email = request.form['email']
-        am_or_pm = request.form['am_or_pm']
+            escape(request.form['standup_minute']))
+        message = escape(request.form['message'])
+        email = escape(request.form['email'])
+        am_or_pm = escape(request.form['am_or_pm'])
         # If the form field was valid...
         if form.validate_on_submit():
             # Look for channel in database
