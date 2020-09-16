@@ -173,8 +173,8 @@ p {
   display: block;
 }
 
-.extra_top_padding {
-  padding-top: 5px;
+.additional_5px_top_margin {
+  margin-top: 5px;
 }
 
 .error_details {

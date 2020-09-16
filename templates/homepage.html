@@ -58,7 +58,7 @@
 					{% endfor %}
 				{% endif %}
 				{% if form.standup_minute.errors %}
-					<span class="error error_details bold {% if form.standup_hour.errors %}extra_top_padding{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+					<span class="error error_details bold {% if form.standup_hour.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
 					{% for error in form.standup_minute.errors %}
 						<span class="error error_details">{{ error }}</span>
 					{% endfor %}
