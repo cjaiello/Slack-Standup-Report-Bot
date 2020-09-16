@@ -173,6 +173,10 @@ p {
   display: block;
 }
 
+.error_details {
+  font-size: 10px;
+}
+
 .success {
   color: #0543ca;
   padding: 5px;
