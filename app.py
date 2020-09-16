@@ -35,6 +35,7 @@ class StandupSignupForm(FlaskForm):
     email = TextField(
         'Where should we email your standup reports? (optional):')
     recaptcha = RecaptchaField()
+    csrf = app.config['SECRET_KEY']
 
 
 @app.route("/", methods=['GET', 'POST'])
