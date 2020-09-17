@@ -9,7 +9,7 @@ SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 def send_standup_message(channel_name, message):
   response = SLACK_CLIENT.chat_postMessage(
       channel=str(channel_name),
-      text= ("Please reply here with your standup status!" if (message == None) else  message),
+      text= ("Please reply here with your standup status!" if (message == None) else message),
       username="Standup Bot",
       icon_emoji=":memo:"
   )
