@@ -16,7 +16,7 @@ def call_slack_messaging_api(channel_name, message):
   print(util.create_logging_label() + response.headers)
   for item in response.data.items():
     print(util.create_logging_label() + " " + item[0] + " " + item[1])
-  return response.data
+  return response.status_code
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)

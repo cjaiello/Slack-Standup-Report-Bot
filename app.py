@@ -43,9 +43,10 @@ def homepage():
     message = None
 
     if request.method == 'POST':
+        print(util.create_logging_label() + "We got a post!")
         form = StandupSignupForm(request.form)
         # Get whatever info they gave us for their channel
-        submitted_channel_name = escape(request.form['submitted_channel_name'].replace("#",""))
+        submitted_channel_name = escape(request.form['channel_name'])
         standup_hour = util.remove_starting_zeros_from_time(
             escape(request.form['standup_hour']))
         standup_minute = util.remove_starting_zeros_from_time(
