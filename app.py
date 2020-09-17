@@ -91,8 +91,9 @@ def homepage():
                 if (email != None):
                     set_email_job(channel)
 
-            message = "Success! Standup bot scheduling set for " + submitted_channel_name
-            slack_client.call_slack_messaging_api(submitted_channel_name, message)
+            message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + str(standup_minute) + am_or_pm + " with reminder message " + message + " and with responses being emailed to " + email
+            slack_client.send_confirmation_message(submitted_channel_name, message)
+
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
@@ -135,7 +136,7 @@ def set_schedules():
 # @return nothing
 def trigger_standup_call(channel_name, message):
     # Sending our standup message
-    result = slack_client.call_slack_messaging_api(channel_name, message)
+    result = slack_client.send_standup_message(channel_name, message)
     # Evaluating result of call and logging it
     if ("ok" in result):
         print(util.create_logging_label() +
