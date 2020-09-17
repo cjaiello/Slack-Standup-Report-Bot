@@ -32,7 +32,7 @@ class StandupSignupForm(FlaskForm):
     am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField(
-        'Where should we email your standup reports? (optional):')
+        'Where should we email your standup reports? (optional):', validators=[validators.Email()])
     recaptcha = RecaptchaField()
     csrf = app.config['SECRET_KEY']
 
