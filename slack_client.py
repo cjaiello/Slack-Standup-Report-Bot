@@ -34,6 +34,7 @@ def send_confirmation_message(channel_name, message):
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
 # @return Standup messages in JSON format
+# TODO: Make sure this still works
 def get_standup_replies_for_message(timestamp, channel_name):
     channel_id = get_channel_id_via_name(channel_name)
 
@@ -41,7 +42,6 @@ def get_standup_replies_for_message(timestamp, channel_name):
     # "To retrieve a single message, specify its ts value as latest, set
     # inclusive to true, and dial your count down to 1"
     result = SLACK_CLIENT.conversations_history(
-      token=os.environ['SLACK_BOT_TOKEN'],
       channel=channel_id,
       latest=timestamp,
       inclusive=True,
@@ -66,9 +66,9 @@ def get_standup_replies_for_message(timestamp, channel_name):
 # to the API only gives us the user's ID# and the message's timestamp (ts)
 # @param channel_id: ID of the channel whom we're reporting for
 # @param standup_status_timestamp: Timestamp for this message
+# TODO: Make sure this still works
 def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
     reply_result = SLACK_CLIENT.conversations_history(
-      token=os.environ['SLACK_BOT_TOKEN'],
       channel=channel_id,
       latest=standup_status_timestamp,
       inclusive=True,
@@ -76,7 +76,6 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
     )
     # Get username of person who made this reply
     user_result = SLACK_CLIENT.users_info(
-      token=os.environ['SLACK_BOT_TOKEN'],
       user=reply_result.get("messages")[0].get("user")
     )
     print(util.create_logging_label() + "Adding standup results for " + user_result.get("user").get("real_name"))
