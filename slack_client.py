@@ -13,7 +13,7 @@ def call_slack_messaging_api(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  print(util.create_logging_label() + response.status_code)
+  print(util.create_logging_label() + str(response.status_code))
   for item in response.data.items():
     print(util.create_logging_label() + " " + item[0] + " " + item[1])
   return response.status_code
