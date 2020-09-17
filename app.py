@@ -44,8 +44,7 @@ def homepage():
     response_message = None
 
     if request.method == 'POST':
-        post_came_from = request.raw._connection.sock.socket.getsockname()
-        print(util.create_logging_label() + "Someone posted a form: " + post_came_from)
+        print(util.create_logging_label() + "Someone posted a form: " + request.remote_addr)
         form = StandupSignupForm(request.form)
         # Get whatever info they gave us for their channel
         submitted_channel_name = escape(request.form['channel_name'])
