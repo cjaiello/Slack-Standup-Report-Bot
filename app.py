@@ -40,7 +40,7 @@ class StandupSignupForm(FlaskForm):
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form = StandupSignupForm()
-    message = None
+    response_message = None
 
     if request.method == 'POST':
         print(util.create_logging_label() + "We got a post!")
