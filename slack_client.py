@@ -7,10 +7,6 @@ SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 
 # Will send @param message to @param channel_name
 def call_slack_messaging_api(channel_name, message):
-  # text = {"text" : message}
-  # response = requests.post(os.environ['SLACK_BOT_CHANNEL_URL'], json = text)
-  # print(util.create_logging_label() + "Result of call to slack was: " + response.text)
-  # return response
   response = SLACK_CLIENT.chat_postMessage(
       channel=str(channel_name),
       text= "<!channel> " + ("Please reply here with your standup status!" if (message == None) else  message),
@@ -18,7 +14,8 @@ def call_slack_messaging_api(channel_name, message):
       icon_emoji=":memo:"
   )
   print(util.create_logging_label() + response.headers)
-  print(util.create_logging_label() + response.data)
+  for item in a_dict.items():
+    print(util.create_logging_label() + " " + item[0] + " " + item[1])
   return response.data
 
 # Will fetch the standup messages for a channel
@@ -83,3 +80,9 @@ def get_channel_id_via_name(channel_name):
     for channel in channels_list.get("channels"):
         if channel.get("name") == channel_name:
             return channel.get("id")
+
+# Calls API to get channel ID based on name.
+# @param channel_name
+# @return channel ID
+def get_all_channels():
+    return SLACK_CLIENT.conversations_list(types="public_channel")

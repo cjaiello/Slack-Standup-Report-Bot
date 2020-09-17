@@ -26,8 +26,7 @@ STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
 
 # Our form model
 class StandupSignupForm(FlaskForm):
-    submitted_channel_name = TextField(
-        'Channel Name:', validators=[validators.required()])
+    submitted_channel_name = slack_client.get_all_channels()
     standup_hour = IntegerField('Standup Hour:', validators=[validators.NumberRange(min=0, max=12)])
     standup_minute = IntegerField('Standup Minute:', validators=[validators.NumberRange(min=0, max=59)])
     am_or_pm = ['pm', 'am']

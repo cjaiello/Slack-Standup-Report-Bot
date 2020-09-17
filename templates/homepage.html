@@ -39,8 +39,13 @@
 				{% if message %}
 					<span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
 				{% endif %}
-				{{ form.submitted_channel_name(placeholder="(REQUIRED) Channel name without #") }}
-				{% for error in form.submitted_channel_name.errors %}
+
+				<select name="channel_name" method="GET" action="/">
+				    {% for option in form.channel_name %}
+				    	<option value= "{{option}}" SELECTED>{{option}}</option>"
+				    {% endfor %}
+				</select>
+				{% for error in form.channel_name.errors %}
 				  <span class="error error_details">{{ error }}</span>
 				{% endfor %}
 			</div>
