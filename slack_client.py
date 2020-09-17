@@ -15,7 +15,7 @@ def send_standup_message(channel_name, message):
   )
   print(util.create_logging_label() + str(response.status_code))
   for item in response.data.items():
-    print(util.create_logging_label() + " " + str(item[0]) + " " + str(item[1]))
+    print(util.create_logging_label() + "send_standup_message response[" + str(item[0]) + "]: " + str(item[1]))
   return response.status_code
 
 # Will send confirmation message to @param channel_name
