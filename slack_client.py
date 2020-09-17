@@ -14,7 +14,7 @@ def call_slack_messaging_api(channel_name, message):
       icon_emoji=":memo:"
   )
   print(util.create_logging_label() + response.headers)
-  for item in a_dict.items():
+  for item in response.data.items():
     print(util.create_logging_label() + " " + item[0] + " " + item[1])
   return response.data
 
