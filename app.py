@@ -91,17 +91,17 @@ def homepage():
                 if (email != None):
                     set_email_job(channel)
 
-            message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + str(standup_minute) + am_or_pm + " with reminder message " + message + " and with responses being emailed to " + email if (email) else ""
-            slack_client.send_confirmation_message(submitted_channel_name, message)
+            response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + str(standup_minute) + am_or_pm + " with reminder message " + message + " and with responses being emailed to " + email if (email) else ""
+            slack_client.send_confirmation_message(submitted_channel_name, response_message)
 
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
             print(util.create_logging_label() +
                   str(form.errors))
-            message = "Please fix the error(s) below"
+            response_message = "Please fix the error(s) below"
 
-    return render_template('homepage.html', form=form, message=message)
+    return render_template('homepage.html', form=form, message=response_message)
 
 
 # Adds standup job and logs it
