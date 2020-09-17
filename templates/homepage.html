@@ -73,6 +73,9 @@
 
 			<div class="input text">
 				{{ form.email(placeholder="Where should we email your standup reports?") }}
+				{% for error in form.email.errors %}
+					<span class="error error_details">{{ error }}</span>
+				{% endfor %}
 			</div>
 
 			<div class="input submit">
