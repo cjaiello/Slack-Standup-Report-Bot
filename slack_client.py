@@ -7,16 +7,15 @@ SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 
 # Will send @param message to @param channel_name
 def send_standup_message(channel_name, message):
-  print(util.create_logging_label() + message)
   response = SLACK_CLIENT.chat_postMessage(
       channel=str(channel_name),
       text= ("Please reply here with your standup status!" if (message == None) else message),
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  print(util.create_logging_label() + str(response.status_code))
+  print(util.create_logging_label() + "send_standup_message response " + str(response.status_code))
   for item in response.data.items():
-    print(util.create_logging_label() + "send_standup_message response[" + str(item[0]) + "]: " + str(item[1]))
+    print(util.create_logging_label() + "send_standup_message response" + str(item[0]) + ": " + str(item[1]))
   return response.status_code
 
 # Will send confirmation message to @param channel_name
