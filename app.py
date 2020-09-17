@@ -58,43 +58,13 @@ def homepage():
         if form.validate_on_submit():
             # Look for channel in database
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
-                # Channel isn't in database. Create our channel object and add it to the database
-                channel = Channel(submitted_channel_name, util.calculate_am_or_pm(
-                    standup_hour, am_or_pm), standup_minute, message, email, None)
-                DB.session.add(channel)
-                DB.session.commit()
-                # Adding this additional job to the queue
-                add_standup_job(submitted_channel_name, message, util.calculate_am_or_pm(
-                    standup_hour, am_or_pm), standup_minute)
-                # Set email job if requested
-                if (email != None):
-                    set_email_job(channel)
-
+                add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
             else:
-                # Update channel's standup info (if values weren't empty)
-                channel = Channel.query.filter_by(
-                    channel_name=submitted_channel_name).first()
-                channel.standup_hour = util.calculate_am_or_pm(
-                    standup_hour, am_or_pm) if standup_hour != None else channel.standup_hour
-                channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
-                channel.message = message if message != None else channel.message
-                channel.email = email if email != None else channel.email
-                DB.session.commit()
-                # Next we will update the standup message job if one of those values was edited
-                if (message != None or standup_hour != None or standup_minute != None):
-                    # Updating this job's timing (need to delete and re-add)
-                    SCHEDULER.remove_job(
-                        submitted_channel_name + "_standupcall")
-                    add_standup_job(channel.channel_name, channel.message,
-                                    channel.standup_hour, channel.standup_minute)
-                # Lastly, we update the email job if a change was requested
-                if (email != None):
-                    set_email_job(channel)
-
+                # Update channel's standup info
+                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + str(standup_minute) + am_or_pm + " with reminder message " + message
-            response_message += " and with responses being emailed to " + email if (email) else ""
+            response_message += " and responses being emailed to " + email if (email) else ""
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
-
         else:
             print(util.create_logging_label() +
                   "Could not update standup time.")
@@ -104,6 +74,38 @@ def homepage():
 
     return render_template('homepage.html', form=form, message=response_message)
 
+def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm):
+    channel = Channel.query.filter_by(
+        channel_name=submitted_channel_name).first()
+    channel.standup_hour = util.calculate_am_or_pm(
+        standup_hour, am_or_pm) if standup_hour != None else channel.standup_hour
+    channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
+    channel.message = message if message != None else channel.message
+    channel.email = email if email != None else channel.email
+    DB.session.commit()
+    # Next we will update the standup message job if one of those values was edited
+    if (message != None or standup_hour != None or standup_minute != None):
+        # Updating this job's timing (need to delete and re-add)
+        SCHEDULER.remove_job(
+            submitted_channel_name + "_standupcall")
+        add_standup_job(channel.channel_name, channel.message,
+                        channel.standup_hour, channel.standup_minute)
+    # Lastly, we update the email job if a change was requested
+    if (email != None):
+        set_email_job(channel)
+
+def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm):
+    # Channel isn't in database. Create our channel object and add it to the database
+    channel = Channel(submitted_channel_name, util.calculate_am_or_pm(
+        standup_hour, am_or_pm), standup_minute, message, email, None)
+    DB.session.add(channel)
+    DB.session.commit()
+    # Adding this additional job to the queue
+    add_standup_job(submitted_channel_name, message, util.calculate_am_or_pm(
+        standup_hour, am_or_pm), standup_minute)
+    # Set email job if requested
+    if (email != None):
+        set_email_job(channel)
 
 # Adds standup job and logs it
 def add_standup_job(channel_name, message, standup_hour, standup_minute):
