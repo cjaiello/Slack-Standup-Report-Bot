@@ -1,6 +1,5 @@
 import util
 import os
-import requests
 import slack
 
 SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
