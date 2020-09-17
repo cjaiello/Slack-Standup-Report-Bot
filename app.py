@@ -10,6 +10,8 @@ import util
 import slack_client
 from flask_wtf import FlaskForm, RecaptchaField
 from flask import escape
+import email_validator
+
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
