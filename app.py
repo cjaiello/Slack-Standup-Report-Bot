@@ -17,7 +17,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['RECAPTCHA_USE_SSL'] = False
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lf3OMwZAAAAACr0y0f-qazuY6MZbmJL5SxXrb-d'
+app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ['RECAPTCHA_PUBLIC_KEY']
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
 app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
@@ -33,7 +33,7 @@ class StandupSignupForm(FlaskForm):
     am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField(
-        'Where should we email your standup reports? (optional):', validators=[validators.Email()])
+        'Where should we email your standup reports? (optional):', validators=[validators.Email(), validators.Optional()])
     recaptcha = RecaptchaField()
     csrf = app.config['SECRET_KEY']
 
