@@ -81,8 +81,11 @@ def get_channel_id_via_name(channel_name):
         if channel.get("name") == channel_name:
             return channel.get("id")
 
-# Calls API to get channel ID based on name.
-# @param channel_name
-# @return channel ID
+# Get list of channel names
+# @return list of channel names
 def get_all_channels():
-    return SLACK_CLIENT.conversations_list(types="public_channel")
+  channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
+  channel_names_list = []
+  for channel in channels_list.get("channels"):
+      channel_names_list.append(channel.get("name"))
+  return channel_names_list
