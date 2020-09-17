@@ -26,7 +26,7 @@
 		<form action="" method="post" class="form">
 			{{ form.csrf_token }}
 			<div class="directions">
-				<p>Note to self: MAKE DUMMY SLACK WORKSPACE FOR THIS PROJECT. Also create confirm email feature (or disconnect sending emails)</p>
+				<p>Note to self: Create confirm email feature (or disconnect sending emails)</p>
 				<p>Use this form to add or update your standup information.</p>
 
 				<ol>
@@ -72,7 +72,7 @@
 			</div>
 
 			<div class="input text">
-				{{ form.email(placeholder="Where should we email your standup reports?") }}
+				{{ form.email(placeholder="(OPTIONAL) Where should we email your standup reports?") }}
 				{% for error in form.email.errors %}
 					<span class="error error_details">{{ error }}</span>
 				{% endfor %}
