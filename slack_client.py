@@ -24,15 +24,13 @@ def call_slack_messaging_api(channel_name, message):
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)
 # @return Standup messages in JSON format
-# TODO: DOES THIS STILL WORK?
 def get_standup_replies_for_message(timestamp, channel_name):
     channel_id = get_channel_id_via_name(channel_name)
 
-    # https://api.slack.com/methods/channels.history
+    # https://api.slack.com/methods/conversations.history
     # "To retrieve a single message, specify its ts value as latest, set
     # inclusive to true, and dial your count down to 1"
-    result = SLACK_CLIENT.api_call(
-      "channels.history",
+    result = SLACK_CLIENT.conversations_history(
       token=os.environ['SLACK_BOT_TOKEN'],
       channel=channel_id,
       latest=timestamp,
@@ -59,8 +57,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
 # @param channel_id: ID of the channel whom we're reporting for
 # @param standup_status_timestamp: Timestamp for this message
 def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
-    reply_result = SLACK_CLIENT.api_call(
-      "channels.history",
+    reply_result = SLACK_CLIENT.conversations_history(
       token=os.environ['SLACK_BOT_TOKEN'],
       channel=channel_id,
       latest=standup_status_timestamp,
@@ -68,8 +65,7 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
       count=1
     )
     # Get username of person who made this reply
-    user_result = SLACK_CLIENT.api_call(
-      "users.info",
+    user_result = SLACK_CLIENT.users_info(
       token=os.environ['SLACK_BOT_TOKEN'],
       user=reply_result.get("messages")[0].get("user")
     )
@@ -81,10 +77,8 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
 # @param channel_name
 # @return channel ID
 def get_channel_id_via_name(channel_name):
-    channels_list = SLACK_CLIENT.api_call(
-      "channels.list",
-      token=os.environ['SLACK_BOT_TOKEN']
-    )
+    channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
+    
     print("get_channel_id_via_name " + str(channels_list))
     for channel in channels_list.get("channels"):
         if channel.get("name") == channel_name:
