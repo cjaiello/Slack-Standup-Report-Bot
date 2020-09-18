@@ -47,6 +47,7 @@ def homepage():
         form = StandupSignupForm(request.form)
         logger.log("Made the form object with form values", "INFO")
         # Get whatever info they gave us for their channel
+        # TODO: You don't need to make all these variables... just set them on the form object and pass around the form
         submitted_channel_name = escape(request.form['channel_name'])
         standup_hour = util.remove_starting_zeros_from_time(
             escape(request.form['standup_hour']))
