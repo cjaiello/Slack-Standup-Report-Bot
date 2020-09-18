@@ -205,12 +205,9 @@ def send_email(channel_name, recipient_email_address, email_content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    email_address = os.environ['USERNAME'] + "@gmail.com"
-    server.login(email_address, os.environ['PASSWORD'])
-    message = 'Subject: {}\n\n{}'.format(
-        channel_name + " Standup Report", email_content)
-    server.sendmail(email_address,
-                    recipient_email_address, message)
+    server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
+    server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
 
 
