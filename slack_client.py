@@ -57,8 +57,9 @@ def get_standup_replies_for_message(timestamp, channel_name):
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
+              logger.log("Raw reply is: " + str(standup_status), "INFO")
+              if standup_status.subtype != "bot_message":
                 # Get username of person who made this reply
-                logger.log("Raw reply is: " + str(standup_status), "INFO")
                 user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
                 logger.log("User's info is: " + str(user_result), "INFO")
                 logger.log("Adding standup results for " + user_result["user"]["profile"]["real_name"], "INFO")
