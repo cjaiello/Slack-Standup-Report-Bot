@@ -54,7 +54,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
         logger.log("Successfully got standup replies for message", "INFO")
         # Only do the following if we actually got replies
         replies = result.get("messages")[0].get("replies")
-        logger.log(str(replies))
+        logger.log(str(replies), "INFO")
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
