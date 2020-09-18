@@ -23,5 +23,5 @@ def remove_starting_zeros_from_time(time):
 # to 24-hour time.
 def calculate_am_or_pm(reminder_hour, am_or_pm):
     if (am_or_pm == "pm"):
-        reminder_hour  = int(reminder_hour) + 12
+        reminder_hour  = int(reminder_hour) + 11
     return reminder_hour
