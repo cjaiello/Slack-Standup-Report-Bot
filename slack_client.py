@@ -42,7 +42,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     # "To retrieve a single message, specify its ts value as latest, set
     # inclusive to true, and dial your count down to 1"
     logger.log(str({'channel': channel_id, 'latest': timestamp}), "INFO")
-    result = SLACK_CLIENT.conversations_history(
+    result = SLACK_CLIENT.conversations_replies(
       channel=channel_id,
       latest=timestamp,
       inclusive=True,
