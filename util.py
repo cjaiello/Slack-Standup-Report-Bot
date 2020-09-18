@@ -22,6 +22,8 @@ def remove_starting_zeros_from_time(time):
 # data from the form into the database, we convert from AM/PM
 # to 24-hour time.
 def calculate_am_or_pm(reminder_hour, am_or_pm):
-    if (am_or_pm == "pm"):
-        reminder_hour  = int(reminder_hour) + 11
+    if (am_or_pm == "pm" and reminder_hour != 12):
+        reminder_hour = int(reminder_hour) + 12
+    elif (am_or_pm == "am" and reminder_hour == 12):
+        reminder_hour = 0
     return reminder_hour
