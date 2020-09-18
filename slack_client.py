@@ -52,39 +52,24 @@ def get_standup_replies_for_message(timestamp, channel_name):
     if (result["ok"]):
         logger.log("Successfully got standup replies for message", "INFO")
         # Only do the following if we actually got replies
-        replies = result.get("messages")[0].get("replies")
+        replies = result.get("messages")
         logger.log(str(replies), "INFO")
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
-                # Add to our list of standup messages
-                standup_results.append(retrieve_standup_reply_info(channel_id, standup_status.get("ts")))
+                # Get username of person who made this reply
+                logger.log("Raw reply is: " + str(standup_status), "INFO")
+                user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
+                logger.log("User's info is: " + str(user_result), "INFO")
+                logger.log("Adding standup results for " + user_result["user"]["profile"]["real_name"], "INFO")
+                standup_response_for_person = user_result["user"]["profile"]["real_name"] + ": " + standup_status['text'] + "; \n"
+                standup_results.append(standup_response_for_person)
             return standup_results
         else:
           logger.log("We got back replies object but it was empty", "INFO")
     else:
         # Log that it didn't work
         logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), "ERROR")
-
-
-# Getting detailed info about this reply, since the initial call
-# to the API only gives us the user's ID# and the message's timestamp (ts)
-# @param channel_id: ID of the channel whom we're reporting for
-# @param standup_status_timestamp: Timestamp for this message
-# TODO: Make sure this still works
-def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
-    reply_result = SLACK_CLIENT.conversations_history(
-      channel=channel_id,
-      latest=standup_status_timestamp,
-      inclusive=True,
-      count=1
-    )
-    # Get username of person who made this reply
-    user_result = SLACK_CLIENT.users_info(
-      user=reply_result.get("messages")[0].get("user")
-    )
-    logger.log("Adding standup results for " + user_result.get("user").get("real_name"), "INFO")
-    return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; \n"
 
 
 # Calls API to get channel ID based on name.
