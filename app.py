@@ -45,6 +45,7 @@ def homepage():
     if request.method == 'POST':
         logger.log("Someone posted a form: " + request.remote_addr, "INFO")
         form = StandupSignupForm(request.form)
+        logger.log("Made the form object with form values", "INFO")
         # Get whatever info they gave us for their channel
         submitted_channel_name = escape(request.form['channel_name'])
         standup_hour = util.remove_starting_zeros_from_time(
@@ -54,13 +55,17 @@ def homepage():
         message = escape(request.form['message'])
         email = escape(request.form['email'])
         am_or_pm = escape(request.form['am_or_pm'])
+        logger.log("Pulled values from form", "INFO")
         # If the form field was valid...
         if form.validate_on_submit():
             # Look for channel in database
+            logger.log("Form was valid upon submit", "INFO")
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
+                logger.log("Add new channel to DB", "INFO")
                 add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
             else:
                 # Update channel's standup info
+                logger.log("Update channel's standup info", "INFO")
                 update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + str(standup_minute) + am_or_pm + " with reminder message " + message
             response_message += " and responses being emailed to " + email if (email) else ""
