@@ -145,7 +145,7 @@ def trigger_standup_call(channel_name, message):
         logger.log("Standup alert message was sent to " + channel_name, "INFO")
         # Getting timestamp for today's standup message for this channel
         channel = Channel.query.filter_by(channel_name=channel_name).first()
-        channel.timestamp = result.get("ts")
+        channel.timestamp = result["ts"]
         DB.session.commit()
     else:
         logger.log("Could not send standup alert message to " + channel_name, "ERROR")

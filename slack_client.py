@@ -52,19 +52,19 @@ def get_standup_replies_for_message(timestamp, channel_name):
     if (result["ok"]):
         logger.log("Successfully got standup replies for message", "INFO")
         # Only do the following if we actually got replies
-        replies = result.get("messages")
+        replies = result["messages"]
         logger.log(str(replies), "INFO")
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
               logger.log("Raw reply is: " + str(standup_status), "INFO")
-              if standup_status.get("subtype") != "bot_message":
+              if standup_status["subtype"] != "bot_message":
                 # Get username of person who made this reply
-                user_result = SLACK_CLIENT.users_info(user=standup_status.get('user'))
+                user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
                 logger.log("User's info is: " + str(user_result), "INFO")
-                name = user_result.get("user").get("profile").get("real_name")
+                name = user_result["user"]["profile"]["real_name"]
                 logger.log("Adding standup results for " + name, "INFO")
-                standup_response_for_person = name + ": " + standup_status.get('text') + "; \n"
+                standup_response_for_person = name + ": " + standup_status['text'] + "; \n"
                 standup_results.append(standup_response_for_person)
             return standup_results
         else:
@@ -81,16 +81,16 @@ def get_channel_id_via_name(channel_name):
     channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
     
     logger.log("get_channel_id_via_name " + str(channels_list), "INFO")
-    for channel in channels_list.get("channels"):
-        if channel.get("name") == channel_name:
-            logger.log("get_channel_id_via_name " + str(channel.get("name")) + " == " + channel_name, "INFO")
-            return channel.get("id")
+    for channel in channels_list["channels"]:
+        if channel["name"] == channel_name:
+            logger.log("get_channel_id_via_name " + str(channel["name"]) + " == " + channel_name, "INFO")
+            return channel["id"]
 
 # Get list of channel names
 # @return list of channel names
 def get_all_channels():
   channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
   channel_names_list = []
-  for channel in channels_list.get("channels"):
-      channel_names_list.append(channel.get("name"))
+  for channel in channels_list["channels"]:
+      channel_names_list.append(channel["name"])
   return channel_names_list
