@@ -45,7 +45,7 @@ def homepage():
     response_message = None
 
     if request.method == 'POST':
-        logger.log("Someone posted a form: " + request.remote_addr)
+        logger.log("Someone posted a form: " + request.remote_addr, "INFO")
         form = StandupSignupForm(request.form)
         # Get whatever info they gave us for their channel
         submitted_channel_name = escape(request.form['channel_name'])
