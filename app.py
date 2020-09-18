@@ -116,7 +116,7 @@ def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_m
 
 # Adds standup job and logs it
 def add_standup_job(channel_name, message, standup_hour, standup_minute):
-    logger.log("Adding standup to scheduler", "INFO")
+    logger.log("Adding standup to scheduler " + " \n Channel name: " + channel_name + " \n Message: " + message + "\n Standup_hour: " + str(standup_hour) + "\n Standup_minute: " + str(standup_minute), "INFO")
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel_name + "_standupcall")
     logger.log("Set " + channel_name + "'s standup time to " + str(standup_hour) +
