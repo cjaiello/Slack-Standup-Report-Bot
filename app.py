@@ -77,7 +77,8 @@ def homepage():
             logger.log(str(form.errors), "ERROR") # Issue 25: eventType: ProcessingForm
             response_message = "Please fix the error(s) below"
 
-    return render_template('homepage.html', form=form, message=response_message)
+    return True
+   # return render_template('homepage.html', form=form, message=response_message)
 
 def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm):
     channel = Channel.query.filter_by(
