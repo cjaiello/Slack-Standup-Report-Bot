@@ -54,12 +54,15 @@ def get_standup_replies_for_message(timestamp, channel_name):
         logger.log("Successfully got standup replies for message", "INFO")
         # Only do the following if we actually got replies
         replies = result.get("messages")[0].get("replies")
+        logger.log(str(replies))
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
                 # Add to our list of standup messages
                 standup_results.append(retrieve_standup_reply_info(channel_id, standup_status.get("ts")))
             return standup_results
+        else:
+          logger.log("We got back replies object but it was empty", "INFO")
     else:
         # Log that it didn't work
         logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), "ERROR")
