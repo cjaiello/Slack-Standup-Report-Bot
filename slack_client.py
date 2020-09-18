@@ -43,7 +43,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     result = SLACK_CLIENT.conversations_replies(
       channel=channel_id,
       ts=timestamp,
-      latest=now,
+      latest='now',
       inclusive=True,
       count=1
     )
