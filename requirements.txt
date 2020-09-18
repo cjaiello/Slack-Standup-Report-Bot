@@ -8,7 +8,7 @@ Werkzeug==0.11.11
 flask-sqlalchemy
 psycopg2
 slackclient
-APScheduler==3.0.0
+APScheduler
 wtforms
 newrelic
 yagmail
