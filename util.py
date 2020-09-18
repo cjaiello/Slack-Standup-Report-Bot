@@ -1,12 +1,5 @@
 # Standup Bot by Christina Aiello, 2017
-from time import localtime, strftime
 import re
-
-# Used for logging when actions happen
-# @return string with logging time
-def create_logging_label():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime()) + "| "
-
 
 # For logging purposes
 def format_minutes_to_have_zero(minutes):

@@ -1,6 +1,7 @@
 import util
 import os
 import slack
+import logger
 
 SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 
@@ -12,9 +13,9 @@ def send_standup_message(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  print(util.create_logging_label() + "send_standup_message response code: " + str(response.status_code))
+  logger.log("send_standup_message response code: " + str(response.status_code), "INFO")
   for item in response.data.items():
-    print(util.create_logging_label() + "send_standup_message response[" + str(item[0]) + "]: " + str(item[1]))
+    logger.log("send_standup_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO")
   return response
 
 # Will send confirmation message to @param channel_name
@@ -25,9 +26,9 @@ def send_confirmation_message(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  print(util.create_logging_label() + "send_confirmation_message response code: " + str(response.status_code))
+  logger.log("send_confirmation_message response code: " + str(response.status_code), "INFO")
   for item in response.data.items():
-    print(util.create_logging_label() + "send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]))
+    logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO")
   return response.status_code
 
 # Will fetch the standup messages for a channel
@@ -40,6 +41,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     # https://api.slack.com/methods/conversations.history
     # "To retrieve a single message, specify its ts value as latest, set
     # inclusive to true, and dial your count down to 1"
+    print()
     result = SLACK_CLIENT.conversations_history(
       channel=channel_id,
       latest=timestamp,
@@ -48,6 +50,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     )
     # Need to ensure that API call worked
     if (result["ok"]):
+        logger.log("Successfully got standup replies for message", "INFO")
         # Only do the following if we actually got replies
         replies = result.get("messages")[0].get("replies")
         if (replies is not None):
@@ -58,7 +61,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
             return standup_results
     else:
         # Log that it didn't work
-        print(util.create_logging_label() + "Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error))
+        logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), "ERROR")
 
 
 # Getting detailed info about this reply, since the initial call
@@ -77,7 +80,7 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
     user_result = SLACK_CLIENT.users_info(
       user=reply_result.get("messages")[0].get("user")
     )
-    print(util.create_logging_label() + "Adding standup results for " + user_result.get("user").get("real_name"))
+    logger.log("Adding standup results for " + user_result.get("user").get("real_name"), "INFO")
     return user_result.get("user").get("real_name") + ": " + reply_result.get("messages")[0].get("text") + "; \n"
 
 
@@ -87,7 +90,7 @@ def retrieve_standup_reply_info(channel_id, standup_status_timestamp):
 def get_channel_id_via_name(channel_name):
     channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
     
-    print("get_channel_id_via_name " + str(channels_list))
+    logger.log("get_channel_id_via_name " + str(channels_list), "INFO")
     for channel in channels_list.get("channels"):
         if channel.get("name") == channel_name:
             return channel.get("id")

@@ -11,6 +11,7 @@ import slack_client
 from flask_wtf import FlaskForm, RecaptchaField
 from flask import escape
 import email_validator
+import logger
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
@@ -44,7 +45,7 @@ def homepage():
     response_message = None
 
     if request.method == 'POST':
-        print(util.create_logging_label() + "Someone posted a form: " + request.remote_addr)
+        logger.log("Someone posted a form: " + request.remote_addr)
         form = StandupSignupForm(request.form)
         # Get whatever info they gave us for their channel
         submitted_channel_name = escape(request.form['channel_name'])
@@ -112,7 +113,7 @@ def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_m
 def add_standup_job(channel_name, message, standup_hour, standup_minute):
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel_name + "_standupcall")
-    print(util.create_logging_label() + "Set " + channel_name + "'s standup time to " + str(standup_hour) +
+    logger.log("Set " + channel_name + "'s standup time to " + str(standup_hour) +
           ":" + util.format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
 
 
@@ -141,13 +142,11 @@ def set_schedules():
 def trigger_standup_call(channel_name, message):
     # Sending our standup message
     result = slack_client.send_standup_message(channel_name, message)
-    print(result)
     # Evaluating result of call and logging it
+    logger.log("Result of sending standup message to " + channel_name + " was " + str(result))
     if (result["ok"]):
         print(util.create_logging_label() +
               "Standup alert message was sent to " + channel_name)
-        print(util.create_logging_label(
-        ) + "Result of sending standup message to " + channel_name + " was " + str(result))
         # Getting timestamp for today's standup message for this channel
         channel = Channel.query.filter_by(channel_name=channel_name).first()
         channel.timestamp = result.get("ts")
@@ -173,7 +172,7 @@ def set_email_job(channel):
         print(util.create_logging_label() +
               "Channel that we set email schedule for: " + channel.channel_name)
     else:
-        print(util.create_logging_label() + "Channel " + channel.channel_name +
+        logger.log("Channel " + channel.channel_name +
               " did not want their standups emailed to them today.")
 
 
@@ -195,18 +194,18 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             # Then we need to send an email with this information
             send_email(a_channel_name, recipient_email_address,
                        formatted_standup_message)
-            print(util.create_logging_label() + "Sent " + a_channel_name + "'s standup messages, " +
-                  formatted_standup_message + ", to " + recipient_email_address)
+            logger.log("Sent " + a_channel_name + "'s standup messages, " +
+                  formatted_standup_message + ", to " + recipient_email_address, "INFO")
             # Finally we need to reset the standup timestamp so we don't get a repeat.
             channel.timestamp = None
             DB.session.commit()
         else:
-            print(util.create_logging_label() + "Channel " + a_channel_name +
-                  " did not have any standup submissions to email today.")
+            logger.log("Channel " + a_channel_name +
+                  " did not have any standup submissions to email today.", "INFO")
     else:
         # Log that it didn't work
-        print(util.create_logging_label() + "Channel " + a_channel_name +
-              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.")
+        logger.log("Channel " + a_channel_name +
+              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.", "ERROR")
 
 
 # Sends an email via our GMAIL account to the chosen email address
@@ -254,4 +253,4 @@ set_schedules()
 # Running the scheduling
 SCHEDULER.start()
 
-print(util.create_logging_label() + "Standup bot was started up and scheduled.")
+logger.log("Standup bot was started up and scheduled.")
