@@ -143,7 +143,7 @@ def trigger_standup_call(channel_name, message):
     result = slack_client.send_standup_message(channel_name, message)
     print(result)
     # Evaluating result of call and logging it
-    if ("ok" in result):
+    if (result["ok"]):
         print(util.create_logging_label() +
               "Standup alert message was sent to " + channel_name)
         print(util.create_logging_label(

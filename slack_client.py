@@ -47,7 +47,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
       count=1
     )
     # Need to ensure that API call worked
-    if ("ok" in result):
+    if (result["ok"]):
         # Only do the following if we actually got replies
         replies = result.get("messages")[0].get("replies")
         if (replies is not None):
