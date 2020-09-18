@@ -206,6 +206,7 @@ def send_email(channel_name, recipient_email_address, email_content):
     server.ehlo()
     server.starttls()
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
+    logger.log("Username is " + os.environ['USERNAME'], 'INFO')
     message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()

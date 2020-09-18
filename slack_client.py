@@ -58,7 +58,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
             standup_results = []
             for standup_status in replies:
               logger.log("Raw reply is: " + str(standup_status), "INFO")
-              if "subtype" in standup_status and standup_status["subtype"] != "bot_message":
+              if ("subtype" not in standup_status):
                 # Get username of person who made this reply
                 user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
                 logger.log("User's info is: " + str(user_result), "INFO")
@@ -66,6 +66,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
                 logger.log("Adding standup results for " + name, "INFO")
                 standup_response_for_person = name + ": " + standup_status['text'] + "; \n"
                 standup_results.append(standup_response_for_person)
+            logger.log("Final standup results: " + str(standup_results), "INFO")
             return standup_results
         else:
           logger.log("We got back replies object but it was empty", "INFO")
