@@ -39,12 +39,11 @@ def get_standup_replies_for_message(timestamp, channel_name):
     channel_id = get_channel_id_via_name(channel_name)
 
     # https://api.slack.com/methods/conversations.history
-    # "To retrieve a single message, specify its ts value as latest, set
-    # inclusive to true, and dial your count down to 1"
     logger.log(str({'channel': channel_id, 'latest': timestamp}), "INFO")
     result = SLACK_CLIENT.conversations_replies(
       channel=channel_id,
-      latest=timestamp,
+      ts=timestamp,
+      latest=now,
       inclusive=True,
       count=1
     )
