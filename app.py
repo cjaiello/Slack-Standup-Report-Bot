@@ -68,10 +68,8 @@ def homepage():
             response_message += " and responses being emailed to " + email if (email) else ""
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
         else:
-            print(util.create_logging_label() +
-                  "Could not update standup time.")
-            print(util.create_logging_label() +
-                  str(form.errors))
+            logger.log("Could not update standup time.", "ERROR")
+            logger.log(str(form.errors), "ERROR")
             response_message = "Please fix the error(s) below"
 
     return render_template('homepage.html', form=form, message=response_message)
@@ -114,14 +112,13 @@ def add_standup_job(channel_name, message, standup_hour, standup_minute):
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channel_name, message], day_of_week='mon-fri', hour=standup_hour, minute=standup_minute, id=channel_name + "_standupcall")
     logger.log("Set " + channel_name + "'s standup time to " + str(standup_hour) +
-          ":" + util.format_minutes_to_have_zero(standup_minute) + " with standup message: " + message)
+          ":" + util.format_minutes_to_have_zero(standup_minute) + " with standup message: " + message, "INFO")
 
 
 # Setting the standup schedules for already-existing jobs
 # @return nothing
 def set_schedules():
-    print(util.create_logging_label() +
-          "Loading previously-submitted standup data.")
+    logger.log("Loading previously-submitted standup data.", "INFO")
     # Get all rows from our table
     channels_with_scheduled_standups = Channel.query.all()
     # Loop through our results
@@ -143,17 +140,15 @@ def trigger_standup_call(channel_name, message):
     # Sending our standup message
     result = slack_client.send_standup_message(channel_name, message)
     # Evaluating result of call and logging it
-    logger.log("Result of sending standup message to " + channel_name + " was " + str(result))
+    logger.log("Result of sending standup message to " + channel_name + " was " + str(result), "INFO")
     if (result["ok"]):
-        print(util.create_logging_label() +
-              "Standup alert message was sent to " + channel_name)
+        logger.log("Standup alert message was sent to " + channel_name, "INFO")
         # Getting timestamp for today's standup message for this channel
         channel = Channel.query.filter_by(channel_name=channel_name).first()
         channel.timestamp = result.get("ts")
         DB.session.commit()
     else:
-        print(util.create_logging_label() +
-              "Could not send standup alert message to " + channel_name)
+        logger.log("Could not send standup alert message to " + channel_name, "ERROR")
 
 
 # Used to set the email jobs for any old or new channels with standup messages
@@ -169,11 +164,10 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
                           channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour), minute=int(channel.standup_minute) + 1, id=channel.channel_name + "_sendemail")
-        print(util.create_logging_label() +
-              "Channel that we set email schedule for: " + channel.channel_name)
+        logger.log("Channel that we set email schedule for: " + channel.channel_name, "INFO")
     else:
         logger.log("Channel " + channel.channel_name +
-              " did not want their standups emailed to them today.")
+              " did not want their standups emailed to them today.", "INFO")
 
 
 # Emailing standup results to chosen email address.
@@ -253,4 +247,4 @@ set_schedules()
 # Running the scheduling
 SCHEDULER.start()
 
-logger.log("Standup bot was started up and scheduled.")
+logger.log("Standup bot was started up and scheduled.", "INFO")
