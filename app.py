@@ -23,8 +23,6 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
 app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
-STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS = "vistaprintdesignexperience@gmail.com"
-
 
 # Our form model
 class StandupSignupForm(FlaskForm):
@@ -207,10 +205,11 @@ def send_email(channel_name, recipient_email_address, email_content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    server.login(os.environ['USERNAME'] + "@gmail.com", os.environ['PASSWORD'])
+    email_address = os.environ['USERNAME'] + "@gmail.com"
+    server.login(email_address, os.environ['PASSWORD'])
     message = 'Subject: {}\n\n{}'.format(
         channel_name + " Standup Report", email_content)
-    server.sendmail(STANDUP_MESSAGE_ORIGIN_EMAIL_ADDRESS,
+    server.sendmail(email_address,
                     recipient_email_address, message)
     server.quit()
 
