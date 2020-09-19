@@ -49,7 +49,6 @@ def homepage():
 
     if request.method == 'POST':
         logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
-        form = StandupSignupForm(request.form)
         logger.log("Made the form object with form values", "INFO") # Issue 25: eventType: ProcessingForm
         # Get whatever info they gave us for their channel
         # TODO: You don't need to make all these variables... 
@@ -94,10 +93,9 @@ def confirm_email():
     channel_name = request.args.get('channel_name', default = None)
 
     if request.method == 'POST':
-        form = EmailConfirmationForm(request.form)
-        logger.log("form " + str(form), "INFO")
-        logger.log("form " + str(form.code), "INFO")
-        logger.log("form " + str(form.csrf), "INFO")
+        logger.log("form " + str(request.form), "INFO")
+        logger.log("form " + str(request.form.code), "INFO")
+        logger.log("form " + str(request.form.csrf), "INFO")
         if form.validate_on_submit():
             channel = Channel.query.filter_by(channel_name=channel_name).first()
             if (form.code == channel.confirmation_code):
@@ -110,7 +108,8 @@ def confirm_email():
                 response_message = "Code failed"
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
-            response_message = "Code failed"
+            logger.log(str(request.form.errors), "ERROR")
+            response_message = "Form failed"
             return render_template('confirm_email.html', form=form, message=response_message)
     else:
         return render_template('confirm_email.html', form=form, message=None)
