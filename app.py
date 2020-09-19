@@ -126,6 +126,7 @@ def update_channel_standup_schedule(submitted_channel_name, standup_hour, standu
     channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
     channel.message = message if message != None else channel.message
     channel.email = email if email != None else channel.email
+    channel.confirmation_code = confirmation_code if confirmation_code != None else channel.confirmation_code
     DB.session.add(channel)
     DB.session.commit()
     # Next we will update the standup message job if one of those values was edited
@@ -258,7 +259,7 @@ def send_email(channel_name, recipient_email_address, email_content):
     server.starttls()
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     logger.log("Username is " + os.environ['USERNAME'], 'INFO') # Issue 25: eventType: SendEmail
-    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
+    message = 'Subject: {}\n\n{}'.format("#" + channel_name + " Standup Report", email_content)
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
 
