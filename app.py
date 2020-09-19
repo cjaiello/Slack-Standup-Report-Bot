@@ -134,6 +134,7 @@ def update_channel_standup_schedule(submitted_channel_name, standup_hour, standu
     channel.message = message if message != None else channel.message
     channel.email = email if email != None else channel.email
     channel.confirmation_code = confirmation_code if confirmation_code != None else channel.confirmation_code
+    channel.email_confirmed = False
     DB.session.add(channel)
     DB.session.commit()
     # Next we will update the standup message job if one of those values was edited
