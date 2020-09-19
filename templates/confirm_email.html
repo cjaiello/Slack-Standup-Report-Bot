@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- Standup Bot by Christina Aiello, 2017 -->
+<html>
+
+<head>
+	<title>DX Slack Standup Bot</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+
+<link rel="icon" href="static/favicon.ico" type="image/x-icon" />
+
+<body bgcolor="#181818">
+
+	<nav class="navigation">
+		<div class="header_text">
+			Slack Standup Bot
+		</div>
+	</nav>
+
+	<section class="separator_line">
+	</section>
+	<section class="second_separator_line">
+	</section>
+
+	<section class="white_textbox">
+		<form action="" method="post" class="form">
+			{{ form.csrf_token }}
+			<div class="input text">
+				{{ form.code(placeholder="Confirm Email with Code") }}
+			</div>
+            {{ form.recaptcha }}
+            <input class="submitButton" type="submit" value="Submit" />
+		</form>
+	</section>
+	<!-- Closing tag for main white text box -->
+
+	<!-- Adds a bar across the page for colors -->
+	<section class="second_separator_line">
+	</section>
+	<section class="separator_line">
+	</section>
+
+	<!-- Bottom Bar -->
+	<footer class="footer">
+		<span class="footer_text">Standup bot by <a href="https://github.com/cjaiello" target="_blank">Christina Aiello</a></span>
+	</footer>
+</body>
+
+</html>

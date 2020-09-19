@@ -5,7 +5,7 @@ import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
-from wtforms import TextField, TextAreaField, IntegerField, validators, StringField, SubmitField
+from wtforms import TextField, TextAreaField, IntegerField, validators, StringField, SubmitField, BooleanField
 import util
 import slack_client
 from flask_wtf import FlaskForm, RecaptchaField
@@ -35,7 +35,12 @@ class StandupSignupForm(FlaskForm):
         'Where should we email your standup reports? (optional):', validators=[validators.Email(), validators.Optional()])
     recaptcha = RecaptchaField()
     csrf = app.config['SECRET_KEY']
+    confirmation_code = TextField()
+    email_confirmed = BooleanField()
 
+class EmailConfirmationForm(FlaskForm):
+    standup_minute = IntegerField(validators=[validators.Required()])
+    recaptcha = RecaptchaField()
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
@@ -57,6 +62,7 @@ def homepage():
         message = escape(request.form['message'])
         email = escape(request.form['email'])
         am_or_pm = escape(request.form['am_or_pm'])
+        confirmation_code = "000000"
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm
         # If the form field was valid...
         if form.validate_on_submit():
@@ -64,11 +70,13 @@ def homepage():
             logger.log("Form was valid upon submit", "INFO") # Issue 25: eventType: ProcessingForm
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
-                add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
+                add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " <a href='https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + submitted_channel_name + "'>Click here</a>.")
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
-                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm)
+                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, True, confirmation_code)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " <a href='https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + submitted_channel_name + "'>Click here</a>.")
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
             response_message += " and responses being emailed to " + email if (email) else ""
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
@@ -77,10 +85,34 @@ def homepage():
             logger.log(str(form.errors), "ERROR") # Issue 25: eventType: ProcessingForm
             response_message = "Please fix the error(s) below"
 
-    return True
-   # return render_template('homepage.html', form=form, message=response_message)
+    return render_template('homepage.html', form=form, message=response_message)
 
-def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm):
+@app.route("/confirm_email", methods=['GET', 'POST'])
+def confirm_email():
+    form = EmailConfirmationForm()
+    response_message = None
+    channel_name = request.args.get('channel_name', default = None)
+
+    if request.method == 'POST':
+        form = request.form
+        if form.validate_on_submit():
+            channel = Channel.query.filter_by(channel_name=channel_name).first()
+            if (form.code == channel.confirmation_code):
+                channel.email_confirmed = 1
+                DB.session.add(channel)
+                DB.session.commit()
+                response_message = "Email confirmed!"
+                return render_template('homepage.html', form=form, message=response_message)
+            else:
+                response_message = "Code failed"
+                return render_template('confirm_email.html', form=form, message=response_message)
+    else:
+        return render_template('confirm_email.html', form=form, message=None)
+
+# Method that sends confirmation email with link
+
+
+def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
     channel = Channel.query.filter_by(
         channel_name=submitted_channel_name).first()
     channel.standup_hour = util.calculate_am_or_pm(
@@ -88,6 +120,7 @@ def update_channel_standup_schedule(submitted_channel_name, standup_hour, standu
     channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
     channel.message = message if message != None else channel.message
     channel.email = email if email != None else channel.email
+    DB.session.add(channel)
     DB.session.commit()
     # Next we will update the standup message job if one of those values was edited
     if (message != None or standup_hour != None or standup_minute != None):
@@ -98,12 +131,13 @@ def update_channel_standup_schedule(submitted_channel_name, standup_hour, standu
                         channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
     if (email != None):
+        # TODO twofactor redirect here
         set_email_job(channel)
 
-def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm):
+def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
     # Channel isn't in database. Create our channel object and add it to the database
     channel = Channel(submitted_channel_name, util.calculate_am_or_pm(
-        standup_hour, am_or_pm), standup_minute, message, email, None)
+        standup_hour, am_or_pm), standup_minute, message, email, None, False, confirmation_code)
     logger.log("Made channel object", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     DB.session.add(channel)
     logger.log("Added into DB session", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
@@ -115,6 +149,7 @@ def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_m
     logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
     if (email != None):
+        # TODO twofactor redirect here
         set_email_job(channel)
 
 # Adds standup job and logs it
@@ -186,7 +221,7 @@ def set_email_job(channel):
 # @return nothing
 def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     channel = Channel.query.filter_by(channel_name=a_channel_name).first()
-    if (channel.timestamp != None):
+    if (channel.timestamp != None and channel.email_confirmed):
         # First we need to get all replies to this message:
         standups = slack_client.get_standup_replies_for_message(
             channel.timestamp, channel.channel_name)
@@ -208,7 +243,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     else:
         # Log that it didn't work
         logger.log("Channel " + a_channel_name +
-              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP.", "ERROR") # Issue 25: eventType: SendStandupEmail
+              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP or haven't confirmed their email.", "ERROR") # Issue 25: eventType: SendStandupEmail
 
 
 # Sends an email via our GMAIL account to the chosen email address
@@ -233,14 +268,18 @@ class Channel(DB.Model):
     message = DB.Column(DB.String(120), unique=False)
     email = DB.Column(DB.String(120), unique=False)
     timestamp = DB.Column(DB.String(120), unique=False)
+    email_confirmed = DB.Column(DB.Integer)
+    confirmation_code = DB.Column(DB.String(6), unique=False)
 
-    def __init__(self, channel_name, standup_hour, standup_minute, message, email, timestamp):
+    def __init__(self, channel_name, standup_hour, standup_minute, message, email, timestamp, email_confirmed, confirmation_code):
         self.channel_name = channel_name
         self.standup_hour = standup_hour
         self.standup_minute = standup_minute
         self.message = message
         self.email = email
         self.timestamp = timestamp
+        self.email_confirmed = email_confirmed
+        self.confirmation_code = confirmation_code
 
     def __repr__(self):
         return '<Channel %r>' % self.channel_name
