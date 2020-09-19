@@ -13,6 +13,7 @@ from flask import escape
 import email_validator
 import logger
 import random
+import html
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
@@ -91,6 +92,7 @@ def homepage():
 def confirm_email():
     form = EmailConfirmationForm()
     response_message = None
+    logger.log("request.args: " + str(request.args), "INFO") # Issue 25: eventType: ConfirmEmail
     email = request.args.get('email', default = None)
     channel_name = request.args.get('channel_name', default = None)
     logger.log("channel_name: " + channel_name, "INFO") # Issue 25: eventType: ConfirmEmail
@@ -264,7 +266,7 @@ def send_email(channel_name, recipient_email_address, email_content):
     server.starttls()
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     logger.log("Username is " + os.environ['USERNAME'], 'INFO') # Issue 25: eventType: SendEmail
-    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
+    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", html.unescape(email_content))
     logger.log(message, "INFO")
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
