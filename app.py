@@ -100,6 +100,9 @@ def confirm_email():
             channel = Channel.query.filter_by(email=email).first()
             logger.log("Email address being confirmed is: " + str(channel.email), "INFO") # Issue 25: eventType: ConfirmEmail
             logger.log("Code submitted was: " + str(code), "INFO") # Issue 25: eventType: ConfirmEmail
+            logger.log("confirmation_code was: " + str(channel.confirmation_code), "INFO") # Issue 25: eventType: ConfirmEmail
+            logger.log("Type of Code submitted was: " + str(type(code)), "INFO") # Issue 25: eventType: ConfirmEmail
+            logger.log("Type of confirmation_code was: " + str(type(channel.confirmation_code)), "INFO") # Issue 25: eventType: ConfirmEmail
             if (code == channel.confirmation_code):
                 channel.email_confirmed = True
                 DB.session.add(channel)
