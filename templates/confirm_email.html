@@ -23,6 +23,10 @@
 	</section>
 
 	<section class="white_textbox">
+        {% if message %}
+            <span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
+        {% endif %}
+        
 		<form action="" method="post" class="form">
 			{{ form.csrf_token }}
 			<div class="input text">

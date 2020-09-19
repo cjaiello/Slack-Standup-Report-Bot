@@ -105,6 +105,9 @@ def confirm_email():
             else:
                 response_message = "Code failed"
                 return render_template('confirm_email.html', form=form, message=response_message)
+        else:
+            response_message = "Code failed"
+            return render_template('confirm_email.html', form=form, message=response_message)
     else:
         return render_template('confirm_email.html', form=form, message=None)
 
