@@ -38,7 +38,7 @@ class StandupSignupForm(FlaskForm):
     email_confirmed = BooleanField()
 
 class EmailConfirmationForm(FlaskForm):
-    standup_minute = IntegerField(validators=[validators.Required()])
+    code = IntegerField(validators=[validators.Required()])
     recaptcha = RecaptchaField()
 
 @app.route("/", methods=['GET', 'POST'])
