@@ -26,14 +26,20 @@
         {% if message %}
             <span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
         {% endif %}
-        
+
 		<form action="" method="post" class="form">
 			{{ form.csrf_token }}
 			<div class="input text">
 				{{ form.code(placeholder="Confirm Email with Code") }}
 			</div>
-            {{ form.recaptcha }}
-            <input class="submitButton" type="submit" value="Submit" />
+
+			<div class="input submit">
+				{{ form.recaptcha }}
+				{% for error in form.recaptcha.errors %}
+				  <span class="error error_details bold">You must fill out the reCAPTCHA!</span>
+				{% endfor %}
+				<input class="submitButton" type="submit" value="Submit" />
+			</div>
 		</form>
 	</section>
 	<!-- Closing tag for main white text box -->
