@@ -94,27 +94,25 @@ def confirm_email():
 
     if request.method == 'POST':
         form = EmailConfirmationForm(request.form)
-        logger.log("request.form " + str(request.form), "INFO")
-        logger.log("form " + str(form), "INFO")
         code = request.form['code']
-        logger.log("form " + str(code), "INFO")
-        if form.validate_on_submit():
+        if form.validate_on_submit() and email:
             channel = Channel.query.filter_by(email=email).first()
-            logger.log(str(channel.email), "INFO")
-            logger.log(str(code), "INFO")
-            logger.log(str(channel.confirmation_code), "INFO")
+            logger.log("Email address being confirmed is: " + str(channel.email), "INFO")
+            logger.log("Code submitted was: " + str(code), "INFO")
             if (code == channel.confirmation_code):
                 channel.email_confirmed = True
                 DB.session.add(channel)
                 DB.session.commit()
-                response_message = "Email confirmed!"
+                response_message = "Email " + channel.email + " has been confirmed! You will now be emailed your standup reports."
+                logger.log("Email address being confirmed is: " + channel.email, "INFO")
                 return render_template('homepage.html', form=StandupSignupForm(), message=response_message)
             else:
-                response_message = "Code != channel confirmation code. Code failed"
+                logger.log("Could not validate form because code != channel.confirmation_code", "ERROR")
+                response_message = "Form submission failed. Please try again."
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
-            logger.log(str(form.errors), "ERROR")
-            response_message = "Form failed"
+            logger.log("Could not validate form because: " + str(form.errors), "ERROR")
+            response_message = "Form submission failed. Please try again."
             return render_template('confirm_email.html', form=form, message=response_message)
     else:
         return render_template('confirm_email.html', form=form, message=None)
