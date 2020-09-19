@@ -94,11 +94,12 @@ def confirm_email():
 
     if request.method == 'POST':
         logger.log("form " + str(request.form), "INFO")
-        logger.log("form " + str(request.form.code), "INFO")
-        logger.log("form " + str(request.form.csrf), "INFO")
+        code = request.form['code']
+        logger.log("form " + str(code), "INFO")
+        logger.log("form " + str(request.form['csrf']), "INFO")
         if form.validate_on_submit():
             channel = Channel.query.filter_by(channel_name=channel_name).first()
-            if (form.code == channel.confirmation_code):
+            if (code == channel.confirmation_code):
                 channel.email_confirmed = 1
                 DB.session.add(channel)
                 DB.session.commit()
