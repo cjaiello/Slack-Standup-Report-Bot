@@ -108,7 +108,7 @@ def confirm_email():
                 DB.session.add(channel)
                 DB.session.commit()
                 response_message = "Email confirmed!"
-                return render_template('homepage.html', form=form, message=response_message)
+                return render_template('homepage.html', form=StandupSignupForm(), message=response_message)
             else:
                 response_message = "Code != channel confirmation code. Code failed"
                 return render_template('confirm_email.html', form=form, message=response_message)
