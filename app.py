@@ -40,6 +40,7 @@ class StandupSignupForm(FlaskForm):
 class EmailConfirmationForm(FlaskForm):
     code = IntegerField(validators=[validators.Required()])
     recaptcha = RecaptchaField()
+    csrf = app.config['SECRET_KEY']
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
