@@ -77,7 +77,7 @@ def homepage():
                 update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, True, confirmation_code)
                 send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + submitted_channel_name)
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
-            response_message += " and responses being emailed to " + email if (email) else ""
+            response_message += " and responses being emailed to " + email if (email) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
         else:
             logger.log("Could not update standup time.", "ERROR") # Issue 25: eventType: ProcessingForm
@@ -100,14 +100,17 @@ def confirm_email():
         logger.log("form " + str(code), "INFO")
         if form.validate_on_submit():
             channel = Channel.query.filter_by(channel_name=channel_name).first()
+            logger.log(str(channel.channel_name), "INFO")
+            logger.log(str(code), "INFO")
+            logger.log(str(channel.confirmation_code), "INFO")
             if (code == channel.confirmation_code):
-                channel.email_confirmed = 1
+                channel.email_confirmed = True
                 DB.session.add(channel)
                 DB.session.commit()
                 response_message = "Email confirmed!"
                 return render_template('homepage.html', form=form, message=response_message)
             else:
-                response_message = "Code failed"
+                response_message = "Code != channel confirmation code. Code failed"
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
             logger.log(str(form.errors), "ERROR")
