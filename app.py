@@ -264,6 +264,7 @@ def send_email(channel_name, recipient_email_address, email_content):
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     logger.log("Username is " + os.environ['USERNAME'], 'INFO') # Issue 25: eventType: SendEmail
     message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
+    logger.log(message, "INFO")
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
 
