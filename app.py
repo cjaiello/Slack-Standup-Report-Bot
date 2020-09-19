@@ -257,7 +257,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
 
 # Sends an email via our GMAIL account to the chosen email address
 def send_email(channel_name, recipient_email_address, email_content):
-    logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + str(email_content), "INFO")
+    logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, "INFO")
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
