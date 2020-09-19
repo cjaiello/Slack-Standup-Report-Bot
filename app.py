@@ -93,7 +93,9 @@ def confirm_email():
     channel_name = request.args.get('channel_name', default = None)
 
     if request.method == 'POST':
-        logger.log("form " + str(request.form), "INFO")
+        form = EmailConfirmationForm(request.form)
+        logger.log("request.form " + str(request.form), "INFO")
+        logger.log("form " + str(form), "INFO")
         code = request.form['code']
         logger.log("form " + str(code), "INFO")
         if form.validate_on_submit():
@@ -108,7 +110,7 @@ def confirm_email():
                 response_message = "Code failed"
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
-            logger.log(str(request.form.errors), "ERROR")
+            logger.log(str(form.errors), "ERROR")
             response_message = "Form failed"
             return render_template('confirm_email.html', form=form, message=response_message)
     else:
