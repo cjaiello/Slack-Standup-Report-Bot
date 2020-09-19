@@ -38,7 +38,7 @@ class StandupSignupForm(FlaskForm):
     email_confirmed = BooleanField()
 
 class EmailConfirmationForm(FlaskForm):
-    code = IntegerField(validators=[validators.Required()])
+    code = TextField(validators=[validators.Required()])
     recaptcha = RecaptchaField()
     csrf = app.config['SECRET_KEY']
 
