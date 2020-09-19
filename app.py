@@ -70,12 +70,12 @@ def homepage():
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
                 add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + submitted_channel_name)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + email)
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
                 update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, True, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + submitted_channel_name)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?channel_name=" + email)
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
             response_message += " and responses being emailed to " + email if (email) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
@@ -90,7 +90,7 @@ def homepage():
 def confirm_email():
     form = EmailConfirmationForm()
     response_message = None
-    channel_name = request.args.get('channel_name', default = None)
+    email = request.args.get('email', default = None)
 
     if request.method == 'POST':
         form = EmailConfirmationForm(request.form)
@@ -99,8 +99,8 @@ def confirm_email():
         code = request.form['code']
         logger.log("form " + str(code), "INFO")
         if form.validate_on_submit():
-            channel = Channel.query.filter_by(channel_name=channel_name).first()
-            logger.log(str(channel.channel_name), "INFO")
+            channel = Channel.query.filter_by(email=email).first()
+            logger.log(str(channel.email), "INFO")
             logger.log(str(code), "INFO")
             logger.log(str(channel.confirmation_code), "INFO")
             if (code == channel.confirmation_code):
