@@ -62,7 +62,7 @@ def homepage():
         email = escape(request.form['email'])
         am_or_pm = escape(request.form['am_or_pm'])
         confirmation_code = "000000"
-        logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm
+        logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
         if form.validate_on_submit():
             # Look for channel in database
