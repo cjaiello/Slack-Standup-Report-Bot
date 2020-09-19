@@ -72,12 +72,12 @@ def homepage():
             if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
                 logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
                 add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name, "Confirm Email Address for Standup Report")
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
                 update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name)
+                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name, "Confirm Email Address for Standup Report")
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
             response_message += " and responses being emailed to " + email if (email) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
             slack_client.send_confirmation_message(submitted_channel_name, response_message)
@@ -244,7 +244,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             formatted_standup_message = ''.join(map(str, standups))
             # Then we need to send an email with this information
             send_email(a_channel_name, recipient_email_address,
-                       formatted_standup_message)
+                       formatted_standup_message, "Standup Report")
             logger.log("Sent " + a_channel_name + "'s standup messages, " +
                   formatted_standup_message + ", to " + recipient_email_address, "INFO") # Issue 25: eventType: SendStandupEmail
             # Finally we need to reset the standup timestamp so we don't get a repeat.
@@ -260,14 +260,14 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
 
 
 # Sends an email via our GMAIL account to the chosen email address
-def send_email(channel_name, recipient_email_address, email_content):
+def send_email(channel_name, recipient_email_address, email_content, email_subject):
     logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, "INFO")
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     logger.log("Username is " + os.environ['USERNAME'], 'INFO') # Issue 25: eventType: SendEmail
-    message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", html.unescape(email_content))
+    message = 'Subject: {}\n\n{}'.format("#" + channel_name + " " + email_subject, html.unescape(email_content))
     logger.log(message, "INFO")
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
