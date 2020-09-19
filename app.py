@@ -61,7 +61,7 @@ def homepage():
         message = escape(request.form['message'])
         email = escape(request.form['email'])
         am_or_pm = escape(request.form['am_or_pm'])
-        confirmation_code = "000000"
+        confirmation_code = generate_code()
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
         if form.validate_on_submit():
@@ -74,7 +74,7 @@ def homepage():
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
-                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, True, confirmation_code)
+                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
                 send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email)
             response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
             response_message += " and responses being emailed to " + email if (email) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
@@ -97,28 +97,25 @@ def confirm_email():
         code = request.form['code']
         if form.validate_on_submit() and email:
             channel = Channel.query.filter_by(email=email).first()
-            logger.log("Email address being confirmed is: " + str(channel.email), "INFO")
-            logger.log("Code submitted was: " + str(code), "INFO")
+            logger.log("Email address being confirmed is: " + str(channel.email), "INFO") # Issue 25: eventType: ConfirmEmail
+            logger.log("Code submitted was: " + str(code), "INFO") # Issue 25: eventType: ConfirmEmail
             if (code == channel.confirmation_code):
                 channel.email_confirmed = True
                 DB.session.add(channel)
                 DB.session.commit()
                 response_message = "Email " + channel.email + " has been confirmed! You will now be emailed your standup reports."
-                logger.log("Email address being confirmed is: " + channel.email, "INFO")
+                logger.log("Email address being confirmed is: " + channel.email, "INFO") # Issue 25: eventType: ConfirmEmail
                 return render_template('homepage.html', form=StandupSignupForm(), message=response_message)
             else:
-                logger.log("Could not validate form because code != channel.confirmation_code", "ERROR")
+                logger.log("Could not validate form because code != channel.confirmation_code", "ERROR") # Issue 25: eventType: ConfirmEmail
                 response_message = "Form submission failed. Please try again."
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
-            logger.log("Could not validate form because: " + str(form.errors), "ERROR")
+            logger.log("Could not validate form because: " + str(form.errors), "ERROR") # Issue 25: eventType: ConfirmEmail
             response_message = "Form submission failed. Please try again."
             return render_template('confirm_email.html', form=form, message=response_message)
     else:
         return render_template('confirm_email.html', form=form, message=None)
-
-# Method that sends confirmation email with link
-
 
 def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
     channel = Channel.query.filter_by(
@@ -139,7 +136,6 @@ def update_channel_standup_schedule(submitted_channel_name, standup_hour, standu
                         channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
     if (email != None):
-        # TODO twofactor redirect here
         set_email_job(channel)
 
 def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
@@ -157,7 +153,6 @@ def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_m
     logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
     if (email != None):
-        # TODO twofactor redirect here
         set_email_job(channel)
 
 # Adds standup job and logs it
@@ -265,6 +260,14 @@ def send_email(channel_name, recipient_email_address, email_content):
     message = 'Subject: {}\n\n{}'.format(channel_name + " Standup Report", email_content)
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
+
+
+# Generate a random 6-digit code
+def generate_code():
+  code = ""
+  for i in range (1, 7):
+    code += (str(random.randrange(10)))
+  return code
 
 
 # Create our database model
