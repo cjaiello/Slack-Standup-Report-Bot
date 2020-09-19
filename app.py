@@ -96,7 +96,6 @@ def confirm_email():
         logger.log("form " + str(request.form), "INFO")
         code = request.form['code']
         logger.log("form " + str(code), "INFO")
-        logger.log("form " + str(request.form['csrf']), "INFO")
         if form.validate_on_submit():
             channel = Channel.query.filter_by(channel_name=channel_name).first()
             if (code == channel.confirmation_code):
