@@ -12,6 +12,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 from flask import escape
 import email_validator
 import logger
+import random
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
