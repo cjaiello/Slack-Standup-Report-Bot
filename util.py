@@ -1,4 +1,4 @@
-# Standup Bot by Christina Aiello, 2017
+# Standup Bot by Christina Aiello, 2017-2020
 import re
 from logger import Logger
 import random
