@@ -63,7 +63,7 @@ def homepage():
         standup_form['channel_name'] = escape(str(request.form['channel_name']))
         standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(request.form['standup_hour']))
         standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(request.form['standup_minute']))
-        standup_form['message'] = filter_standup_message(escape(str(request.form['message'])))
+        standup_form['message'] = escape(filter_standup_message(str(request.form['message'])))
         standup_form['email'] = escape(str(request.form['email']))
         standup_form['am_or_pm'] = escape(str(request.form['am_or_pm']))
         standup_form['confirmation_code'] = generate_code()
