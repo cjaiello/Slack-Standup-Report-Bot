@@ -58,14 +58,12 @@ def homepage():
         logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
         logger.log("Made the form object with form values", "INFO") # Issue 25: eventType: ProcessingForm
         standup_form = {}
-        print(type(request.form['message']))
-        print(type(escape(str(request.form['message']))))
-        standup_form['channel_name'] = escape(str(request.form['channel_name']))
+        standup_form['channel_name'] = str(escape(request.form['channel_name']))
         standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(request.form['standup_hour']))
         standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(request.form['standup_minute']))
-        standup_form['message'] = escape(filter_standup_message(str(request.form['message'])))
-        standup_form['email'] = escape(str(request.form['email']))
-        standup_form['am_or_pm'] = escape(str(request.form['am_or_pm']))
+        standup_form['message'] = str(escape(filter_standup_message(str(request.form['message']))))
+        standup_form['email'] = str(escape(request.form['email']))
+        standup_form['am_or_pm'] = str(escape(request.form['am_or_pm']))
         standup_form['confirmation_code'] = generate_code()
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
@@ -164,6 +162,7 @@ def add_channel_standup_schedule(standup_form):
     add_standup_job(standup_form['channel_name'], standup_form['message'], util.calculate_am_or_pm(standup_form['standup_hour'], standup_form['am_or_pm']), standup_form['standup_minute'])
     logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
+    print(type(standup_form['email']))
     if (standup_form['email'] != None):
         logger.log("New channel, " + standup_form['channel_name'] + ", needs its email job set up to email " + standup_form['email'], "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
         set_email_job(channel)
