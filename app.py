@@ -112,7 +112,7 @@ def confirm_email():
                 DB.session.add(channel)
                 DB.session.commit()
                 response_message = "Email " + channel.email + " has been confirmed! You will now be emailed your standup reports."
-                Logger.log("Email address being confirmed is: " + channel.email, Logger.info) # Issue 25: eventType: ConfirmEmail
+                Logger.log("Email address confirmed was: " + channel.email, Logger.info) # Issue 25: eventType: ConfirmEmail
                 return render_template('homepage.html', form=StandupSignupForm(), message=response_message)
             else:
                 Logger.log("Could not validate form because code != channel.confirmation_code", Logger.error) # Issue 25: eventType: ConfirmEmail
@@ -147,7 +147,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
     
-    return not (channel.email_confirmed)
+    return (form['email'] != None and not (channel.email_confirmed))
 
 
 # Adds standup schedules for a new channel
