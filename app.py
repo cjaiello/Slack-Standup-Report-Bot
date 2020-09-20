@@ -150,9 +150,9 @@ def update_channel_and_check_if_email_confirm_needed(form):
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
 
-    Logger.log("channel.email_confirmed is: " + channel.email_confirmed + " and not that is: " + not channel.email_confirmed, Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("channel.email_confirmed is: " + channel.email_confirmed + " and not that is: " + (not channel.email_confirmed), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
                 
-    return (form['email'] != None and not (channel.email_confirmed))
+    return ((form['email'] != None) and (not channel.email_confirmed))
 
 
 # Adds standup schedules for a new channel
