@@ -53,7 +53,7 @@ def homepage():
     response_message = None
 
     if request.method == 'POST':
-        Logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
+        Logger.log("Someone posted a form: " + request.remote_addr, Logger.info) # Issue 25: eventType: ProcessingForm
         standup_form = {
             'channel_name' : str(escape(request.form['channel_name'])),
             'standup_hour' :  util.remove_starting_zeros_from_time(escape(request.form['standup_hour'])),
@@ -63,28 +63,28 @@ def homepage():
             'am_or_pm' :  str(escape(request.form['am_or_pm'])),
             'confirmation_code' :  util.generate_code()
         }
-        Logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
+        Logger.log("Pulled values from form", Logger.info) # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
         if form.validate_on_submit():
             # Look for channel in database
-            Logger.log("Form was valid upon submit", "INFO") # Issue 25: eventType: ProcessingForm
+            Logger.log("Form was valid upon submit", Logger.info) # Issue 25: eventType: ProcessingForm
             if not DB.session.query(Channel).filter(Channel.channel_name == standup_form['channel_name']).count():
                 # Add our new channel to the database
-                Logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
+                Logger.log("Add new channel to DB", Logger.info) # Issue 25: eventType: ProcessingForm
                 add_channel_standup_schedule(standup_form)
             else:
                 # Update channel's standup info in the database
-                Logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
+                Logger.log("Update channel's standup info", Logger.info) # Issue 25: eventType: ProcessingForm
                 update_channel_standup_schedule(standup_form)
             if standup_form['email'] != None:
-                Logger.log("We need email confirmation for email " + standup_form['email'], "INFO") # Issue 25: eventType: ProcessingForm
+                Logger.log("We need email confirmation for email " + standup_form['email'], Logger.info) # Issue 25: eventType: ProcessingForm
                 confirm_email_message = "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name']
                 email_client.send_email(standup_form['channel_name'], standup_form['email'], confirm_email_message, "Confirm Email Address for Standup Report")
             response_message = confirm_success(standup_form)
         else:
             # If the form was NOT valid...
-            Logger.log("Could not update standup time.", "ERROR") # Issue 25: eventType: ProcessingForm
-            Logger.log(str(form.errors), "ERROR") # Issue 25: eventType: ProcessingForm
+            Logger.log("Could not update standup time.", Logger.error) # Issue 25: eventType: ProcessingForm
+            Logger.log(str(form.errors), Logger.error) # Issue 25: eventType: ProcessingForm
             response_message = "Please fix the error(s) below"
 
     return render_template('homepage.html', form=form, message=response_message)
@@ -94,10 +94,10 @@ def homepage():
 def confirm_email():
     form = EmailConfirmationForm()
     response_message = None
-    Logger.log("request.args: " + str(request.args), "INFO") # Issue 25: eventType: ConfirmEmail
+    Logger.log("request.args: " + str(request.args), Logger.info) # Issue 25: eventType: ConfirmEmail
     email = request.args.get('email', default = None)
     channel_name = request.args.get('channel_name', default = None)
-    Logger.log("channel_name: " + channel_name, "INFO") # Issue 25: eventType: ConfirmEmail
+    Logger.log("channel_name: " + channel_name, Logger.info) # Issue 25: eventType: ConfirmEmail
 
     if request.method == 'POST':
         form = EmailConfirmationForm(request.form)
@@ -105,20 +105,20 @@ def confirm_email():
         if form.validate_on_submit() and email:
             # Go into the database and get our channel object based on email address and channel name.
             channel = Channel.query.filter_by(email=email, channel_name=channel_name).first()
-            Logger.log("Email address being confirmed is: " + str(channel.email) + " | Code submitted was: " + str(code) + " | Confirmation_code was: " + str(channel.confirmation_code), "INFO") # Issue 25: eventType: ConfirmEmail
+            Logger.log("Email address being confirmed is: " + str(channel.email) + " | Code submitted was: " + str(code) + " | Confirmation_code was: " + str(channel.confirmation_code), Logger.info) # Issue 25: eventType: ConfirmEmail
             if (code == channel.confirmation_code):
                 channel.email_confirmed = True
                 DB.session.add(channel)
                 DB.session.commit()
                 response_message = "Email " + channel.email + " has been confirmed! You will now be emailed your standup reports."
-                Logger.log("Email address being confirmed is: " + channel.email, "INFO") # Issue 25: eventType: ConfirmEmail
+                Logger.log("Email address being confirmed is: " + channel.email, Logger.info) # Issue 25: eventType: ConfirmEmail
                 return render_template('homepage.html', form=StandupSignupForm(), message=response_message)
             else:
-                Logger.log("Could not validate form because code != channel.confirmation_code", "ERROR") # Issue 25: eventType: ConfirmEmail
+                Logger.log("Could not validate form because code != channel.confirmation_code", Logger.error) # Issue 25: eventType: ConfirmEmail
                 response_message = "Form submission failed. Please try again."
                 return render_template('confirm_email.html', form=form, message=response_message)
         else:
-            Logger.log("Could not validate form because: " + str(form.errors), "ERROR") # Issue 25: eventType: ConfirmEmail
+            Logger.log("Could not validate form because: " + str(form.errors), Logger.error) # Issue 25: eventType: ConfirmEmail
             response_message = "Form submission failed. Please try again."
             return render_template('confirm_email.html', form=form, message=response_message)
     else:
@@ -153,28 +153,28 @@ def update_channel_standup_schedule(form):
 # Adds standup schedules for a new channel
 # @param form : User's input in form form
 def add_channel_standup_schedule(form):
-    Logger.log("Made channel object", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Made channel object", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     channel = Channel(form['channel_name'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'], form['message'], form['email'], None, False, form['confirmation_code'])
     DB.session.add(channel)
     DB.session.commit()
-    Logger.log("Committed to DB session", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Committed to DB session", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Adding this additional job to the queue
     add_standup_job(form['channel_name'], form['message'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'])
-    Logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Added email job to scheduler. Now going to set email job", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
     if (form['email'] != None):
-        Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+        Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         set_email_job(channel)
 
 
 # Adds standup job and logs it
 # @return nothing
 def add_standup_job(channels_name, standup_message, hour, minute):
-    Logger.log("Adding standup to scheduler " + " \n Channel name: " + channels_name + " \n standup_message: " + standup_message + "\n hour: " + str(hour) + "\n minute: " + str(minute), "INFO") # Issue 25: eventType: AddChannelStandupJob
+    Logger.log("Adding standup to scheduler " + " \n Channel name: " + channels_name + " \n standup_message: " + standup_message + "\n hour: " + str(hour) + "\n minute: " + str(minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channels_name, standup_message], day_of_week='mon-fri', hour=hour, minute=minute, id=channels_name + "_standupcall")
     Logger.log("Set " + channels_name + "'s standup time to " + str(hour) +
-          ":" + util.format_minutes_to_have_zero(minute) + " with standup standup_message: " + standup_message, "INFO") # Issue 25: eventType: AddChannelStandupJob
+          ":" + util.format_minutes_to_have_zero(minute) + " with standup standup_message: " + standup_message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
 
 
 # Sends Slack confirmation message indicating success
@@ -190,7 +190,7 @@ def confirm_success(form):
 # Setting the standup schedules for already-existing jobs
 # @return nothing
 def set_schedules():
-    Logger.log("Loading previously-submitted standup data.", "INFO") # Issue 25: eventType: SettingSchedule
+    Logger.log("Loading previously-submitted standup data.", Logger.info) # Issue 25: eventType: SettingSchedule
     # Get all rows from our table
     channels_with_scheduled_standups = Channel.query.all()
     # Loop through our results
@@ -206,7 +206,7 @@ def set_schedules():
 # @return User's message, censored
 def filter_standup_message(message):
     if (pf.is_profane(message)):
-        Logger.log("Censoring standup message. Message was: " + message + " and is now: " + pf.censor(message), "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+        Logger.log("Censoring standup message. Message was: " + message + " and is now: " + pf.censor(message), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         message = pf.censor(message)
     return message
 
@@ -221,15 +221,15 @@ def trigger_standup_call(channel_name, message):
     # Sending our standup message
     result = slack_client.send_standup_message(channel_name, message)
     # Evaluating result of call and logging it
-    Logger.log("Result of sending standup message to " + channel_name + " was " + str(result), "INFO") # Issue 25: eventType: TriggerStandupMessage
+    Logger.log("Result of sending standup message to " + channel_name + " was " + str(result), Logger.info) # Issue 25: eventType: TriggerStandupMessage
     if (result["ok"]):
-        Logger.log("Standup alert message was sent to " + channel_name, "INFO") # Issue 25: eventType: TriggerStandupMessage
+        Logger.log("Standup alert message was sent to " + channel_name, Logger.info) # Issue 25: eventType: TriggerStandupMessage
         # Getting timestamp for today's standup message for this channel
         channel = Channel.query.filter_by(channel_name=channel_name).first()
         channel.timestamp = result["ts"]
         DB.session.commit()
     else:
-        Logger.log("Could not send standup alert message to " + channel_name, "ERROR") # Issue 25: eventType: TriggerStandupMessage
+        Logger.log("Could not send standup alert message to " + channel_name, Logger.error) # Issue 25: eventType: TriggerStandupMessage
 
 
 # Used to set the email jobs for any old or new channels with standup messages
@@ -245,10 +245,10 @@ def set_email_job(channel):
         # Add a job for each row in the table, sending standup replies to chosen email.
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
                           channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour), minute=int(channel.standup_minute) + 1, id=channel.channel_name + "_sendemail")
-        Logger.log("Channel that we set email schedule for: " + channel.channel_name, "INFO") # Issue 25: eventType: CreateEmailJob
+        Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateEmailJob
     else:
         Logger.log("Channel " + channel.channel_name +
-              " did not want their standups emailed to them today.", "INFO") # Issue 25: eventType: CreateEmailJob
+              " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateEmailJob
 
 
 # Emailing standup results to chosen email address.
@@ -270,7 +270,7 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             # Then we need to send an email with this information
             email_client.send_email(a_channel_name, recipient_email_address, formatted_standup_message, "Standup Report")
             Logger.log("Sent " + a_channel_name + "'s standup messages, " +
-                  formatted_standup_message + ", to " + recipient_email_address, "INFO") # Issue 25: eventType: SendStandupEmail
+                  formatted_standup_message + ", to " + recipient_email_address, Logger.info) # Issue 25: eventType: SendStandupEmail
             # Finally we need to reset the standup timestamp so we don't get a repeat.
             channel.timestamp = None
             DB.session.commit()
@@ -278,11 +278,11 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             # Let them know we had no replies
             message = "Channel " + a_channel_name + " did not have any standup submissions to email today."
             email_client.send_email(a_channel_name, recipient_email_address, message, "No Standup Report For Channel Today")
-            Logger.log(message, "INFO") # Issue 25: eventType: SendStandupEmail
+            Logger.log(message, Logger.info) # Issue 25: eventType: SendStandupEmail
     else:
         # Log that it didn't work
         Logger.log("Channel " + a_channel_name +
-              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP or haven't confirmed their email.", "ERROR") # Issue 25: eventType: SendStandupEmail
+              " isn't set up to have standup results sent anywhere because they don't have a timestamp in STANDUP_TIMESTAMP_MAP or haven't confirmed their email.", Logger.error) # Issue 25: eventType: SendStandupEmail
 
 
 # Create our database model
@@ -321,4 +321,4 @@ set_schedules()
 # Running the scheduling
 SCHEDULER.start()
 
-Logger.log("Standup bot was started up and scheduled.", "INFO") # Issue 25: eventType: Startup
+Logger.log("Standup bot was started up and scheduled.", Logger.info) # Issue 25: eventType: Startup

@@ -10,13 +10,13 @@ import html
 # @param email_content: The content of the email body
 # @param email_subject: The subject of the email
 def send_email(channel_name, recipient_email_address, email_content, email_subject):
-    Logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, "INFO")
+    Logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, Logger.info)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.login(os.environ['USERNAME'], os.environ['PASSWORD'])
     Logger.log("Username is " + os.environ['USERNAME'], 'INFO') # Issue 25: eventType: SendEmail
     message = 'Subject: {}\n\n{}'.format("#" + channel_name + " " + email_subject, html.unescape(email_content))
-    Logger.log(message, "INFO")
+    Logger.log(message, Logger.info)
     server.sendmail(os.environ['USERNAME'], recipient_email_address, message)
     server.quit()
