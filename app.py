@@ -126,7 +126,6 @@ def confirm_email():
 # Updates standup schedules for a previously-submitted channel
 # @param form : User's input in form form
 def update_channel_and_check_if_email_confirm_needed(form):
-    needs_to_confirm_email = False
     channel = Channel.query.filter_by(channel_name=form['channel_name']).first()
     channel.standup_hour = util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm'])
     channel.standup_minute = form['standup_minute']
@@ -138,7 +137,6 @@ def update_channel_and_check_if_email_confirm_needed(form):
         if (form['email'] != None):
             channel.confirmation_code = form['confirmation_code']
             channel.email_confirmed = False
-            needs_to_confirm_email = True
         update_email_job(channel)
 
     DB.session.add(channel)
@@ -149,8 +147,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
     
-    
-    return needs_to_confirm_email
+    return not (channel.email_confirmed)
 
 
 # Adds standup schedules for a new channel
