@@ -116,13 +116,10 @@ def confirm_email():
             else:
                 Logger.log("Could not validate form because code != channel.confirmation_code", Logger.error) # Issue 25: eventType: ConfirmEmail
                 response_message = "Form submission failed. Please try again."
-                return render_template('confirm_email.html', form=form, message=response_message)
         else:
             Logger.log("Could not validate form because: " + str(form.errors), Logger.error) # Issue 25: eventType: ConfirmEmail
             response_message = "Form submission failed. Please try again."
-            return render_template('confirm_email.html', form=form, message=response_message)
-    else:
-        return render_template('confirm_email.html', form=form, message=None)
+    return render_template('confirm_email.html', form=form, message=response_message)
 
 
 # Updates standup schedules for a previously-submitted channel
