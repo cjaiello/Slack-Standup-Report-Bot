@@ -81,7 +81,7 @@ def homepage():
                 logger.log("We need email confirmation for email " + standup_form['email'], "INFO") # Issue 25: eventType: ProcessingForm
                 send_email(standup_form['channel_name'], standup_form['email'], "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name'], "Confirm Email Address for Standup Report")
             response_message = "Success! Standup bot scheduling set for " + standup_form['channel_name'] + " at " + str(standup_form['standup_hour']) + ":" + util.format_minutes_to_have_zero(standup_form['standup_minute']) + standup_form['am_or_pm'] + " with reminder message " + standup_form['message']
-            response_message += " and responses being emailed to " + standup_form['email'] if (standup_form['email']) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
+            response_message += " and responses being emailed to " + standup_form['email'] + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email." if (standup_form['email']) else ""
             slack_client.send_confirmation_message(standup_form['channel_name'], response_message)
         else:
             logger.log("Could not update standup time.", "ERROR") # Issue 25: eventType: ProcessingForm
