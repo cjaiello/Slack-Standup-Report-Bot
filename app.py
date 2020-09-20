@@ -201,11 +201,13 @@ def set_schedules():
 # Filters message if profane and logs when profanity filter is needed
 # @param message : User input for standup message
 # @return User's message, censored
-def filter_standup_message(message):
-    if (PF.is_profane(message)):
-        censored_message = PF.censor(message)
-        Logger.log("Censoring standup message. | Message was: " + message + " | Message is now: " + censored_message, Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
-    return censored_message
+def filter_standup_message(original_message):
+    if (PF.is_profane(original_message)):
+        censored_message = PF.censor(original_message)
+        Logger.log("Censoring standup message. | Message was: " + original_message + " | Message is now: " + censored_message, Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+        return censored_message
+    else:
+        return original_message
 
 
 # Function that triggers the standup call.
