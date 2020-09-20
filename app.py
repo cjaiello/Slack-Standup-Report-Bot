@@ -141,6 +141,8 @@ def update_channel_and_check_if_email_confirm_needed(form):
             Logger.log("Form email wasn't none: " + str(form['email']) + ", so we need to reset the confirmation code and email confirmed field", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
             channel.confirmation_code = form['confirmation_code']
             channel.email_confirmed = False
+        else:
+            channel.email_confirmed = True # Nothing to confirm, so don't let this be a blocker anywhere else
         update_email_job(channel)
 
     DB.session.add(channel)
@@ -152,7 +154,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
 
     Logger.log("channel.email_confirmed is: " + str(channel.email_confirmed) + " and not that is: " + str((not channel.email_confirmed)), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
                 
-    return ((form['email'] != None) and (not channel.email_confirmed))
+    return (not channel.email_confirmed)
 
 
 # Adds standup schedules for a new channel
@@ -249,18 +251,19 @@ def trigger_standup_call(channel_name, message):
 #                  See Channel class above.)
 # @return nothing
 def update_email_job(channel):
+    # Cancel already-existing job if it's there
+    if channel.channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
+        SCHEDULER.remove_job(channel.channel_name + "_sendemail")
+        Logger.log("Channel " + channel.channel_name + " is having their old email job removed.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
+
     # See if user wanted standups emailed to them
     if (channel.email):
-        # Cancel already existing job if it's there
-        if channel.channel_name + "_sendemail" in str(SCHEDULER.get_jobs()):
-            SCHEDULER.remove_job(channel.channel_name + "_sendemail")
         # Add a job for each row in the table, sending standup replies to chosen email.
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
                           channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour), minute=int(channel.standup_minute) + 1, id=channel.channel_name + "_sendemail")
-        Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateEmailJob
+        Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
     else:
-        Logger.log("Channel " + channel.channel_name +
-              " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateEmailJob
+        Logger.log("Channel " + channel.channel_name + " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
 
 
 # Emailing standup results to chosen email address.
