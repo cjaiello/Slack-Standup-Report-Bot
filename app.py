@@ -147,7 +147,8 @@ def update_channel_standup_schedule(standup_form):
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
-    set_email_job(channel)
+    if (standup_form['email'] != None):
+        set_email_job(channel)
 
 
 def add_channel_standup_schedule(standup_form):
@@ -162,7 +163,6 @@ def add_channel_standup_schedule(standup_form):
     add_standup_job(standup_form['channel_name'], standup_form['message'], util.calculate_am_or_pm(standup_form['standup_hour'], standup_form['am_or_pm']), standup_form['standup_minute'])
     logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
-    print(type(standup_form['email']))
     if (standup_form['email'] != None):
         logger.log("New channel, " + standup_form['channel_name'] + ", needs its email job set up to email " + standup_form['email'], "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
         set_email_job(channel)
