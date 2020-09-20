@@ -135,9 +135,11 @@ def update_channel_and_check_if_email_confirm_needed(form):
     # If you change the email address, you need to re-confirm that email address with a new code
     if (form['email'] != channel.email):
         channel.email = form['email']
-        channel.confirmation_code = form['confirmation_code']
-        channel.email_confirmed = False
-        needs_to_confirm_email = True
+        if (form['email'] != None):
+            channel.confirmation_code = form['confirmation_code']
+            channel.email_confirmed = False
+            needs_to_confirm_email = True
+        update_email_job(channel)
 
     DB.session.add(channel)
     DB.session.commit()
@@ -146,9 +148,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
     # Lastly, we update the email job if a change was requested
-    if (form['email'] != None):
-        needs_to_confirm_email = True
-        set_email_job(channel)
+    
     
     return needs_to_confirm_email
 
@@ -169,7 +169,7 @@ def add_channel_and_check_if_email_confirm_needed(form):
     if (form['email'] != None):
         Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         needs_to_confirm_email = True
-        set_email_job(channel)
+        update_email_job(channel)
     return needs_to_confirm_email
 
 
@@ -206,7 +206,7 @@ def set_schedules():
         # Add a job for each row in the table, sending standup message to channel
         add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
         # Set email job if requested
-        set_email_job(channel)
+        update_email_job(channel)
 
 
 # Filters message if profane and logs when profanity filter is needed
@@ -246,7 +246,7 @@ def trigger_standup_call(channel_name, message):
 # @param channel : Channel object from table (has a channel name, email, etc.
 #                  See Channel class above.)
 # @return nothing
-def set_email_job(channel):
+def update_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
         # Cancel already existing job if it's there
