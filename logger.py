@@ -1,9 +1,13 @@
+# Standup Bot by Christina Aiello, 2017-2020
 from time import localtime, strftime
 
-# Used for logging when actions happen
-# @return string with logging time
-def create_logging_label():
-    return "[" + strftime("%Y-%m-%d %H:%M:%S", localtime()) + "]"
+class Logger:
+    def __init__(self):
+        self.info = "INFO"
+        self.error = "ERROR"
 
-def log(message_to_log, log_level):
-  print(create_logging_label() + "[" + log_level +"] " + message_to_log)
+    # Used for logging when actions happen
+    # @return string with logging info
+    @staticmethod
+    def log(message_to_log, log_level):
+        print("[" + strftime("%Y-%m-%d %H:%M:%S", localtime()) + "]" + "[" + log_level +"] " + message_to_log)

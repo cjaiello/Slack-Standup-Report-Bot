@@ -1,7 +1,8 @@
+# Standup Bot by Christina Aiello, 2017-2020
 import util
 import os
 import slack
-import logger
+from logger import Logger
 
 SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
 
@@ -13,9 +14,9 @@ def send_standup_message(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  logger.log("send_standup_message response code: " + str(response.status_code), "INFO") # Issue 25: eventType: SendStandupMessage
+  Logger.log("send_standup_message response code: " + str(response.status_code), "INFO") # Issue 25: eventType: SendStandupMessage
   for item in response.data.items():
-    logger.log("send_standup_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO") # Issue 25: eventType: SendStandupMessage
+    Logger.log("send_standup_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO") # Issue 25: eventType: SendStandupMessage
   return response
 
 # Will send confirmation message to @param channel_name
@@ -26,9 +27,9 @@ def send_confirmation_message(channel_name, message):
       username="Standup Bot",
       icon_emoji=":memo:"
   )
-  logger.log("send_confirmation_message response code: " + str(response.status_code), "INFO") # Issue 25: eventType: SendConfirmationMessage
+  Logger.log("send_confirmation_message response code: " + str(response.status_code), "INFO") # Issue 25: eventType: SendConfirmationMessage
   for item in response.data.items():
-    logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO") # Issue 25: eventType: SendConfirmationMessage
+    Logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), "INFO") # Issue 25: eventType: SendConfirmationMessage
   return response.status_code
 
 # Will fetch the standup messages for a channel
@@ -39,7 +40,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
     channel_id = get_channel_id_via_name(channel_name)
 
     # https://api.slack.com/methods/conversations.history
-    logger.log(str({'channel': channel_id, 'latest': timestamp}), "INFO")
+    Logger.log(str({'channel': channel_id, 'latest': timestamp}), "INFO")
     result = SLACK_CLIENT.conversations_replies(
       channel=channel_id,
       ts=timestamp,
@@ -47,31 +48,31 @@ def get_standup_replies_for_message(timestamp, channel_name):
       inclusive=True,
       count=1
     )
-    logger.log(str(result), "INFO")
+    Logger.log(str(result), "INFO")
     # Need to ensure that API call worked
     if (result["ok"]):
-        logger.log("Successfully got standup replies for message", "INFO") # Issue 25: eventType: GetStandupReports
+        Logger.log("Successfully got standup replies for message", "INFO") # Issue 25: eventType: GetStandupReports
         # Only do the following if we actually got replies
         replies = result["messages"]
-        logger.log(str(replies), "INFO") # Issue 25: eventType: GetStandupReports
+        Logger.log(str(replies), "INFO") # Issue 25: eventType: GetStandupReports
         if (replies is not None):
             standup_results = []
             for standup_status in replies:
-              logger.log("Raw reply is: " + str(standup_status), "INFO") # Issue 25: eventType: GetStandupReports
+              Logger.log("Raw reply is: " + str(standup_status), "INFO") # Issue 25: eventType: GetStandupReports
               if ("subtype" not in standup_status):
                 # Get username of person who made this reply
                 user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
                 name = user_result["user"]["profile"]["real_name"]
-                logger.log("Adding standup results for " + name, "INFO") # Issue 25: eventType: GetStandupReports
+                Logger.log("Adding standup results for " + name, "INFO") # Issue 25: eventType: GetStandupReports
                 standup_response_for_person = name + ": " + standup_status['text'] + "; \n"
                 standup_results.append(standup_response_for_person)
-            logger.log("Final standup results: " + str(standup_results), "INFO") # Issue 25: eventType: GetStandupReports
+            Logger.log("Final standup results: " + str(standup_results), "INFO") # Issue 25: eventType: GetStandupReports
             return standup_results
         else:
-          logger.log("We got back replies object but it was empty", "INFO") # Issue 25: eventType: GetStandupReports
+          Logger.log("We got back replies object but it was empty", "INFO") # Issue 25: eventType: GetStandupReports
     else:
         # Log that it didn't work
-        logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), "ERROR") # Issue 25: eventType: GetStandupReports
+        Logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), "ERROR") # Issue 25: eventType: GetStandupReports
 
 
 # Calls API to get channel ID based on name.
@@ -80,10 +81,10 @@ def get_standup_replies_for_message(timestamp, channel_name):
 def get_channel_id_via_name(channel_name):
     channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
     
-    logger.log("get_channel_id_via_name " + str(channels_list), "INFO") # Issue 25: eventType: GetChannelInfo
+    Logger.log("get_channel_id_via_name " + str(channels_list), "INFO") # Issue 25: eventType: GetChannelInfo
     for channel in channels_list["channels"]:
         if channel["name"] == channel_name:
-            logger.log("get_channel_id_via_name " + str(channel["name"]) + " == " + channel_name, "INFO") # Issue 25: eventType: GetChannelInfo
+            Logger.log("get_channel_id_via_name " + str(channel["name"]) + " == " + channel_name, "INFO") # Issue 25: eventType: GetChannelInfo
             return channel["id"]
 
 # Get list of channel names
@@ -93,5 +94,5 @@ def get_all_channels():
   channel_names_list = []
   for channel in channels_list["channels"]:
       channel_names_list.append(channel["name"])
-  logger.log("Channel list is: " + str(channel_names_list), "INFO") # Issue 25: eventType: GetChannelList
+  Logger.log("Channel list is: " + str(channel_names_list), "INFO") # Issue 25: eventType: GetChannelList
   return channel_names_list
