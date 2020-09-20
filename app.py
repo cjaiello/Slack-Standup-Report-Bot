@@ -170,7 +170,7 @@ def add_channel_standup_schedule(form):
 # Adds standup job and logs it
 # @return nothing
 def add_standup_job(channels_name, standup_message, hour, minute):
-    Logger.log("Adding standup to scheduler " + " \n Channel name: " + channels_name + " \n standup_message: " + standup_message + "\n hour: " + str(hour) + "\n minute: " + str(minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
+    Logger.log("Adding standup to scheduler " + " | Channel name: " + channels_name + " | standup_message: " + standup_message + " | hour: " + str(hour) + " | minute: " + str(minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channels_name, standup_message], day_of_week='mon-fri', hour=hour, minute=minute, id=channels_name + "_standupcall")
     Logger.log("Set " + channels_name + "'s standup time to " + str(hour) +
