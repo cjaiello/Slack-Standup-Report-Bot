@@ -73,11 +73,12 @@ def homepage():
             if not DB.session.query(Channel).filter(Channel.channel_name == standup_form['channel_name']).count():
                 logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
                 add_channel_standup_schedule(standup_form)
-                send_email(standup_form['channel_name'], standup_form['email'], "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name'], "Confirm Email Address for Standup Report")
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
                 update_channel_standup_schedule(standup_form)
+            if standup_form['email']:
+                logger.log("We need email confirmation for email " + standup_form['email'], "INFO") # Issue 25: eventType: ProcessingForm
                 send_email(standup_form['channel_name'], standup_form['email'], "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name'], "Confirm Email Address for Standup Report")
             response_message = "Success! Standup bot scheduling set for " + standup_form['channel_name'] + " at " + str(standup_form['standup_hour']) + ":" + util.format_minutes_to_have_zero(standup_form['standup_minute']) + standup_form['am_or_pm'] + " with reminder message " + standup_form['message']
             response_message += " and responses being emailed to " + standup_form['email'] if (standup_form['email']) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
