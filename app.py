@@ -57,16 +57,13 @@ def homepage():
     if request.method == 'POST':
         logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
         logger.log("Made the form object with form values", "INFO") # Issue 25: eventType: ProcessingForm
-        # Get whatever info they gave us for their channel
-        # TODO: You don't need to make all these variables... 
-        # just set them on the form object and pass around the form
-        standup_form = request.form
-        standup_form['channel_name'] = escape(standup_form['channel_name'])
-        standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(standup_form['standup_hour']))
-        standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(standup_form['standup_minute']))
-        standup_form['message'] = filter_standup_message(escape(standup_form['message']))
-        standup_form['email'] = escape(standup_form['email'])
-        standup_form['am_or_pm'] = escape(standup_form['am_or_pm'])
+        standup_form = {}
+        standup_form['channel_name'] = escape(request.form['channel_name'])
+        standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(request.form['standup_hour']))
+        standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(request.form['standup_minute']))
+        standup_form['message'] = filter_standup_message(escape(request.form['message']))
+        standup_form['email'] = escape(request.form['email'])
+        standup_form['am_or_pm'] = escape(request.form['am_or_pm'])
         standup_form['confirmation_code'] = generate_code()
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
