@@ -25,7 +25,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
 app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
-pf = ProfanityFilter()
+PF = ProfanityFilter()
 
 # Our form model
 class StandupSignupForm(FlaskForm):
@@ -202,10 +202,10 @@ def set_schedules():
 # @param message : User input for standup message
 # @return User's message, censored
 def filter_standup_message(message):
-    if (pf.is_profane(message)):
-        Logger.log("Censoring standup message. Message was: " + message + " and is now: " + pf.censor(message), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
-        message = pf.censor(message)
-    return message
+    if (PF.is_profane(message)):
+        censored_message = PF.censor(message)
+        Logger.log("Censoring standup message. | Message was: " + message + " | Message is now: " + censored_message, Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    return censored_message
 
 
 # Function that triggers the standup call.
