@@ -58,6 +58,8 @@ def homepage():
         logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
         logger.log("Made the form object with form values", "INFO") # Issue 25: eventType: ProcessingForm
         standup_form = {}
+        logger.log(type(request.form['message']), "INFO")
+        logger.log(type(escape(str(request.form['message']))), "INFO")
         standup_form['channel_name'] = escape(str(request.form['channel_name']))
         standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(request.form['standup_hour']))
         standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(request.form['standup_minute']))
