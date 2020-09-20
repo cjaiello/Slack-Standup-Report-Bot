@@ -58,12 +58,12 @@ def homepage():
         logger.log("Someone posted a form: " + request.remote_addr, "INFO") # Issue 25: eventType: ProcessingForm
         logger.log("Made the form object with form values", "INFO") # Issue 25: eventType: ProcessingForm
         standup_form = {}
-        standup_form['channel_name'] = escape(request.form['channel_name'])
+        standup_form['channel_name'] = escape(str(request.form['channel_name']))
         standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(request.form['standup_hour']))
         standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(request.form['standup_minute']))
-        standup_form['message'] = filter_standup_message(escape(request.form['message']))
-        standup_form['email'] = escape(request.form['email'])
-        standup_form['am_or_pm'] = escape(request.form['am_or_pm'])
+        standup_form['message'] = filter_standup_message(escape(str(request.form['message'])))
+        standup_form['email'] = escape(str(request.form['email']))
+        standup_form['am_or_pm'] = escape(str(request.form['am_or_pm']))
         standup_form['confirmation_code'] = generate_code()
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
