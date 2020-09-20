@@ -2,9 +2,8 @@
 from time import localtime, strftime
 
 class Logger:
-    def __init__(self):
-        self.info = "INFO"
-        self.error = "ERROR"
+    info = "INFO"
+    error = "ERROR"
 
     # Used for logging when actions happen
     # @return string with logging info
