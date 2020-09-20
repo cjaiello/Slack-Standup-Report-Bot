@@ -127,14 +127,18 @@ def confirm_email():
 # @param form : User's input in form form
 def update_channel_and_check_if_email_confirm_needed(form):
     channel = Channel.query.filter_by(channel_name=form['channel_name']).first()
+    Logger.log("Updating channel " + str(channel.channel_name), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    
     channel.standup_hour = util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm'])
     channel.standup_minute = form['standup_minute']
     channel.message = form['message']
 
     # If you change the email address, you need to re-confirm that email address with a new code
     if (form['email'] != channel.email):
+        Logger.log("Form email " + str(form['email']) + " not equal to channel's current email: " + str(channel.channel_name), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         channel.email = form['email']
         if (form['email'] != None):
+            Logger.log("Form email wasn't none: " + str(form['email']) + ", so we need to reset the confirmation code and email confirmed field", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
             channel.confirmation_code = form['confirmation_code']
             channel.email_confirmed = False
         update_email_job(channel)
@@ -145,8 +149,9 @@ def update_channel_and_check_if_email_confirm_needed(form):
     # Updating this job's timing (need to delete and re-add)
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
     add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
-    # Lastly, we update the email job if a change was requested
-    
+
+    Logger.log("channel.email_confirmed is: " + channel.email_confirmed + " and not that is: " + not channel.email_confirmed, Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+                
     return (form['email'] != None and not (channel.email_confirmed))
 
 
