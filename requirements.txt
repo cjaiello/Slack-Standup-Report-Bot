@@ -16,5 +16,4 @@ keyring
 keyrings.alt
 Flask-WTF
 email_validator
-spacy
 profanity-filter
