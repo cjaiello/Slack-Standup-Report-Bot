@@ -137,7 +137,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
     if (form['email'] != channel.email):
         Logger.log("Form email " + str(form['email']) + " not equal to channel's current email: " + str(channel.channel_name), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         channel.email = form['email']
-        if (form['email'] != None):
+        if (form['email'] != None and form['email'] != ""):
             Logger.log("Form email wasn't none: " + str(form['email']) + ", so we need to reset the confirmation code and email confirmed field", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
             channel.confirmation_code = form['confirmation_code']
             channel.email_confirmed = False
@@ -170,7 +170,7 @@ def add_channel_and_check_if_email_confirm_needed(form):
     add_standup_job(form['channel_name'], form['message'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'])
     Logger.log("Added email job to scheduler. Now going to set email job", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
-    if (form['email'] != None):
+    if (form['email'] != None and form['email'] != ""):
         Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
         needs_to_confirm_email = True
         update_email_job(channel)
@@ -274,7 +274,7 @@ def update_email_job(channel):
 def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
     channel = Channel.query.filter_by(channel_name=a_channel_name).first()
     # Ensure we have a standup report to grab and that this email address is confirmed
-    if (channel.timestamp != None and channel.email_confirmed):
+    if (channel.timestamp != None and channel.timestamp != "" and channel.email_confirmed):
         # First we need to get all replies to this message:
         standups = slack_client.get_standup_replies_for_message(
             channel.timestamp, channel.channel_name)
