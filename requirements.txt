@@ -16,3 +16,4 @@ keyring
 keyrings.alt
 Flask-WTF
 email_validator
+profanity-filter

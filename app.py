@@ -14,6 +14,7 @@ import email_validator
 import logger
 import random
 import html
+from profanity_filter import ProfanityFilter
 
 app = Flask(__name__)
 # To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
@@ -25,6 +26,8 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
 app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
+pf = ProfanityFilter()
+
 
 # Our form model
 class StandupSignupForm(FlaskForm):
@@ -39,10 +42,12 @@ class StandupSignupForm(FlaskForm):
     confirmation_code = TextField()
     email_confirmed = BooleanField()
 
+
 class EmailConfirmationForm(FlaskForm):
     code = TextField(validators=[validators.Required()])
     recaptcha = RecaptchaField()
     csrf = app.config['SECRET_KEY']
+
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
@@ -55,38 +60,38 @@ def homepage():
         # Get whatever info they gave us for their channel
         # TODO: You don't need to make all these variables... 
         # just set them on the form object and pass around the form
-        submitted_channel_name = escape(request.form['channel_name'])
-        standup_hour = util.remove_starting_zeros_from_time(
-            escape(request.form['standup_hour']))
-        standup_minute = util.remove_starting_zeros_from_time(
-            escape(request.form['standup_minute']))
-        message = escape(request.form['message'])
-        email = escape(request.form['email'])
-        am_or_pm = escape(request.form['am_or_pm'])
-        confirmation_code = generate_code()
+        standup_form = request.form
+        standup_form['channel_name'] = escape(standup_form['channel_name'])
+        standup_form['standup_hour'] = util.remove_starting_zeros_from_time(escape(standup_form['standup_hour']))
+        standup_form['standup_minute'] = util.remove_starting_zeros_from_time(escape(standup_form['standup_minute']))
+        standup_form['message'] = filter_standup_message(escape(standup_form['message']))
+        standup_form['email'] = escape(standup_form['email'])
+        standup_form['am_or_pm'] = escape(standup_form['am_or_pm'])
+        standup_form['confirmation_code'] = generate_code()
         logger.log("Pulled values from form", "INFO") # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
         if form.validate_on_submit():
             # Look for channel in database
             logger.log("Form was valid upon submit", "INFO") # Issue 25: eventType: ProcessingForm
-            if not DB.session.query(Channel).filter(Channel.channel_name == submitted_channel_name).count():
+            if not DB.session.query(Channel).filter(Channel.channel_name == standup_form['channel_name']).count():
                 logger.log("Add new channel to DB", "INFO") # Issue 25: eventType: ProcessingForm
-                add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name, "Confirm Email Address for Standup Report")
+                add_channel_standup_schedule(standup_form)
+                send_email(standup_form['channel_name'], standup_form['email'], "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['submitted_channel_name'], "Confirm Email Address for Standup Report")
             else:
                 # Update channel's standup info
                 logger.log("Update channel's standup info", "INFO") # Issue 25: eventType: ProcessingForm
-                update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, False, confirmation_code)
-                send_email(submitted_channel_name, email, "Your confirmation code is " + confirmation_code + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + email + "&channel_name=" + submitted_channel_name, "Confirm Email Address for Standup Report")
-            response_message = "Success! Standup bot scheduling set for " + submitted_channel_name + " at " + str(standup_hour) + ":" + util.format_minutes_to_have_zero(standup_minute) + am_or_pm + " with reminder message " + message
-            response_message += " and responses being emailed to " + email if (email) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
-            slack_client.send_confirmation_message(submitted_channel_name, response_message)
+                update_channel_standup_schedule(standup_form)
+                send_email(standup_form['channel_name'], standup_form['email'], "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['submitted_channel_name'], "Confirm Email Address for Standup Report")
+            response_message = "Success! Standup bot scheduling set for " + standup_form['channel_name'] + " at " + str(standup_form['standup_hour']) + ":" + util.format_minutes_to_have_zero(standup_form['standup_minute']) + standup_form['am_or_pm'] + " with reminder message " + standup_form['message']
+            response_message += " and responses being emailed to " + standup_form['email'] if (standup_form['email']) else "" + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
+            slack_client.send_confirmation_message(standup_form['channel_name'], response_message)
         else:
             logger.log("Could not update standup time.", "ERROR") # Issue 25: eventType: ProcessingForm
             logger.log(str(form.errors), "ERROR") # Issue 25: eventType: ProcessingForm
             response_message = "Please fix the error(s) below"
 
     return render_template('homepage.html', form=form, message=response_message)
+
 
 @app.route("/confirm_email", methods=['GET', 'POST'])
 def confirm_email():
@@ -125,45 +130,45 @@ def confirm_email():
     else:
         return render_template('confirm_email.html', form=form, message=None)
 
-def update_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
-    channel = Channel.query.filter_by(
-        channel_name=submitted_channel_name).first()
-    channel.standup_hour = util.calculate_am_or_pm(
-        standup_hour, am_or_pm) if standup_hour != None else channel.standup_hour
-    channel.standup_minute = standup_minute if standup_minute != None else channel.standup_minute
-    channel.message = message if message != None else channel.message
-    channel.email = email if email != None else channel.email
-    channel.confirmation_code = confirmation_code if confirmation_code != None else channel.confirmation_code
-    channel.email_confirmed = False
+
+def update_channel_standup_schedule(standup_form):
+    channel = Channel.query.filter_by(channel_name=standup_form['channel_name']).first()
+    channel.standup_hour = util.calculate_am_or_pm(standup_form['standup_hour'], standup_form['am_or_pm'])
+    channel.standup_minute = standup_form['standup_minute']
+    channel.message = standup_form['message']
+
+    # If you change the email address, you need to re-confirm that email address with a new code
+    if (standup_form['email'] != channel.email):
+        channel.email = standup_form['email']
+        channel.confirmation_code = standup_form['confirmation_code']
+        channel.email_confirmed = False
+
     DB.session.add(channel)
     DB.session.commit()
-    # Next we will update the standup message job if one of those values was edited
-    if (message != None or standup_hour != None or standup_minute != None):
-        # Updating this job's timing (need to delete and re-add)
-        SCHEDULER.remove_job(
-            submitted_channel_name + "_standupcall")
-        add_standup_job(channel.channel_name, channel.message,
-                        channel.standup_hour, channel.standup_minute)
-    # Lastly, we update the email job if a change was requested
-    if (email != None):
-        set_email_job(channel)
 
-def add_channel_standup_schedule(submitted_channel_name, standup_hour, standup_minute, message, email, am_or_pm, email_confirmed, confirmation_code):
-    # Channel isn't in database. Create our channel object and add it to the database
-    channel = Channel(submitted_channel_name, util.calculate_am_or_pm(
-        standup_hour, am_or_pm), standup_minute, message, email, None, False, confirmation_code)
+    # Updating this job's timing (need to delete and re-add)
+    SCHEDULER.remove_job(channel.channel_name + "_standupcall")
+    add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
+    # Lastly, we update the email job if a change was requested
+    set_email_job(channel)
+
+
+def add_channel_standup_schedule(standup_form):
+    logger.log("Made channel object", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+    channel = Channel(standup_form['channel_name'], util.calculate_am_or_pm(standup_form['standup_hour'], standup_form['am_or_pm']), standup_form['standup_minute'], standup_form['message'], standup_form['email'], None, False, standup_form['confirmation_code'])
     logger.log("Made channel object", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     DB.session.add(channel)
     logger.log("Added into DB session", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     DB.session.commit()
     logger.log("Committed to DB session", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Adding this additional job to the queue
-    add_standup_job(submitted_channel_name, message, util.calculate_am_or_pm(
-        standup_hour, am_or_pm), standup_minute)
+    add_standup_job(standup_form['channel_name'], standup_form['message'], util.calculate_am_or_pm(standup_form['standup_hour'], standup_form['am_or_pm']), standup_form['standup_minute'])
     logger.log("Added email job to scheduler. Now going to set email job", "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
-    if (email != None):
+    if (standup_form['email'] != None):
+        logger.log("New channel, " + standup_form['submitted_channel_name'] + ", needs its email job set up to email " + standup_form['email'], "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
         set_email_job(channel)
+
 
 # Adds standup job and logs it
 def add_standup_job(channel_name, message, standup_hour, standup_minute):
@@ -186,6 +191,16 @@ def set_schedules():
         add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
         # Set email job if requested
         set_email_job(channel)
+
+
+# Filters message if profane and logs when profanity filter is needed
+# @param message : User input for standup message
+def filter_standup_message(message):
+    if (pf.is_profane(message)):
+        logger.log("Censoring standup message. Message was: " + message + " and is now: " + pf.censor(message), "INFO") # Issue 25: eventType: AddChannelStandupScheduleToDb
+        message = pf.censor(message)
+    return message
+
 
 # Function that triggers the standup call.
 # <!channel> will create the @channel call.
