@@ -32,6 +32,8 @@ class StandupSignupForm(FlaskForm):
     channel_name = slack_client.get_all_channels()
     standup_hour = IntegerField('Standup Hour:', validators=[validators.NumberRange(min=0, max=12)])
     standup_minute = IntegerField('Standup Minute:', validators=[validators.NumberRange(min=0, max=59)])
+    hours_delay = IntegerField('Number of Hours Until Standup Closes:', validators=[validators.NumberRange(min=0, max=23)])
+    minutes_delay = IntegerField('Number of Minutes Until Standup Closes:', validators=[validators.NumberRange(min=0, max=59)])
     am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField('Where should we email your standup reports? (optional):', validators=[validators.Email(), validators.Optional()])
@@ -58,6 +60,8 @@ def homepage():
             'channel_name' : str(escape(request.form['channel_name'])),
             'standup_hour' :  util.remove_starting_zeros_from_time(escape(request.form['standup_hour'])),
             'standup_minute' :  util.remove_starting_zeros_from_time(escape(request.form['standup_minute'])),
+            'hours_delay' :  util.remove_starting_zeros_from_time(escape(request.form['hours_delay'])),
+            'minutes_delay' :  util.remove_starting_zeros_from_time(escape(request.form['minutes_delay'])),
             'message' :  str(escape(filter_standup_message(str(request.form['message'])))),
             'email' :  str(escape(request.form['email'])),
             'am_or_pm' :  str(escape(request.form['am_or_pm'])),
@@ -131,6 +135,8 @@ def update_channel_and_check_if_email_confirm_needed(form):
     
     channel.standup_hour = util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm'])
     channel.standup_minute = form['standup_minute']
+    channel.hours_delay = form['hours_delay']
+    channel.minutes_delay = form['minutes_delay']
     channel.message = form['message']
 
     # If you change the email address, you need to re-confirm that email address with a new code
@@ -150,7 +156,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
 
     # Updating this job's timing (need to delete and re-add)
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
-    add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
+    add_standup_job(channel)
 
     Logger.log("channel.email_confirmed is: " + str(channel.email_confirmed) + " and not that is: " + str((not channel.email_confirmed)), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
                 
@@ -161,13 +167,12 @@ def update_channel_and_check_if_email_confirm_needed(form):
 # @param form : User's input in form form
 def add_channel_and_check_if_email_confirm_needed(form):
     needs_to_confirm_email = False
-    Logger.log("Made channel object", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
-    channel = Channel(form['channel_name'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'], form['message'], form['email'], None, False, form['confirmation_code'])
+    channel = Channel(form['channel_name'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'], form['message'], form['email'], None, False, form['confirmation_code'], form['hours_delay'], form['minutes_delay'])
     DB.session.add(channel)
     DB.session.commit()
-    Logger.log("Committed to DB session", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Committed channel " + form['channel_name'] + " to DB session", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Adding this additional job to the queue
-    add_standup_job(form['channel_name'], form['message'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'])
+    add_standup_job(channel)
     Logger.log("Added email job to scheduler. Now going to set email job", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
     if (form['email'] != None and form['email'] != ""):
@@ -179,12 +184,12 @@ def add_channel_and_check_if_email_confirm_needed(form):
 
 # Adds standup job and logs it
 # @return nothing
-def add_standup_job(channels_name, standup_message, hour, minute):
-    Logger.log("Adding standup to scheduler " + " | Channel name: " + channels_name + " | standup_message: " + standup_message + " | hour: " + str(hour) + " | minute: " + str(minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
+def add_standup_job(channel):
+    Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.standup_message + " | hour: " + str(channel.hour) + " | minute: " + str(channel.minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
-                      channels_name, standup_message], day_of_week='mon-fri', hour=hour, minute=minute, id=channels_name + "_standupcall")
-    Logger.log("Set " + channels_name + "'s standup time to " + str(hour) +
-          ":" + util.format_minutes_to_have_zero(minute) + " with standup standup_message: " + standup_message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
+                      channel.channel_name, channel.standup_message], day_of_week='mon-fri', hour=util.calculate_am_or_pm(channel.standup_hour, channel.am_or_pm), minute=channel.minute, id=channel.channel_name + "_standupcall")
+    Logger.log("Set " + channel.channel_name + "'s standup time to " + str(channel.hour) +
+          ":" + util.format_minutes_to_have_zero(channel.minute) + " with standup standup_message: " + channel.standup_message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
 
 
 # Sends Slack confirmation message indicating success
@@ -208,7 +213,7 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table, sending standup message to channel
-        add_standup_job(channel.channel_name, channel.message, channel.standup_hour, channel.standup_minute)
+        add_standup_job(channel)
         # Set email job if requested
         update_email_job(channel)
 
@@ -258,9 +263,13 @@ def update_email_job(channel):
 
     # See if user wanted standups emailed to them
     if (channel.email):
+        if (channel.hours_delay == "" and channel.minutes_delay == ""):
+            standup_hours_delay = int(channel.standup_hour) + 1 # Default to one hour until the chance to submit standup closes
+        else:
+            standup_hours_delay = int(channel.standup_hour) + int(channel.hours_delay)
         # Add a job for each row in the table, sending standup replies to chosen email.
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
-                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=int(channel.standup_hour), minute=int(channel.standup_minute) + 1, id=channel.channel_name + "_sendemail")
+                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_hours_delay, minute=int(channel.standup_minute) + int(channel.minutes_delay), id=channel.channel_name + "_sendemail")
         Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
     else:
         Logger.log("Channel " + channel.channel_name + " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
@@ -312,8 +321,10 @@ class Channel(DB.Model):
     timestamp = DB.Column(DB.String(120), unique=False)
     email_confirmed = DB.Column(DB.Integer)
     confirmation_code = DB.Column(DB.String(6), unique=False)
+    hours_delay = DB.Column(DB.Integer)
+    minutes_delay = DB.Column(DB.Integer)
 
-    def __init__(self, channel_name, standup_hour, standup_minute, message, email, timestamp, email_confirmed, confirmation_code):
+    def __init__(self, channel_name, standup_hour, standup_minute, message, email, timestamp, email_confirmed, confirmation_code, hours_delay, minutes_delay):
         self.channel_name = channel_name
         self.standup_hour = standup_hour
         self.standup_minute = standup_minute
@@ -322,6 +333,8 @@ class Channel(DB.Model):
         self.timestamp = timestamp
         self.email_confirmed = email_confirmed
         self.confirmation_code = confirmation_code
+        self.hours_delay = hours_delay
+        self.minutes_delay = minutes_delay
 
     def __repr__(self):
         return '<Channel %r>' % self.channel_name

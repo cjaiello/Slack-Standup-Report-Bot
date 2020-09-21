@@ -70,6 +70,10 @@
 			</div>
 
 			<div class="input text">
+				Amount of time until standup submission time closes:<br>{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
+			</div>
+
+			<div class="input text">
 				{{ form.email(placeholder="(OPTIONAL) Where should we email your standup reports?") }}
 				{% for error in form.email.errors %}
 					<span class="error error_details">{{ error }}</span>
