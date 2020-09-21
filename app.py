@@ -185,7 +185,7 @@ def add_channel_and_check_if_email_confirm_needed(form):
 # Adds standup job and logs it
 # @return nothing
 def add_standup_job(channel):
-    Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.message + " | hour: " + str(channel.hour) + " | minute: " + str(channel.minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
+    Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.message + " | hour: " + str(channel.standup_hour) + " | minute: " + str(channel.standup_minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
                       channel.channel_name, channel.message], day_of_week='mon-fri', hour=util.calculate_am_or_pm(channel.standup_hour, channel.am_or_pm), minute=channel.minute, id=channel.channel_name + "_standupcall")
     Logger.log("Set " + channel.channel_name + "'s standup time to " + str(channel.hour) +
