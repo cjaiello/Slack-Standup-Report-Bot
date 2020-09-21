@@ -156,7 +156,7 @@ def update_channel_and_check_if_email_confirm_needed(form):
 
     # Updating this job's timing (need to delete and re-add)
     SCHEDULER.remove_job(channel.channel_name + "_standupcall")
-    add_standup_job(channel, form['am_or_pm'])
+    add_standup_job(channel)
 
     Logger.log("channel.email_confirmed is: " + str(channel.email_confirmed) + " and not that is: " + str((not channel.email_confirmed)), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
                 
@@ -172,7 +172,7 @@ def add_channel_and_check_if_email_confirm_needed(form):
     DB.session.commit()
     Logger.log("Committed channel " + form['channel_name'] + " to DB session", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Adding this additional job to the queue
-    add_standup_job(channel, form['am_or_pm'])
+    add_standup_job(channel)
     Logger.log("Added email job to scheduler. Now going to set email job", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     # Set email job if requested
     if (form['email'] != None and form['email'] != ""):
@@ -184,10 +184,10 @@ def add_channel_and_check_if_email_confirm_needed(form):
 
 # Adds standup job and logs it
 # @return nothing
-def add_standup_job(channel, am_or_pm):
+def add_standup_job(channel):
     Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.message + " | hour: " + str(channel.standup_hour) + " | minute: " + str(channel.standup_minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
-                      channel.channel_name, channel.message], day_of_week='mon-fri', hour=util.calculate_am_or_pm(channel.standup_hour, am_or_pm) if am_or_pm else channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
+                      channel.channel_name, channel.message], day_of_week='mon-fri', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
     Logger.log("Set " + channel.channel_name + "'s standup time to " + str(channel.standup_hour) +
           ":" + util.format_minutes_to_have_zero(channel.standup_minute) + " with standup standup_message: " + channel.message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
 
@@ -213,7 +213,7 @@ def set_schedules():
     # Loop through our results
     for channel in channels_with_scheduled_standups:
         # Add a job for each row in the table, sending standup message to channel
-        add_standup_job(channel, None)
+        add_standup_job(channel)
         # Set email job if requested
         update_email_job(channel)
 
