@@ -199,7 +199,7 @@ def add_standup_job(channel):
 def confirm_success(form, must_confirm_email):
     response_message = "Success! Standup bot scheduling set for " + form['channel_name'] + " at " + str(form['standup_hour']) + ":" + util.format_minutes_to_have_zero(form['standup_minute']) + form['am_or_pm'] + " with reminder message '" + form['message'] + "'."
     if form['hours_delay'] or form['minutes_delay']:
-        response_message += " You have given the channel " + ((str(form['hours_delay']) + " hours") if form['hours_delay'] else "") + (" and" if form['hours_delay'] and form['minutes_delay'] else "" + ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] else "") + " to submit their standup status."
+        response_message += " You have given the channel " + ((str(form['hours_delay']) + " hours") if form['hours_delay'] else "") + (" and" if form['hours_delay'] and form['minutes_delay'] else "") + ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] else "") + " to submit their standup status."
     else:
         response_message += " By default you have given the channel one hour to submit their standup status."
     if must_confirm_email:
