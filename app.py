@@ -32,8 +32,8 @@ class StandupSignupForm(FlaskForm):
     channel_name = slack_client.get_all_channels()
     standup_hour = IntegerField('Standup Hour:', validators=[validators.NumberRange(min=0, max=12)])
     standup_minute = IntegerField('Standup Minute:', validators=[validators.NumberRange(min=0, max=59)])
-    hours_delay = IntegerField('Number of Hours Until Standup Closes:', validators=[validators.NumberRange(min=0, max=23)])
-    minutes_delay = IntegerField('Number of Minutes Until Standup Closes:', validators=[validators.NumberRange(min=0, max=59)])
+    hours_delay = IntegerField('Number of Hours Until Standup Closes:', validators=[validators.Optional(), validators.NumberRange(min=0, max=23)])
+    minutes_delay = IntegerField('Number of Minutes Until Standup Closes:', validators=[validators.Optional(), validators.NumberRange(min=0, max=59)])
     am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField('Where should we email your standup reports? (optional):', validators=[validators.Email(), validators.Optional()])
