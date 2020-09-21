@@ -187,9 +187,9 @@ def add_channel_and_check_if_email_confirm_needed(form):
 def add_standup_job(channel, am_or_pm):
     Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.message + " | hour: " + str(channel.standup_hour) + " | minute: " + str(channel.standup_minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
-                      channel.channel_name, channel.message], day_of_week='mon-fri', hour=util.calculate_am_or_pm(channel.standup_hour, am_or_pm) if am_or_pm else channel.standup_hour, minute=channel.minute, id=channel.channel_name + "_standupcall")
+                      channel.channel_name, channel.message], day_of_week='mon-fri', hour=util.calculate_am_or_pm(channel.standup_hour, am_or_pm) if am_or_pm else channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
     Logger.log("Set " + channel.channel_name + "'s standup time to " + str(channel.hour) +
-          ":" + util.format_minutes_to_have_zero(channel.minute) + " with standup standup_message: " + channel.message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
+          ":" + util.format_minutes_to_have_zero(channel.standup_minute) + " with standup standup_message: " + channel.message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
 
 
 # Sends Slack confirmation message indicating success
