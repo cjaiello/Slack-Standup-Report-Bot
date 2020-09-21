@@ -263,7 +263,7 @@ def update_email_job(channel):
 
     # See if user wanted standups emailed to them
     if (channel.email):
-        if (channel.hours_delay == "" and channel.minutes_delay == ""):
+        if ((channel.hours_delay == "" or channel.hours_delay == None) and (channel.minutes_delay == "" or channel.minutes_delay == None)):
             standup_hours_delay = int(channel.standup_hour) + 1 # Default to one hour until the chance to submit standup closes
         else:
             standup_hours_delay = int(channel.standup_hour) + int(channel.hours_delay)
