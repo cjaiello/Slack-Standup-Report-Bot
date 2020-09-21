@@ -206,7 +206,7 @@ def confirm_success(form, email_confirmed, email):
     if email:
         response_message += " Responses will be emailed to " + email + "."
     if not email_confirmed:
-         response_message += " To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
+         response_message += " To receive your standup report in an email, please log into your email, and go to the link in the email that we just sent you to confirm ownership of this email address, and enter the code that was in the email."
     slack_client.send_confirmation_message(form['channel_name'], response_message)
     return response_message
     
