@@ -197,9 +197,13 @@ def add_standup_job(channel):
 # @param must_confirm_email : Whether or not there was an email address submitted that needs to be confirmed
 # @return Message to display on page
 def confirm_success(form, must_confirm_email):
-    response_message = "Success! Standup bot scheduling set for " + form['channel_name'] + " at " + str(form['standup_hour']) + ":" + util.format_minutes_to_have_zero(form['standup_minute']) + form['am_or_pm'] + " with reminder message " + form['message']
+    response_message = "Success! Standup bot scheduling set for " + form['channel_name'] + " at " + str(form['standup_hour']) + ":" + util.format_minutes_to_have_zero(form['standup_minute']) + form['am_or_pm'] + " with reminder message '" + form['message'] + "'."
+    if form['hours_delay'] or form['minutes_delay']:
+        response_message += " You have given the channel " + ((str(form['hours_delay']) + " hours") if form['hours_delay'] else "") + (" and" if form['hours_delay'] and form['minutes_delay'] else "" + ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] else "") + " to submit their standup status."
+    else:
+        response_message += " By default you have given the channel one hour to submit their standup status."
     if must_confirm_email:
-        response_message += " and responses being emailed to " + form['email'] + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
+        response_message += ". Responses will be emailed to " + form['email'] + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
     slack_client.send_confirmation_message(form['channel_name'], response_message)
     return response_message
     
