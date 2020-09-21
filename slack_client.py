@@ -19,18 +19,24 @@ def send_standup_message(channel_name, message):
     Logger.log("send_standup_message response[" + str(item[0]) + "]: " + str(item[1]), Logger.info) # Issue 25: eventType: SendStandupMessage
   return response
 
+
 # Will send confirmation message to @param channel_name
 def send_confirmation_message(channel_name, message):
-  response = SLACK_CLIENT.chat_postMessage(
-      channel=str(channel_name),
-      text= ("Please reply here with your standup status!" if (message == None) else  message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-  )
+  response = send_slack_message(channel_name, "Please reply here with your standup status!" if (message == None) else  message)
   Logger.log("send_confirmation_message response code: " + str(response.status_code), Logger.info) # Issue 25: eventType: SendConfirmationMessage
   for item in response.data.items():
     Logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), Logger.info) # Issue 25: eventType: SendConfirmationMessage
   return response.status_code
+
+# Sends given slack message to given slack channel
+def send_slack_message(channel_name, message):
+  response = SLACK_CLIENT.chat_postMessage(
+      channel=str(channel_name),
+      text= (message),
+      username="Standup Bot",
+      icon_emoji=":memo:"
+  )
+  return response
 
 # Will fetch the standup messages for a channel
 # @param timestamp : A channel's standup message's timestamp (acquired via API)

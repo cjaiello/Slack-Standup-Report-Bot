@@ -303,6 +303,9 @@ def update_email_job(channel):
 # @param recipient_email_address : Where to send the standup results to
 # @return nothing
 def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
+    times_up_message = "Submission period for " + a_channel_name + "'s standup has ended. Responses were emailed to " + recipient_email_address
+    Logger.log(times_up_message, Logger.info) # Issue 25: eventType: SendStandupEmail
+
     channel = Channel.query.filter_by(channel_name=a_channel_name).first()
     # Ensure we have a standup report to grab and that this email address is confirmed
     if (channel.timestamp != None and channel.timestamp != "" and channel.email_confirmed):
@@ -325,6 +328,8 @@ def get_timestamp_and_send_email(a_channel_name, recipient_email_address):
             message = "Channel " + a_channel_name + " did not have any standup submissions to email today."
             email_client.send_email(a_channel_name, recipient_email_address, message, "No Standup Report For Channel Today")
             Logger.log(message, Logger.info) # Issue 25: eventType: SendStandupEmail
+        # Let channel know their results were sent.
+        slack_client.send_slack_message(a_channel_name, times_up_message)
     else:
         # Log that it didn't work
         Logger.log("Channel " + a_channel_name +
