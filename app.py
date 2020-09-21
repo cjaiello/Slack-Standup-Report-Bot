@@ -70,22 +70,22 @@ def homepage():
         Logger.log("Pulled values from form", Logger.info) # Issue 25: eventType: ProcessingForm  
         # If the form field was valid...
         if form.validate_on_submit():
-            must_confirm_email = False # Default to false
+            channel = None # Default to None
             # Look for channel in database
             Logger.log("Form was valid upon submit", Logger.info) # Issue 25: eventType: ProcessingForm
             if not DB.session.query(Channel).filter(Channel.channel_name == standup_form['channel_name']).count():
                 # Add our new channel to the database
                 Logger.log("Add new channel to DB", Logger.info) # Issue 25: eventType: ProcessingForm
-                must_confirm_email = add_channel_and_check_if_email_confirm_needed(standup_form)
+                channel = add_channel(standup_form)
             else:
                 # Update channel's standup info in the database
                 Logger.log("Update channel's standup info", Logger.info) # Issue 25: eventType: ProcessingForm
-                must_confirm_email = update_channel_and_check_if_email_confirm_needed(standup_form)
-            if must_confirm_email:
+                channel = update_channel(standup_form)
+            if not channel.email_confirmed:
                 Logger.log("We need email confirmation for email " + standup_form['email'], Logger.info) # Issue 25: eventType: ProcessingForm
                 confirm_email_message = "Thank you for using Standup Bot! https://daily-stand-up-bot.herokuapp.com/ If you did not sign up on our website, please disregard this email. Your confirmation code is " + standup_form['confirmation_code'] + " https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name']
                 email_client.send_email(standup_form['channel_name'], standup_form['email'], confirm_email_message, "Confirm Email Address for Standup Report")
-            response_message = confirm_success(standup_form, must_confirm_email)
+            response_message = confirm_success(standup_form, channel.email_confirmed, channel.email)
         else:
             # If the form was NOT valid...
             Logger.log("Could not update standup time.", Logger.error) # Issue 25: eventType: ProcessingForm
@@ -129,7 +129,7 @@ def confirm_email():
 
 # Updates standup schedules for a previously-submitted channel
 # @param form : User's input in form form
-def update_channel_and_check_if_email_confirm_needed(form):
+def update_channel(form):
     channel = Channel.query.filter_by(channel_name=form['channel_name']).first()
     Logger.log("Updating channel " + str(channel.channel_name), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
     
@@ -160,13 +160,12 @@ def update_channel_and_check_if_email_confirm_needed(form):
 
     Logger.log("channel.email_confirmed is: " + str(channel.email_confirmed) + " and not that is: " + str((not channel.email_confirmed)), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
                 
-    return (not channel.email_confirmed)
+    return channel
 
 
 # Adds standup schedules for a new channel
 # @param form : User's input in form form
-def add_channel_and_check_if_email_confirm_needed(form):
-    needs_to_confirm_email = False
+def add_channel(form):
     channel = Channel(form['channel_name'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'], form['message'], form['email'], None, False, form['confirmation_code'], form['hours_delay'], form['minutes_delay'])
     DB.session.add(channel)
     DB.session.commit()
@@ -177,9 +176,8 @@ def add_channel_and_check_if_email_confirm_needed(form):
     # Set email job if requested
     if (form['email'] != None and form['email'] != ""):
         Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
-        needs_to_confirm_email = True
         update_email_job(channel)
-    return needs_to_confirm_email
+    return channel
 
 
 # Adds standup job and logs it
@@ -196,14 +194,16 @@ def add_standup_job(channel):
 # @param form: form inputs
 # @param must_confirm_email : Whether or not there was an email address submitted that needs to be confirmed
 # @return Message to display on page
-def confirm_success(form, must_confirm_email):
+def confirm_success(form, email_confirmed, email):
     response_message = "Success! Standup bot scheduling set for " + form['channel_name'] + " at " + str(form['standup_hour']) + ":" + util.format_minutes_to_have_zero(form['standup_minute']) + form['am_or_pm'] + " with reminder message '" + form['message'] + "'."
     if form['hours_delay'] or form['minutes_delay']:
         response_message += " You have given the channel " + ((str(form['hours_delay']) + " hours") if form['hours_delay'] else "") + (" and" if form['hours_delay'] and form['minutes_delay'] else "") + ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] else "") + " to submit their standup status."
     else:
         response_message += " By default you have given the channel one hour to submit their standup status."
-    if must_confirm_email:
-        response_message += ". Responses will be emailed to " + form['email'] + ". To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
+    if email:
+        response_message += " Responses will be emailed to " + form['email'] + "."
+    if not email_confirmed:
+         response_message += " To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
     slack_client.send_confirmation_message(form['channel_name'], response_message)
     return response_message
     
