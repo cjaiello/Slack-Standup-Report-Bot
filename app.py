@@ -185,7 +185,7 @@ def add_channel(form):
 def add_standup_job(channel):
     Logger.log("Adding standup to scheduler " + " | Channel name: " + channel.channel_name + " | standup_message: " + channel.message + " | hour: " + str(channel.standup_hour) + " | minute: " + str(channel.standup_minute), Logger.info) # Issue 25: eventType: AddChannelStandupJob
     SCHEDULER.add_job(trigger_standup_call, 'cron', [
-                      channel.channel_name, channel.message], day_of_week='sun-sat', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
+                      channel.channel_name, channel.message], day_of_week='mon-sun', hour=channel.standup_hour, minute=channel.standup_minute, id=channel.channel_name + "_standupcall")
     Logger.log("Set " + channel.channel_name + "'s standup time to " + str(channel.standup_hour) +
           ":" + util.format_minutes_to_have_zero(channel.standup_minute) + " with standup standup_message: " + channel.message, Logger.info) # Issue 25: eventType: AddChannelStandupJob
 
