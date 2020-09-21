@@ -149,7 +149,7 @@ def update_channel(form):
             channel.email_confirmed = False
         else:
             channel.email_confirmed = True # Nothing to confirm, so don't let this be a blocker anywhere else
-        update_email_job(channel)
+    update_email_job(channel)
 
     DB.session.add(channel)
     DB.session.commit()
