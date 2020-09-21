@@ -66,11 +66,25 @@
 			</div>
 
 			<div class="input text">
-				{{ form.message(placeholder="Standup Message, without @channel") }}
+				{{ form.message(placeholder="Standup message") }}
 			</div>
 
 			<div class="input text">
-				How long do people have to submit their standup status?<br>{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
+				How long do people have to submit their standup status?
+				<br>
+				{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
+				{% if form.hours_delay.errors %}
+					<span class="error error_details bold">Hours Error{% if form.hours_delay.errors |length > 1 %}s{% endif %}</span>
+					{% for error in form.hours_delay.errors %}
+						<span class="error error_details">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
+				{% if form.minutes_delay.errors %}
+					<span class="error error_details bold {% if form.hours_delay.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
+					{% for error in form.minutes_delay.errors %}
+						<span class="error error_details">{{ error }}</span>
+					{% endfor %}
+				{% endif %}
 			</div>
 
 			<div class="input text">
