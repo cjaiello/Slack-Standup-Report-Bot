@@ -291,7 +291,7 @@ def update_email_job(channel):
             standup_closing_minute = int(channel.standup_minute) + int(channel.minutes_delay)
         
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
-                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_closing_hour, minute=standup_closing_minute, id=channel.channel_name + "_sendemail")
+                          channel.channel_name, channel.email], day_of_week='mon-sun', hour=standup_closing_hour, minute=standup_closing_minute, id=channel.channel_name + "_sendemail")
         Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
     else:
         Logger.log("Channel " + channel.channel_name + " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
