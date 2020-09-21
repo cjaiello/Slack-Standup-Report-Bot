@@ -263,13 +263,18 @@ def update_email_job(channel):
 
     # See if user wanted standups emailed to them
     if (channel.email):
+        # Add a job for each row in the table, sending standup replies to chosen email.
         if ((channel.hours_delay == "" or channel.hours_delay == None) and (channel.minutes_delay == "" or channel.minutes_delay == None)):
             standup_hours_delay = int(channel.standup_hour) + 1 # Default to one hour until the chance to submit standup closes
         else:
             standup_hours_delay = int(channel.standup_hour) + int(channel.hours_delay)
-        # Add a job for each row in the table, sending standup replies to chosen email.
+        if ((channel.minutes_delay == "" or channel.minutes_delay == None) and (channel.minutes_delay == "" or channel.minutes_delay == None)):
+            standup_minutes_delay = int(channel.standup_minute)
+        else:
+            standup_minutes_delay = int(channel.standup_minute) + int(channel.minutes_delay)
+        
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
-                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_hours_delay, minute=int(channel.standup_minute) + int(channel.minutes_delay), id=channel.channel_name + "_sendemail")
+                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_hours_delay, minute=standup_minutes_delay, id=channel.channel_name + "_sendemail")
         Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
     else:
         Logger.log("Channel " + channel.channel_name + " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
