@@ -197,14 +197,14 @@ def add_standup_job(channel):
 def confirm_success(form, email_confirmed, email):
     response_message = "Success! Standup bot scheduling set for " + form['channel_name'] + " at " + str(form['standup_hour']) + ":" + util.format_minutes_to_have_zero(form['standup_minute']) + form['am_or_pm'] + " with reminder message '" + form['message'] + "'."
     if form['hours_delay'] or form['minutes_delay']:
-        potential_minutes_text = ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] and int(form['minutes_delay']) > 1 else "") + ((str(form['minutes_delay']) + " minute") if int(form['minutes_delay']) == 1 else "")
+        potential_minutes_text = ((str(form['minutes_delay']) + " minutes") if form['minutes_delay'] and int(form['minutes_delay']) > 1 else "") + ((str(form['minutes_delay']) + " minute") if form['minutes_delay'] and int(form['minutes_delay']) == 1 else "")
         potential_hours_text = ((str(form['hours_delay']) + " hours") if form['hours_delay'] else "")
         potential_and_text = (" and " if form['hours_delay'] and form['minutes_delay'] else "")
         response_message += " You have given the channel " + potential_hours_text + potential_and_text + potential_minutes_text + " to submit their standup status."
     else:
         response_message += " By default you have given the channel one hour to submit their standup status."
     if email:
-        response_message += " Responses will be emailed to " + form['email'] + "."
+        response_message += " Responses will be emailed to " + email + "."
     if not email_confirmed:
          response_message += " To receive your standup report in an email, please log into your email and click the link and enter the code in the email we just sent you to confirm ownership of this email."
     slack_client.send_confirmation_message(form['channel_name'], response_message)
