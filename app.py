@@ -264,17 +264,27 @@ def update_email_job(channel):
     # See if user wanted standups emailed to them
     if (channel.email):
         # Add a job for each row in the table, sending standup replies to chosen email.
-        if ((channel.hours_delay == "" or channel.hours_delay == None) and (channel.minutes_delay == "" or channel.minutes_delay == None)):
-            standup_hours_delay = int(channel.standup_hour) + 1 # Default to one hour until the chance to submit standup closes
+        did_not_enter_hours = channel.hours_delay == "" or channel.hours_delay == None
+        did_not_enter_minutes = channel.minutes_delay == "" or channel.minutes_delay == None
+        if did_not_enter_hours and did_not_enter_minutes:
+            # Did not enter either
+            standup_closing_hour = int(channel.standup_hour) + 1 # Default to one hour until the chance to submit standup closes
+            standup_closing_minute = int(channel.standup_minute) # Default to zero minutes
+        elif did_not_enter_hours and not did_not_enter_minutes:
+            # They only entered minutes
+            standup_closing_hour = int(channel.standup_hour)
+            standup_closing_minute = int(channel.standup_minute) + int(channel.minutes_delay)
+        elif did_not_enter_minutes and not did_not_enter_hours:
+            # They only entered hours
+            standup_closing_hour = int(channel.standup_hour) + int(channel.hours_delay)
+            standup_closing_minute = int(channel.standup_minute)
         else:
-            standup_hours_delay = int(channel.standup_hour) + int(channel.hours_delay)
-        if ((channel.minutes_delay == "" or channel.minutes_delay == None) and (channel.minutes_delay == "" or channel.minutes_delay == None)):
-            standup_minutes_delay = int(channel.standup_minute)
-        else:
-            standup_minutes_delay = int(channel.standup_minute) + int(channel.minutes_delay)
+            # They entered both
+            standup_closing_hour = int(channel.standup_hour) + int(channel.hours_delay)
+            standup_closing_minute = int(channel.standup_minute) + int(channel.minutes_delay)
         
         SCHEDULER.add_job(get_timestamp_and_send_email, 'cron', [
-                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_hours_delay, minute=standup_minutes_delay, id=channel.channel_name + "_sendemail")
+                          channel.channel_name, channel.email], day_of_week='mon-fri', hour=standup_closing_hour, minute=standup_closing_minute, id=channel.channel_name + "_sendemail")
         Logger.log("Channel that we set email schedule for: " + channel.channel_name, Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
     else:
         Logger.log("Channel " + channel.channel_name + " did not want their standups emailed to them today.", Logger.info) # Issue 25: eventType: CreateOrUpdateEmailJob
