@@ -4,8 +4,11 @@
 ## Technologies Used
 Python, Flask, wtforms, PostgreSQL
 
-This is the page you use to sign up your channel for standup bot:
-![Screenshot of app](https://raw.githubusercontent.com/cjaiello/standupbot/master/screenshot.png)
+## Setting Standup for Channel
+![Setting Your Standup Message](https://raw.githubusercontent.com/cjaiello/standupbot/master/standup-setting-message.gif)
 
-This is what the standup bot message looks like:
-![Standup Bot message](https://raw.githubusercontent.com/cjaiello/standupbot/master/standupbot_message)
+## Confirming Email Address
+![Confirming Email Address](https://raw.githubusercontent.com/cjaiello/standupbot/master/standup-confirm-email-address.gif)
+
+## Submitting Your Report and Email Summary
+![Submitting Your Report and Email Summary](https://raw.githubusercontent.com/cjaiello/standupbot/master/standup-submitting-reports-and-emailing.gif)
