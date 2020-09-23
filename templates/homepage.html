@@ -33,9 +33,11 @@
 				{% if message %}
 					<span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
 				{% endif %}
+			</div>
 
+			<div class="input text">
+				Channel:<br>
 				<select name="channel_name" method="GET" action="/">
-					Channel:<br>
 				    {% for option in form.channel_name %}
 				    	<option value= "{{option}}" SELECTED>{{option}}</option>"
 				    {% endfor %}
