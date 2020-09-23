@@ -1,3 +1,9 @@
+# Slack Standup Report Bot
+### By Christina
+
+## Technologies Used
+Python, Flask, wtforms, PostgreSQL
+
 This is the page you use to sign up your channel for standup bot:
 ![Screenshot of app](https://raw.githubusercontent.com/cjaiello/standupbot/master/screenshot.png)
 

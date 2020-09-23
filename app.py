@@ -16,7 +16,6 @@ from profanity_filter import ProfanityFilter
 import email_client
 
 app = Flask(__name__)
-# To do this just using psycopg2: conn = psycopg2.connect(os.environ['DATABASE_URL'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['RECAPTCHA_USE_SSL'] = False

@@ -38,6 +38,7 @@
 				{% endif %}
 
 				<select name="channel_name" method="GET" action="/">
+					Channel:<br>
 				    {% for option in form.channel_name %}
 				    	<option value= "{{option}}" SELECTED>{{option}}</option>"
 				    {% endfor %}
