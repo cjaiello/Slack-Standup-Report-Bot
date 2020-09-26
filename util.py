@@ -28,7 +28,7 @@ def remove_starting_zeros_from_time(time):
     return (re.search( r'0?(\d+)?', time, re.M|re.I)).group(1)
 
 
-# Adds 12 if PM else keeps as original time. When we insert
+# Adds 12 if PM and not noon, else keeps as original time. When we insert
 # data from the form into the database, we convert from AM/PM
 # to 24-hour time.
 def calculate_am_or_pm(reminder_hour, am_or_pm):
