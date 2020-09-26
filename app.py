@@ -205,8 +205,8 @@ def confirm_success(form, email_confirmed, email):
         response_message += " By default you have given the channel one hour to submit their standup status."
     if email:
         response_message += " Responses will be emailed to " + email + "."
-    if not email_confirmed:
-         response_message += " To receive your standup report in an email, please confirm ownership of this email address by going to your inbox, clicking on the link in the email that we just sent you, and entering the code that was in the email."
+        if not email_confirmed:
+            response_message += " To receive your standup report in an email, please confirm ownership of this email address by going to your inbox, clicking on the link in the email that we just sent you, and entering the code that was in the email."
     slack_client.send_confirmation_message(form['channel_name'], response_message)
     return response_message
     
