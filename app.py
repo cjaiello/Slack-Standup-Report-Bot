@@ -107,7 +107,7 @@ def confirm_email():
     if request.method == 'POST':
         form = EmailConfirmationForm(request.form)
         code = request.form['code']
-        if form.validate_on_submit() and email:
+        if form.validate_on_submit() and code:
             # Go into the database and get our channel object based on email address and channel name.
             channel = Channel.query.filter_by(email=email, channel_name=channel_name).first()
             Logger.log("Email address being confirmed is: " + str(channel.email) + " | Code submitted was: " + str(code) + " | Confirmation_code was: " + str(channel.confirmation_code), Logger.info) # Issue 25: eventType: ConfirmEmail
@@ -122,7 +122,7 @@ def confirm_email():
                 Logger.log("Could not validate form because code != channel.confirmation_code", Logger.error) # Issue 25: eventType: ConfirmEmail
                 response_message = "Form submission failed. Please try again."
         else:
-            Logger.log("Could not validate form because: " + str(form.errors), Logger.error) # Issue 25: eventType: ConfirmEmail
+            Logger.log("!form.validate_on_submit() and email. Could not validate form because: " + str(form.errors), Logger.error) # Issue 25: eventType: ConfirmEmail
             response_message = "Form submission failed. Please try again."
     return render_template('confirm_email.html', form=form, message=response_message)
 
