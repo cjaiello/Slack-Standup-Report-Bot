@@ -70,7 +70,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
                 user_result = SLACK_CLIENT.users_info(user=standup_status['user'])
                 name = user_result["user"]["profile"]["real_name"]
                 Logger.log("Adding standup results for " + name, Logger.info) # Issue 25: eventType: GetStandupReports
-                standup_response_for_person = name + ": " + standup_status['text'] + "; \n"
+                standup_response_for_person = name + ": " + standup_status['text'] + "\n\n\n"
                 standup_results.append(standup_response_for_person)
             Logger.log("Final standup results: " + str(standup_results), Logger.info) # Issue 25: eventType: GetStandupReports
             return standup_results
