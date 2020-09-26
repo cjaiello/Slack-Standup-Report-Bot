@@ -80,7 +80,7 @@ def homepage():
                 # Update channel's standup info in the database
                 Logger.log("Update channel's standup info", Logger.info) # Issue 25: eventType: ProcessingForm
                 channel = update_channel(standup_form)
-            if not channel.email_confirmed:
+            if standup_form['email'] and not channel.email_confirmed:
                 Logger.log("We need email confirmation for email " + standup_form['email'], Logger.info) # Issue 25: eventType: ProcessingForm
                 link_to_confirm_email = "https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name']
                 confirm_email_message = "Thank you for using Daily Standup Bot! https://daily-stand-up-bot.herokuapp.com/! \n If you did not sign up on our website, please disregard this email. \n\n Your confirmation code is " + standup_form['confirmation_code'] + ". Please go to this link and submit your code to confirm your email: " + link_to_confirm_email
