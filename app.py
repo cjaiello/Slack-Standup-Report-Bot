@@ -82,8 +82,8 @@ def homepage():
                 channel = update_channel(standup_form)
             if standup_form['email'] and not channel.email_confirmed:
                 Logger.log("We need email confirmation for email " + standup_form['email'], Logger.info) # Issue 25: eventType: ProcessingForm
-                link_to_confirm_email = "https://daily-stand-up-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name']
-                confirm_email_message = "Thank you for using Daily Standup Bot! https://daily-stand-up-bot.herokuapp.com/! \n If you did not sign up on our website, please disregard this email. \n\n Your confirmation code is " + standup_form['confirmation_code'] + ". Please go to this link and submit your code to confirm your email: " + link_to_confirm_email
+                link_to_confirm_email = "https://slack-daily-standup-bot.herokuapp.com/confirm_email?email=" + standup_form['email'] + "&channel_name=" + standup_form['channel_name']
+                confirm_email_message = "Thank you for using Daily Standup Bot! https://slack-daily-standup-bot.herokuapp.com/! \n If you did not sign up on our website, please disregard this email. \n\n Your confirmation code is " + standup_form['confirmation_code'] + ". Please go to this link and submit your code to confirm your email: " + link_to_confirm_email
                 email_client.send_email(standup_form['channel_name'], standup_form['email'], confirm_email_message, "Confirm Email Address for Standup Report")
             response_message = confirm_success(standup_form, channel.email_confirmed, channel.email)
         else:
@@ -140,15 +140,20 @@ def update_channel(form):
     channel.message = form['message']
 
     # If you change the email address, you need to re-confirm that email address with a new code
-    if (form['email'] != channel.email):
-        Logger.log("Form email " + str(form['email']) + " not equal to channel's current email: " + str(channel.channel_name), Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
-        channel.email = form['email']
-        if (form['email'] != None and form['email'] != ""):
+    if (form['email'] != None and form['email'] != ""):
+        # If they're submitting a new email address, or if they're using an address that's already there but not confirmed
+        if (form['email'] != channel.email or not channel.email_confirmed):
+            Logger.log("Form email " + str(form['email']) + " not equal to channel's current email: " + str(channel.channel_name) + " or this is the same email but it wasn't confirmed yet", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+            channel.email = form['email']
             Logger.log("Form email wasn't none: " + str(form['email']) + ", so we need to reset the confirmation code and email confirmed field", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
             channel.confirmation_code = form['confirmation_code']
             channel.email_confirmed = False
         else:
             channel.email_confirmed = True # Nothing to confirm, so don't let this be a blocker anywhere else
+    else:
+        channel.email = None
+        channel.confirmation_code = None
+        channel.email_confirmed = True # Nothing to confirm, so don't let this be a blocker anywhere else
     update_email_job(channel)
 
     DB.session.add(channel)
