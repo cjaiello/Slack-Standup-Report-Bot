@@ -29,7 +29,7 @@ And then a screenshot of what this looks like in gmail:
 * Fork this repository (https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo)
 * Run `git clone` to clone this project onto your computer (https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo or https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository)
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
-* Run `./build-mac-and-linux.sh` (MacOS or Linux) or `./build-winows.sh` (Windows) to run my build script to set everything up for you. (If it won't run, do `chmod +x build` and then `./build`)
+* Run `./build-mac-and-linux.sh` (MacOS or Linux) or `./build-winows.sh` (Windows) to run my build script to set everything up for you. (If it won't run, do `chmod +x ./build-mac-and-linux.sh` if Mac/Linux or `chmod +x build-winows.sh` if Windows and then run the script again. +x will let it be executed.)
   * If you're wondering what the script does, these are each of its parts (and if you don't care, that's fine too!):
     * Running `virtualenv -p python3.8 myenv` to create a virtual environment
     * Running `source myenv/bin/activate` to start your virtual environment
