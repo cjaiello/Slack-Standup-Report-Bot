@@ -18,12 +18,13 @@ And then a screenshot of what this looks like in gmail:
 ![Screenshot of Gmail Confirmation](https://raw.githubusercontent.com/cjaiello/standupbot/master/confirmation-in-gmail.png)
 
 ## Local Development Setup
+**(Does not have Slack integration but allows you to still view the standup form and submit it to the database, letting you see what you need when making all HTML, all CSS, and some Python changes)**
+
 ### Prerequisites
 * Install python3 (Mac: `brew install python3`, and ff you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
 * Install `virtualenv` via `pip3 install virtualenv`
 
-### Local Setup 
-**(Does not have Slack integration but allows you to still view the standup form and submit it to the database, letting you see what you need when making all HTML, all CSS, and some Python changes)**
+### Setup
 * Fork this repository
 * Run `git clone` to clone this project onto your computer
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
