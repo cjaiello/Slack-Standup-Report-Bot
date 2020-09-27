@@ -23,7 +23,8 @@ And then a screenshot of what this looks like in gmail:
 * Install `virtualenv` via `pip3 install virtualenv`
 
 ### Local Setup (Does not have Slack integration but allows you to still view the standup form and submit it to the database, letting you see what you need when making all HTML, all CSS, and some Python changes)
-* Git clone this directory onto your computer
+* Fork this repository
+* Run `git clone` to clone this project onto your computer
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
 * Run `virtualenv venv --system-site-packages` in that directory
 * Run `source venv/bin/activate` to start your virtual environment
