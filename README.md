@@ -22,7 +22,7 @@ And then a screenshot of what this looks like in gmail:
 * Install python3 (Mac: `brew install python3`, and ff you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
 * Install `virtualenv` via `pip3 install virtualenv`
 
-### Setup
+### Setup, without Slack Integration (Allows you to still make HTML, CSS, and some Python changes)
 * Git clone this directory onto your computer
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
 * Run `virtualenv venv --system-site-packages` in that directory
