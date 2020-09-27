@@ -42,4 +42,4 @@ And then a screenshot of what this looks like in gmail:
   * Run `export DATABASE_URL="postgresql:///standup"` to set an environment variable that points to your newly-created database
   * Run `gunicorn --bind 0.0.0.0:5000 wsgi:app;` to start the app
 * Go to http://127.0.0.1:5000/ to see your app running
-* To exit `venv`, your virtual environment, just type `deactivate` and hit enter
+* To exit `myenv`, your virtual environment, just type `deactivate` and hit enter
