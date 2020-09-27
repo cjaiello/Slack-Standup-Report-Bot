@@ -2,7 +2,7 @@
 ### By Christina
 
 ## Technologies Used
-Python, Flask, wtforms, PostgreSQL
+Python, Flask, PostgreSQL, Gunicorn
 
 ## Setting Standup for Channel
 ![Setting Your Standup Message](https://raw.githubusercontent.com/cjaiello/standupbot/master/static/standup-setting-message.gif)
