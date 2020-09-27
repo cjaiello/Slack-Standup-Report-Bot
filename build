@@ -1,7 +1,7 @@
-virtualenv venv --system-site-packages;
+virtualenv -p python3.8 myenv;
 source venv/bin/activate;
 pip3 install -r requirements.txt;
-python -m spacy download en;
+python3 -m spacy download en;
 export FLASK_APP=app.py;
 psql -U postgres -c "create database standup";
 psql -U postgres -d standup <<EOF
