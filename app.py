@@ -10,8 +10,8 @@ from flask import escape
 import email_validator
 import html
 from profanity_filter import ProfanityFilter
-from . import slack_client, email_client, util
-from .logger import Logger
+import slack_client, email_client, util
+from logger import Logger
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
