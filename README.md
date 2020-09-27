@@ -40,6 +40,6 @@ And then a screenshot of what this looks like in gmail:
   * Run `CREATE TABLE channel (id SERIAL PRIMARY KEY, channel_name varchar(120), standup_hour int, standup_minute int, message text, email varchar(50), timestamp varchar(50), response_period_in_hours int, email_confirmed boolean, confirmation_code varchar(120), hours_delay int, minutes_delay int);` to create your table you'll need for this app
   * Run `\q` to quit psql
   * Run `export DATABASE_URL="postgresql:///standup"` to set an environment variable that points to your newly-created database
-* Run `flask run` to start the app
+  * Run `flask run` to start the app
 * Go to http://127.0.0.1:5000/ to see your app running
 * To exit `venv`, your virtual environment, just type `deactivate` and hit enter
