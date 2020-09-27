@@ -19,10 +19,7 @@ And then a screenshot of what this looks like in gmail:
 
 ## Local Development Setup
 ### Prerequisites
-* Install python3:
-** Mac: `brew install python3`
-*** If you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation
-** Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows
+* Install python3 (Mac: `brew install python3`, and ff you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
 * Install `virtualenv` via `pip3 install virtualenv`
 
 ### Setup
