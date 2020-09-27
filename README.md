@@ -40,4 +40,3 @@ And then a screenshot of what this looks like in gmail:
 * Run `\q` to quit psql
 * Run `export DATABASE_URL="postgresql:///standup"` to set an environment variable that points to your newly-created database
 * Run `flask run` to start the app
-* 
