@@ -1,8 +1,8 @@
 # Standup Bot by Christina Aiello, 2017-2020
-from . import util
+import util
 import os
 import slack
-from .logger import Logger
+from logger import Logger
 
 if 'SLACK_BOT_TOKEN' in os.environ:
   SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)

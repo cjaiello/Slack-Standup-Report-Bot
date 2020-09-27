@@ -2,7 +2,7 @@
 import smtplib
 import os
 import html
-from .logger import Logger
+from logger import Logger
 
 # Sends an email via our gmail account to the chosen email address
 # @param channel_name: The channel that we are sending updates about
