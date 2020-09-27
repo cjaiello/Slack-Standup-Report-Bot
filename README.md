@@ -22,14 +22,14 @@ And then a screenshot of what this looks like in gmail:
 
 ### Prerequisites
 * Git (https://git-scm.com/downloads)
-* python3 (Mac: `brew install python3`, and if you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
-* `virtualenv`, installed via `pip3 install virtualenv`
+* python3, specfically Python 3.8 or higher (Mac: `brew install python3`, and if you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
+* `virtualenv`, installed via `pip3 install virtualenv` for Mac and Linux or `py -m pip install --user virtualenv` for Windows
 
 ### Setup
 * Fork this repository (https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo)
 * Run `git clone` to clone this project onto your computer (https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo or https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository)
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
-* Run `./build` to run my build script for this app. (If it won't run, do `chmod +x build` and then `./build`)
+* Run `./build-mac-and-linux` (MacOS or Linux) or `./build-winows` (Windows) to run my build script to set everything up for you. (If it won't run, do `chmod +x build` and then `./build`)
   * If you're wondering what the script does, these are each of its parts:
   * Run `virtualenv -p python3.8 myenv` in that directory
   * Run `source myenv/bin/activate` to start your virtual environment
