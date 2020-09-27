@@ -28,7 +28,8 @@ And then a screenshot of what this looks like in gmail:
 * Fork this repository
 * Run `git clone` to clone this project onto your computer
 * Use `cd Slack-Standup-Report-Bot` to change directories into your Slack-Standup-Report-Bot copy
-* Run `./build` to run my build script for this app. If you're wondering what the script does, these are each of its parts:
+* Run `./build` to run my build script for this app. (If it won't run, do `chmod +x build` and then `./build`)
+  * If you're wondering what the script does, these are each of its parts:
   * Run `virtualenv venv --system-site-packages` in that directory
   * Run `source venv/bin/activate` to start your virtual environment
   * Run `pip3 install -r requirements.txt` to install required dependencies for project
