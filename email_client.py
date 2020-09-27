@@ -1,8 +1,8 @@
 # Standup Bot by Christina Aiello, 2017-2020
 import smtplib
 import os
-from logger import Logger
 import html
+from .logger import Logger
 
 # Sends an email via our gmail account to the chosen email address
 # @param channel_name: The channel that we are sending updates about

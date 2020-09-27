@@ -1,19 +1,23 @@
 # Standup Bot by Christina Aiello, 2017-2020
-import util
+from . import util
 import os
 import slack
-from logger import Logger
+from .logger import Logger
 
-SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
+if 'SLACK_BOT_TOKEN' in os.environ:
+  SLACK_CLIENT = slack.WebClient(os.environ["SLACK_BOT_TOKEN"], timeout=30)
+else:
+  SLACK_CLIENT = None
 
 # Will send @param message to @param channel_name
 def send_standup_message(channel_name, message):
-  response = SLACK_CLIENT.chat_postMessage(
-      channel=str(channel_name),
-      text= ("Please reply here with your standup status!" if (message == None) else message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-  )
+  if SLACK_CLIENT:
+    response = SLACK_CLIENT.chat_postMessage(
+        channel=str(channel_name),
+        text= ("Please reply here with your standup status!" if (message == None) else message),
+        username="Standup Bot",
+        icon_emoji=":memo:"
+    )
   Logger.log("send_standup_message response code: " + str(response.status_code), Logger.info) # Issue 25: eventType: SendStandupMessage
   for item in response.data.items():
     Logger.log("send_standup_message response[" + str(item[0]) + "]: " + str(item[1]), Logger.info) # Issue 25: eventType: SendStandupMessage
@@ -23,19 +27,25 @@ def send_standup_message(channel_name, message):
 # Will send confirmation message to @param channel_name
 def send_confirmation_message(channel_name, message):
   response = send_slack_message(channel_name, "Please reply here with your standup status!" if (message == None) else  message)
-  Logger.log("send_confirmation_message response code: " + str(response.status_code), Logger.info) # Issue 25: eventType: SendConfirmationMessage
-  for item in response.data.items():
-    Logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), Logger.info) # Issue 25: eventType: SendConfirmationMessage
-  return response.status_code
+  if response:
+    Logger.log("send_confirmation_message response code: " + str(response.status_code), Logger.info) # Issue 25: eventType: SendConfirmationMessage
+    for item in response.data.items():
+      Logger.log("send_confirmation_message response[" + str(item[0]) + "]: " + str(item[1]), Logger.info) # Issue 25: eventType: SendConfirmationMessage
+    return response.status_code
+  else:
+    return None
 
 # Sends given slack message to given slack channel
 def send_slack_message(channel_name, message):
-  response = SLACK_CLIENT.chat_postMessage(
-      channel=str(channel_name),
-      text= (message),
-      username="Standup Bot",
-      icon_emoji=":memo:"
-  )
+  if SLACK_CLIENT:
+    response = SLACK_CLIENT.chat_postMessage(
+        channel=str(channel_name),
+        text= (message),
+        username="Standup Bot",
+        icon_emoji=":memo:"
+    )
+  else:
+    response = None
   return response
 
 # Will fetch the standup messages for a channel
@@ -43,6 +53,7 @@ def send_slack_message(channel_name, message):
 # @return Standup messages in JSON format
 # TODO: Make sure this still works
 def get_standup_replies_for_message(timestamp, channel_name):
+  if SLACK_CLIENT:
     channel_id = get_channel_id_via_name(channel_name)
 
     # https://api.slack.com/methods/conversations.history
@@ -79,26 +90,32 @@ def get_standup_replies_for_message(timestamp, channel_name):
     else:
         # Log that it didn't work
         Logger.log("Tried to retrieve standup results. Could not retrieve standup results for " + channel_name + " due to: " + str(result.error), Logger.error) # Issue 25: eventType: GetStandupReports
-
+  else:
+    return None
 
 # Calls API to get channel ID based on name.
 # @param channel_name
 # @return channel ID
 def get_channel_id_via_name(channel_name):
+  if SLACK_CLIENT:
     channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
-    
     Logger.log("get_channel_id_via_name " + str(channels_list), Logger.info) # Issue 25: eventType: GetChannelInfo
     for channel in channels_list["channels"]:
         if channel["name"] == channel_name:
             Logger.log("get_channel_id_via_name " + str(channel["name"]) + " == " + channel_name, Logger.info) # Issue 25: eventType: GetChannelInfo
             return channel["id"]
+  else:
+    return None
 
 # Get list of channel names
 # @return list of channel names
 def get_all_channels():
-  channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
-  channel_names_list = []
-  for channel in channels_list["channels"]:
-      channel_names_list.append(channel["name"])
-  Logger.log("Channel list is: " + str(channel_names_list), Logger.info) # Issue 25: eventType: GetChannelList
+  if SLACK_CLIENT:
+    channels_list = SLACK_CLIENT.conversations_list(types="public_channel")
+    channel_names_list = []
+    for channel in channels_list["channels"]:
+        channel_names_list.append(channel["name"])
+    Logger.log("Channel list is: " + str(channel_names_list), Logger.info) # Issue 25: eventType: GetChannelList
+  else:
+    channel_names_list = ["Dummy Name 1", "Dummy Name 2"]
   return channel_names_list

@@ -5,22 +5,21 @@ from flask_sqlalchemy import SQLAlchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, Response, jsonify, render_template
 from wtforms import TextField, TextAreaField, IntegerField, validators, StringField, SubmitField, BooleanField
-import util
-import slack_client
 from flask_wtf import FlaskForm, RecaptchaField
 from flask import escape
 import email_validator
-from logger import Logger
 import html
 from profanity_filter import ProfanityFilter
-import email_client
+from . import slack_client, email_client, util
+from .logger import Logger
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['RECAPTCHA_USE_SSL'] = False
-app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ['RECAPTCHA_PUBLIC_KEY']
-app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
+if 'RECAPTCHA_PUBLIC_KEY' in os.environ:
+    app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ['RECAPTCHA_PUBLIC_KEY']
+    app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ['RECAPTCHA_PRIVATE_KEY']
 app.config['SECRET_KEY'] = os.urandom(32)
 DB = SQLAlchemy(app)
 SCHEDULER = BackgroundScheduler()
@@ -36,7 +35,10 @@ class StandupSignupForm(FlaskForm):
     am_or_pm = ['pm', 'am']
     message = TextField('Standup Message (Will use default message if blank):')
     email = TextField('Where should we email your standup reports? (optional):', validators=[validators.Email(), validators.Optional()])
-    recaptcha = RecaptchaField()
+    if 'RECAPTCHA_PUBLIC_KEY' in app.config:
+        recaptcha = RecaptchaField()
+    else:
+        recaptcha = None
     csrf = app.config['SECRET_KEY']
     confirmation_code = TextField()
     email_confirmed = BooleanField()

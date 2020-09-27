@@ -1,7 +1,7 @@
 # Standup Bot by Christina Aiello, 2017-2020
 import re
-from logger import Logger
 import random
+from .logger import Logger
 
 # For logging purposes
 def format_minutes_to_have_zero(minutes):
