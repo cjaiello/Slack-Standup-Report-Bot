@@ -22,7 +22,7 @@ And then a screenshot of what this looks like in gmail:
 
 ### Prerequisites
 * Git (https://git-scm.com/downloads)
-* python3, specfically Python 3.8 or higher (Mac: `brew install python3`, and if you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
+* python3, specfically Python 3.8 (Mac: `brew install python3`, and if you don't have homebrew for the above step, get it here: https://docs.brew.sh/Installation; Windows: https://phoenixnap.com/kb/how-to-install-python-3-windows)
 * `virtualenv`, installed via `pip3 install virtualenv` for Mac and Linux or `py -m pip install --user virtualenv` for Windows
 
 ### Setup
