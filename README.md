@@ -4,17 +4,20 @@
 ## Technologies Used
 Python, Flask, PostgreSQL, Gunicorn
 
----
+
+
 
 ## Setting Standup for Channel
 ![Setting Your Standup Message](https://raw.githubusercontent.com/cjaiello/standupbot/master/static/standup-setting-message.gif)
 
----
+
+
 
 ## Submitting Your Report and Email Summary
 ![Submitting Your Report and Email Summary](https://raw.githubusercontent.com/cjaiello/standupbot/master/static/standup-submitting-reports-and-emailing.gif)
 
----
+
+
 
 ## Confirming Email Address
 To receive an email summary of standup reports, you must confirm your email address:
@@ -23,7 +26,8 @@ To receive an email summary of standup reports, you must confirm your email addr
 And then a screenshot of what this looks like in gmail:
 ![Screenshot of Gmail Confirmation](https://raw.githubusercontent.com/cjaiello/standupbot/master/static/confirmation-in-gmail.png)
 
----
+
+
 
 ## Local Development Setup
 **(Does not have Slack integration but allows you to still view the standup form and submit it to the database, letting you see what you need when making all HTML, all CSS, and some Python changes)**
@@ -52,7 +56,8 @@ And then a screenshot of what this looks like in gmail:
 * Go to http://127.0.0.1:5000/ to see your app running
 * To exit `myenv`, your virtual environment, just type `deactivate` and hit enter
 
----
+
+
 
 ## Setup to Work Locally but Run App on Heroku and Interact with Slack
 Each time you make changes, you'll push to Github, which we'll set up to trigger an automatic deploy to Heroku. Your bot can then use your new changes.
