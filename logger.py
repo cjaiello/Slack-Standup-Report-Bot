@@ -8,5 +8,5 @@ class Logger:
     # Used for logging when actions happen
     # @return string with logging info
     @staticmethod
-    def log(message_to_log, log_level):
-        print("[" + strftime("%Y-%m-%d %H:%M:%S", localtime()) + "]" + "[" + log_level +"] " + message_to_log)
+    def log(message_to_log, log_level, event_type):
+        print("[" + strftime("%Y-%m-%d %H:%M:%S", localtime()) + "]" + "[" + log_level +"] " + "[" + event_type +"] " + message_to_log)

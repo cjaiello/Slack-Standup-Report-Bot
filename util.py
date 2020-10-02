@@ -32,11 +32,12 @@ def remove_starting_zeros_from_time(time):
 # data from the form into the database, we convert from AM/PM
 # to 24-hour time.
 def calculate_am_or_pm(reminder_hour, am_or_pm):
-    Logger.log("Hour is: " + str(reminder_hour) + " and am or pm is: " + am_or_pm, Logger.info) # Issue 25: eventType: CalculateAmOrPm
+    event_type = "CalculateAmOrPm"
+    Logger.log("Hour is: " + str(reminder_hour) + " and am or pm is: " + am_or_pm, Logger.info, event_type)
     reminder_hour = int(reminder_hour)
     if (am_or_pm == "pm" and reminder_hour != 12):
         reminder_hour += 12
     elif (am_or_pm == "am" and reminder_hour == 12):
         reminder_hour = 0
-    Logger.log("Hour now is: " + str(reminder_hour) + " and am or pm is: " + am_or_pm, Logger.info) # Issue 25: eventType: CalculateAmOrPm
+    Logger.log("Hour now is: " + str(reminder_hour) + " and am or pm is: " + am_or_pm, Logger.info, event_type)
     return reminder_hour
