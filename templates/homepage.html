@@ -31,7 +31,9 @@
 
 			<div class="input text">
 				{% if message %}
-					<span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
+					<div class="{% if form.errors %}error{% else %}success{% endif %}-box">
+						<span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
+					</div>
 				{% endif %}
 			</div>
 
@@ -52,16 +54,20 @@
 				    {% endfor %}
 				</select>
 				{% if form.standup_hour.errors %}
-				<span class="error error_details bold">Hours Error{% if form.standup_hour.errors |length > 1 %}s{% endif %}</span>
-					{% for error in form.standup_hour.errors %}
-						<span class="error error_details">{{ error }}</span>
-					{% endfor %}
+					<div class="error-box">
+						<span class="error error_details bold">Hours Error{% if form.standup_hour.errors |length > 1 %}s{% endif %}</span>
+						{% for error in form.standup_hour.errors %}
+							<span class="error error_details">{{ error }}</span>
+						{% endfor %}
+					</div>
 				{% endif %}
 				{% if form.standup_minute.errors %}
-					<span class="error error_details bold {% if form.standup_hour.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
-					{% for error in form.standup_minute.errors %}
-						<span class="error error_details">{{ error }}</span>
-					{% endfor %}
+					<div class="error-box">
+						<span class="error error_details bold {% if form.standup_hour.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+						{% for error in form.standup_minute.errors %}
+							<span class="error error_details">{{ error }}</span>
+						{% endfor %}
+					</div>
 				{% endif %}
 			</div>
 
@@ -74,31 +80,43 @@
 				<br>
 				{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
 				{% if form.hours_delay.errors %}
-					<span class="error error_details bold">Hours Error{% if form.hours_delay.errors |length > 1 %}s{% endif %}</span>
-					{% for error in form.hours_delay.errors %}
-						<span class="error error_details">{{ error }}</span>
-					{% endfor %}
+					<div class="error-box">
+						<span class="error error_details bold">Hours Error{% if form.hours_delay.errors |length > 1 %}s{% endif %}</span>
+						{% for error in form.hours_delay.errors %}
+							<span class="error error_details">{{ error }}</span>
+						{% endfor %}
+					</div>
 				{% endif %}
 				{% if form.minutes_delay.errors %}
-					<span class="error error_details bold {% if form.hours_delay.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
-					{% for error in form.minutes_delay.errors %}
-						<span class="error error_details">{{ error }}</span>
-					{% endfor %}
+					<div class="error-box">
+						<span class="error error_details bold {% if form.hours_delay.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
+						{% for error in form.minutes_delay.errors %}
+							<span class="error error_details">{{ error }}</span>
+						{% endfor %}
+					</div>
 				{% endif %}
 			</div>
 
 			<div class="input text">
 				{{ form.email(placeholder="(OPTIONAL) Where should we email your standup reports?") }}
-				{% for error in form.email.errors %}
-					<span class="error error_details">{{ error }}</span>
-				{% endfor %}
+				{% if form.email.errors %}
+					<div class="error-box">
+						{% for error in form.email.errors %}
+						<span class="error error_details">{{ error }}</span>
+						{% endfor %}
+					</div>
+				{% endif %}
 			</div>
 
 			<div class="input submit">
 				{{ form.recaptcha }}
-				{% for error in form.recaptcha.errors %}
-				  <span class="error error_details bold">You must fill out the reCAPTCHA!</span>
-				{% endfor %}
+				{% if form.email.errors %}
+					<div class="error-box">
+						{% for error in form.recaptcha.errors %}
+						<span class="error error_details bold">You must fill out the reCAPTCHA!</span>
+						{% endfor %}
+					</div>
+				{% endif %}
 				<input class="submitButton" type="submit" value="Submit" />
 			</div>
 			</div>
