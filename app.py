@@ -176,16 +176,17 @@ def update_channel(form):
 # Adds standup schedules for a new channel
 # @param form : User's input in form form
 def add_channel(form):
+    event_type = "AddChannelStandupScheduleToDb"
     channel = Channel(form['channel_name'], util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm']), form['standup_minute'], form['message'], form['email'], None, False, form['confirmation_code'], form['hours_delay'], form['minutes_delay'])
     DB.session.add(channel)
     DB.session.commit()
-    Logger.log("Committed channel " + form['channel_name'] + " to DB session", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Committed channel " + form['channel_name'] + " to DB session", Logger.info, event_type)
     # Adding this additional job to the queue
     add_standup_job(channel)
-    Logger.log("Added email job to scheduler. Now going to set email job", Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+    Logger.log("Added email job to scheduler. Now going to set email job", Logger.info, event_type)
     # Set email job if requested
     if (form['email'] != None and form['email'] != ""):
-        Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info) # Issue 25: eventType: AddChannelStandupScheduleToDb
+        Logger.log("New channel, " + form['channel_name'] + ", needs its email job set up to email " + form['email'], Logger.info, event_type)
         update_email_job(channel)
     return channel
 

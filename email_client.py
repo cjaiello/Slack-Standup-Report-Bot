@@ -11,7 +11,7 @@ from logger import Logger
 # @param email_subject: The subject of the email
 def send_email(channel_name, recipient_email_address, email_content, email_subject):
     event_type = "SendEmail"
-    Logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, Logger.info, "SendEmail")
+    Logger.log("Email info: " + str(channel_name) + " | " + str(recipient_email_address) + " | " + email_content, Logger.info, event_type)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()

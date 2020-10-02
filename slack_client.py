@@ -68,7 +68,7 @@ def get_standup_replies_for_message(timestamp, channel_name):
       inclusive=True,
       count=1
     )
-    Logger.log(str(result), Logger.info)
+    Logger.log(str(result), Logger.info, event_type)
     # Need to ensure that API call worked
     if (result["ok"]):
         Logger.log("Successfully got standup replies for message", Logger.info, event_type)
