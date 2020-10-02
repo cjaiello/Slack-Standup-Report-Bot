@@ -167,6 +167,12 @@ p {
   font-weight: 800;
 }
 
+.error-box {
+  background-color: #f7a2a2;
+  padding: 5px;
+  display: block;
+}
+
 .error {
   color: #c70505;
   padding: 5px;
@@ -180,6 +186,12 @@ p {
 .error_details {
   font-size: 10px;
   line-height: 0.2;
+}
+
+.success-box {
+  background-color: #81a9ff;
+  padding: 5px;
+  display: block;
 }
 
 .success {
