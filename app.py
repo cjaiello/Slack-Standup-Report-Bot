@@ -136,7 +136,7 @@ def confirm_email():
 def update_channel(form):
     event_type = "AddChannelStandupScheduleToDb"
     channel = Channel.query.filter_by(channel_name=form['channel_name']).first()
-    Logger.log("Updating channel " + str(channel.channel_name), Logger.info, )
+    Logger.log("Updating channel " + str(channel.channel_name), Logger.info, event_type)
     
     channel.standup_hour = util.calculate_am_or_pm(form['standup_hour'], form['am_or_pm'])
     channel.standup_minute = form['standup_minute']
