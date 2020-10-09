@@ -12,11 +12,11 @@ input[type=text] {
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
 
-.channel-name, .time {
+.channel-name-div, .time-div {
   float: left;
 }
 
-.channel-name {
+.channel-name-div {
   padding-top: 5px;
 }
 
