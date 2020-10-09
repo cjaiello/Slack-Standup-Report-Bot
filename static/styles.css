@@ -201,7 +201,7 @@ p {
   color: #c70505;
   padding: 5px;
   display: block;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .additional-margin {
@@ -234,23 +234,23 @@ p {
   color: #0543ca;
   padding: 5px;
   display: block;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 input::-webkit-input-placeholder {
-  color: #42b4cf !important;
+  color: #8b8b8b8f !important;
 }
 
 input:-moz-placeholder {
-  color: #42b4cf !important;
+  color: #8b8b8b8f !important;
 }
 
 input::-moz-placeholder {
-  color: #42b4cf !important;
+  color: #8b8b8b8f !important;
 }
 
 input:-ms-input-placeholder {
-  color: #42b4cf !important;
+  color: #8b8b8b8f !important;
 }
 
 .footer_text {
