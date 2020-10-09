@@ -12,17 +12,17 @@
 <body bgcolor="#181818">
 
 	<nav class="navigation">
-		<div class="header_text">
+		<div class="header-text">
 			Slack Standup Bot
 		</div>
 	</nav>
 
-	<section class="separator_line">
+	<section class="separator">
 	</section>
-	<section class="second_separator_line">
+	<section class="second-separator">
 	</section>
 
-	<section class="white_textbox">
+	<section class="main-page-body">
         {% if message %}
             <span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
         {% endif %}
@@ -38,16 +38,16 @@
 				{% for error in form.recaptcha.errors %}
 				  <span class="error error_details bold">You must fill out the reCAPTCHA!</span>
 				{% endfor %}
-				<input class="submitButton" type="submit" value="Submit" />
+				<input class="submit-button" type="submit" value="Submit" />
 			</div>
 		</form>
 	</section>
 	<!-- Closing tag for main white text box -->
 
 	<!-- Adds a bar across the page for colors -->
-	<section class="second_separator_line">
+	<section class="second-separator">
 	</section>
-	<section class="separator_line">
+	<section class="separator">
 	</section>
 
 	<!-- Bottom Bar -->
