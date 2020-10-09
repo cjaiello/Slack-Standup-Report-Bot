@@ -12,10 +12,12 @@ input[type=text] {
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
 
-.bottom-shadow {
-  -moz-box-shadow: 5px 15px 5px 0px #000;
-  -webkit-box-shadow: 5px 15px 5px 0px #000;
-  box-shadow: 5px 15px 5px 0px #000;
+.channel-name, .time {
+  float: left;
+}
+
+.channel-name {
+  padding-top: 5px;
 }
 
 select {
