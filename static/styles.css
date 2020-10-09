@@ -117,15 +117,8 @@ p {
 }
 
 .footer-wrapper {
-  min-height: 100%;
   height: auto !important;
   margin-bottom: -116px;
-}
-
-.footer-wrapper:after {
-  content: "";
-  display: block;
-  height: 116px;
 }
 
 .submitButton {
