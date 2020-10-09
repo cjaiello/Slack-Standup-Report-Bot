@@ -17,12 +17,12 @@
 		</div>
 	</nav>
 
-	<section class="separator_line">
+	<section class="separator">
 	</section>
-	<section class="second_separator_line">
+	<section class="second-separator">
 	</section>
 
-	<section class="white_textbox">
+	<section class="main-page-body">
 		<form action="" method="post" class="form">
 			{{ form.csrf_token }}
 			<div class="directions">
@@ -63,7 +63,7 @@
 				{% endif %}
 				{% if form.standup_minute.errors %}
 					<div class="error-box">
-						<span class="error error_details bold {% if form.standup_hour.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+						<span class="error error_details bold {% if form.standup_hour.errors %}additional-margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
 						{% for error in form.standup_minute.errors %}
 							<span class="error error_details">{{ error }}</span>
 						{% endfor %}
@@ -89,7 +89,7 @@
 				{% endif %}
 				{% if form.minutes_delay.errors %}
 					<div class="error-box">
-						<span class="error error_details bold {% if form.hours_delay.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
+						<span class="error error_details bold {% if form.hours_delay.errors %}additional-margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
 						{% for error in form.minutes_delay.errors %}
 							<span class="error error_details">{{ error }}</span>
 						{% endfor %}
@@ -117,7 +117,7 @@
 						{% endfor %}
 					</div>
 				{% endif %}
-				<input class="submitButton" type="submit" value="Submit" />
+				<input class="submit-button" type="submit" value="Submit" />
 			</div>
 			</div>
 		</form>
@@ -126,9 +126,9 @@
 
 	<section class="footer-wrapper">
 		<!-- Adds a bar across the page for colors -->
-		<section class="second_separator_line">
+		<section class="second-separator">
 		</section>
-		<section class="separator_line">
+		<section class="separator">
 		</section>
 
 		<!-- Bottom Bar -->
