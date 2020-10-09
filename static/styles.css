@@ -117,6 +117,8 @@ p {
 }
 
 .footer-wrapper {
+  min-height: 100%;
+  height: auto !important;
   margin-bottom: -116px;
 }
 
