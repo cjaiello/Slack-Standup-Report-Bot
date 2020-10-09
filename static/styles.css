@@ -136,9 +136,13 @@ p {
   color: #ffffff;
   height: 50px;
   font-size: 18px;
-  padding: 5px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   margin-top: 10px;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+  border-color: transparent;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
