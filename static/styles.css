@@ -7,7 +7,7 @@ input[type=text] {
   margin-top: 5px;
   background-color: #f2f2f2;
   border-style: solid;
-  color: #f2f2f28f;
+  color: #8b8b8b8f;
   border-color: #f2f2f2e8;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
@@ -17,7 +17,7 @@ select {
   font-size: 16px;
   height: 48px;
   border: none;
-  color: #f2f2f28f;
+  color: #8b8b8b8f;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
