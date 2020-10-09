@@ -98,6 +98,7 @@ p {
   overflow: auto;
   width: 100%;
   height: 80%;
+  padding: 15px;
 }
 
 .header-text {
@@ -158,7 +159,7 @@ p {
   margin: 0 auto;
   width: 100%;
   color: #ffffff;
-  padding: 20px;
+  padding: 15px;
 }
 
 .time {
