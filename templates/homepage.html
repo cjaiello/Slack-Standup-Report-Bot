@@ -53,23 +53,25 @@
 				    <option value= "{{option}}" SELECTED>{{option}}</option>"
 				    {% endfor %}
 				</select>
-				{% if form.standup_hour.errors %}
-					<div class="error-box">
-						<span class="error error_details bold">Hours Error{% if form.standup_hour.errors |length > 1 %}s{% endif %}</span>
-						{% for error in form.standup_hour.errors %}
-							<span class="error error_details">{{ error }}</span>
-						{% endfor %}
-					</div>
-				{% endif %}
-				{% if form.standup_minute.errors %}
-					<div class="error-box">
-						<span class="error error_details bold {% if form.standup_hour.errors %}additional-margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
-						{% for error in form.standup_minute.errors %}
-							<span class="error error_details">{{ error }}</span>
-						{% endfor %}
-					</div>
-				{% endif %}
 			</div>
+
+
+			{% if form.standup_hour.errors %}
+				<div class="error-box">
+					<span class="error error_details bold">Hours Error{% if form.standup_hour.errors |length > 1 %}s{% endif %}</span>
+					{% for error in form.standup_hour.errors %}
+						<span class="error error_details">{{ error }}</span>
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% if form.standup_minute.errors %}
+				<div class="error-box">
+					<span class="error error_details bold {% if form.standup_hour.errors %}additional-margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+					{% for error in form.standup_minute.errors %}
+						<span class="error error_details">{{ error }}</span>
+					{% endfor %}
+				</div>
+			{% endif %}
 
 			<div class="input text">
 				{{ form.message(placeholder="Standup message") }}
