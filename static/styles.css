@@ -19,7 +19,7 @@ select {
   color: #186cab;
 }
 
-body {
+html, body {
   margin: 0px;
   font-size: 16px;
   padding: 0px;
