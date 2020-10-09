@@ -37,7 +37,7 @@
 				{% endif %}
 			</div>
 
-			<div class="input text channel-name">
+			<div class="input text channel-name-div">
 				Channel:<br>
 				<select name="channel_name" method="GET" action="/">
 				    {% for option in form.channel_name %}
@@ -46,7 +46,7 @@
 				</select>
 			</div>
 
-			<div class="input text time">
+			<div class="input text time-div">
 				Standup Time:<br>{{ form.standup_hour(class_="time", placeholder="00") }} {{ form.standup_minute(class_="time", placeholder="00") }}
 				<select name="am_or_pm" method="GET" action="/">
 				    {% for option in form.am_or_pm %}
