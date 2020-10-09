@@ -18,7 +18,7 @@ select {
   height: 48px;
   border: none;
   color: #186cab;
-  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
+  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -139,6 +139,7 @@ p {
   font-size: 18px;
   padding: 5px;
   margin-top: 10px;
+  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
