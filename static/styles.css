@@ -13,7 +13,7 @@ input[type=text] {
 }
 
 .time-div {
-  margin: 20px 0 20px 20px !important;
+  margin: 20px 0 20px 40px !important;
 }
 
 .channel-name-div, .time-div {
@@ -30,7 +30,7 @@ select {
   height: 48px;
   padding-left: 10px;
   border: none;
-  color: #8b8b8b8f;
+  color: #5c5c5c;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
@@ -251,19 +251,19 @@ p {
 }
 
 input::-webkit-input-placeholder {
-  color: #8b8b8b8f !important;
+  color: #5c5c5c !important;
 }
 
 input:-moz-placeholder {
-  color: #8b8b8b8f !important;
+  color: #5c5c5c !important;
 }
 
 input::-moz-placeholder {
-  color: #8b8b8b8f !important;
+  color: #5c5c5c !important;
 }
 
 input:-ms-input-placeholder {
-  color: #8b8b8b8f !important;
+  color: #5c5c5c !important;
 }
 
 .footer_text {
