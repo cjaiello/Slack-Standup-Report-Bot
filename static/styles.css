@@ -179,8 +179,10 @@ p {
 
 .error-box {
   background-color: #ffc3c3;
-  padding: 5px;
+  padding: 10px;
   display: block;
+  margin-top: 10px;
+  width: 100%;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
