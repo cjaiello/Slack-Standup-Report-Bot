@@ -7,7 +7,7 @@ input[type=text] {
   margin-top: 5px;
   background-color: #f2f2f2;
   border-style: solid;
-  color: #8b8b8b8f;
+  color: #838383;
   border-color: #f2f2f2e8;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
@@ -30,7 +30,7 @@ select {
   height: 48px;
   padding-left: 10px;
   border: none;
-  color: #5c5c5c;
+  color: #838383;
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
@@ -251,19 +251,19 @@ p {
 }
 
 input::-webkit-input-placeholder {
-  color: #5c5c5c !important;
+  color: #838383 !important;
 }
 
 input:-moz-placeholder {
-  color: #5c5c5c !important;
+  color: #838383 !important;
 }
 
 input::-moz-placeholder {
-  color: #5c5c5c !important;
+  color: #838383 !important;
 }
 
 input:-ms-input-placeholder {
-  color: #5c5c5c !important;
+  color: #838383 !important;
 }
 
 .footer_text {
