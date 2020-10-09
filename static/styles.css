@@ -9,6 +9,7 @@ input[type=text] {
   background-color: #b7edfa;
   border-style: solid;
   border-color: #b7edfa;
+  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
 
 select {
@@ -46,6 +47,7 @@ A {
 body {
   text-align: left;
   color: #000000;
+  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
 }
 
 A:link {
