@@ -13,7 +13,7 @@ input[type=text] {
 }
 
 .time-div {
-  margin: 20px 0 20px 20px;
+  margin: 20px 0 20px 20px !important;
 }
 
 .channel-name-div, .time-div {
