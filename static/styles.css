@@ -12,6 +12,10 @@ input[type=text] {
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
 }
 
+.time-div {
+  margin-left: 20px;
+}
+
 .channel-name-div, .time-div {
   float: left;
 }
