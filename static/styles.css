@@ -110,6 +110,7 @@ p {
 
 .main-page-body {
   background-color: #ffffff;
+  margin-top: 55px;
   margin: 0 auto;
   overflow: auto;
   width: 100%;
@@ -180,6 +181,8 @@ p {
   width: 100%;
   color: #ffffff;
   padding: 15px 15px 5px 15px;
+  position: fixed;
+  top: 0;
 }
 
 .time {
