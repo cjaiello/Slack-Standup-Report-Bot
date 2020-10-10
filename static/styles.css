@@ -9,7 +9,7 @@ input[type=text] {
   border-style: solid;
   color: #838383;
   border-color: #f2f2f2e8;
-  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
+  font-family: "Montserrat", georgia, serif; 
 }
 
 .time-div {
@@ -31,7 +31,7 @@ select {
   padding-left: 10px;
   border: none;
   color: #838383;
-  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+  font-family: "Montserrat", georgia, serif;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -59,7 +59,7 @@ A {
 body {
   text-align: left;
   color: #000000;
-  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+  font-family: "Montserrat", georgia, serif;
 }
 
 a {
@@ -172,7 +172,7 @@ p {
   padding-top: 5px;
   padding-bottom: 5px;
   margin-top: 10px;
-  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+  font-family: "Montserrat", georgia, serif;
   border-color: transparent;
   -moz-border-bottom-left-radius: 5px;
   -moz-border-bottom-right-radius: 5px;
