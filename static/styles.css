@@ -134,14 +134,23 @@ p {
   width: 50%;
 }
 
-.footer {
-  height: 100px;
+.navigation, .footer {
   width: 100%;
-  background-color: #186cab;
+  background-color: #550955;
   margin: 0 auto;
   color: #ffffff;
+}
+
+.footer {
+  height: 100px;
   text-align: center;
   padding: 15px 0 15px 0;
+}
+
+.navigation {
+  padding: 15px 0 15px 0;
+  position: fixed;
+  top: 0;
 }
 
 .footer-wrapper {
@@ -177,16 +186,6 @@ p {
 
 .text {
   margin: 20px 0px 20px 0px;
-}
-
-.navigation {
-  background-color: #186cab;
-  margin: 0 auto;
-  width: 100%;
-  color: #ffffff;
-  padding: 15px 0 15px 0;
-  position: fixed;
-  top: 0;
 }
 
 .time {
