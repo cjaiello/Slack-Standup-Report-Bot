@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>DX Slack Standup Bot</title>
+	<title>Slack Daily Standup Bot</title>
 	<link rel="stylesheet" href="../static/styles.css" />
 </head>
 
@@ -12,8 +12,8 @@
 <body bgcolor="#181818">
 
 	<nav class="navigation">
-		<div class="header_text">
-			DX Slack Standup Bot
+		<div class="header-text">
+			Slack Daily Standup Bot
 		</div>
 	</nav>
 
@@ -76,7 +76,7 @@
 			</div>
 
 			<div class="input text">
-				How long do people have to submit their standup status?
+				Standup status deadline
 				<br>
 				{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
 				{% if form.hours_delay.errors %}
@@ -98,7 +98,7 @@
 			</div>
 
 			<div class="input text">
-				{{ form.email(placeholder="(OPTIONAL) Where should we email your standup reports?") }}
+				{{ form.email(placeholder="(OPTIONAL) Recipient email") }}
 				{% if form.email.errors %}
 					<div class="error-box">
 						{% for error in form.email.errors %}
