@@ -115,6 +115,7 @@ p {
 .main-page-body {
   background-color: #ffffff;
   margin-top: 55px;
+  margin-bottom: 30px;
   margin: 0 auto;
   overflow: auto;
   width: 100%;
@@ -126,7 +127,6 @@ p {
   color: #ffffff;
   text-align: center;
   font-size: 30px;
-  padding: 5px;
 }
 
 .form {
@@ -142,7 +142,7 @@ p {
   margin: 0 auto;
   color: #ffffff;
   text-align: center;
-  padding: 15px;
+  padding: 15px 0 15px 0;
 }
 
 .footer-wrapper {
