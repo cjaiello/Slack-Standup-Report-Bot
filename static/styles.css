@@ -108,6 +108,10 @@ p {
   background-color: #a1e6f7;
 }
 
+.header-image {
+  background-image: url('static/standup-bot-demo-greyscale-42-percent-darker.gif');
+}
+
 .main-page-body {
   background-color: #ffffff;
   margin-top: 55px;
