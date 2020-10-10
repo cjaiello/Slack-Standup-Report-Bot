@@ -62,9 +62,13 @@ body {
   font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
 }
 
-A:link {
+a {
   font-weight: bold;
   color: #68cff0;
+}
+
+a:visited {
+  color: pink;
 }
 
 h1, h2, h3, h4 {
