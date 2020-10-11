@@ -110,7 +110,9 @@ p {
   text-align: center;
   vertical-align: middle;
   line-height: 400px;
-  list-style: none; 
+  list-style: none;
+  font-size: 25px;
+  color: #ffffff; 
 }
 
 .header-image-quotes li {
