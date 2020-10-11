@@ -10,6 +10,7 @@
 	<script>
 		function fadeOutAndIn(item) {
 			item.fadeOut(1000).delay(5000).fadeIn(1000, function() {
+				console.log("I'm called!")
 				if (item.next().length) {
 					fadeOutAndIn(item.next());
 				} else {
@@ -17,8 +18,9 @@
 				}
 			});
 		};
-
-		fadeOutAndIn($(".header-image-quotes li:first-child"));
+		var firstItem2 = $(".header-image-quotes");
+		var firstItem = $(".header-image-quotes li:first-child");
+		fadeOutAndIn(firstItem);
 		</script>
 </head>
 
