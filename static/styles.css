@@ -109,7 +109,8 @@ p {
 .header-image-quotes {
   text-align: center;
   vertical-align: middle;
-  line-height: 400px;   
+  line-height: 400px;
+  list-style: none; 
 }
 
 .header-image-quotes li {
@@ -137,7 +138,7 @@ p {
   padding: 50px 0 50px 0;
 }
 
-.header-text {
+.page-header {
   color: #ffffff;
   text-align: center;
   font-size: 30px;
