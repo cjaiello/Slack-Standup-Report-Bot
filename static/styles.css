@@ -50,6 +50,7 @@ html, body {
   margin: 0px;
   font-size: 16px;
   padding: 0px;
+  height: 100%;
 }
 
 A {
@@ -172,11 +173,6 @@ p {
   padding: 15px 0 15px 0;
   position: fixed;
   top: 0;
-}
-
-.footer-wrapper {
-  height: auto !important;
-  margin-bottom: -116px;
 }
 
 .submit-button {
