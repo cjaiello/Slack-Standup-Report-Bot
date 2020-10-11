@@ -8,20 +8,22 @@
 	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script>
-		function fadeOutAndIn(item) {
-			item.fadeOut(1000).delay(5000).fadeIn(1000, function() {
-				console.log("I'm called!")
-				if (item.next().length) {
-					fadeOutAndIn(item.next());
-				} else {
-					fadeOutAndIn(item.siblings(':first'));
-				}
-			});
-		};
-		var firstItem2 = $(".header-image-quotes");
-		var firstItem = $(".header-image-quotes li:first-child");
-		fadeOutAndIn(firstItem);
-		</script>
+		$(document).ready(function(){
+			function fadeOutAndIn(item) {
+				item.fadeOut(1000).delay(5000).fadeIn(1000, function() {
+					console.log("I'm called!")
+					if (item.next().length) {
+						fadeOutAndIn(item.next());
+					} else {
+						fadeOutAndIn(item.siblings(':first'));
+					}
+				});
+			};
+			var firstItem2 = $(".header-image-quotes");
+			var firstItem = $(".header-image-quotes li:first-child");
+			fadeOutAndIn(firstItem);
+		}
+	</script>
 </head>
 
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
