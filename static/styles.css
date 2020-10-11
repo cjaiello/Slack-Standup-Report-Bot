@@ -50,7 +50,6 @@ html, body {
   margin: 0px;
   font-size: 16px;
   padding: 0px;
-  height: 100%;
 }
 
 A {
@@ -132,6 +131,7 @@ p {
 
 .email-confirm-form {
   padding-top: 150px;
+  height: 1000px;
 }
 
 .main-page-body {
