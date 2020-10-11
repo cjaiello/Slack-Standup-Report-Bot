@@ -7,21 +7,7 @@
 	<link rel="stylesheet" href="../static/styles.css" />
 	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-	<script>
-		$(document).ready(function(){
-			function fadeInAndOut(item) {
-				item.fadeIn(1000).delay(5000).fadeOut(1000, function() {
-					if (item.next().length) {
-						fadeInAndOut(item.next());
-					} else {
-						fadeInAndOut(firstItem);
-					}
-				});
-			};
-			var firstItem = $(".header-image-quotes li:first-child");
-			fadeInAndOut(firstItem);
-		});
-	</script>
+	<script src="../static/script.js" type="text/javascript"></script>
 </head>
 
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
