@@ -1,26 +1,22 @@
 <!DOCTYPE html>
-<!-- Standup Bot by Christina Aiello, 2017 -->
+<!-- Standup Bot by Christina Aiello, 2017-2020 -->
 <html>
 
 <head>
-	<title>DX Slack Standup Bot</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+	<title>Confirm Email - Slack Daily Standup Bot</title>
+	<link rel="stylesheet" href="../static/styles.css" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
 
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
 
-<body bgcolor="#181818">
-
+<body>
 	<nav class="navigation">
 		<div class="page-header">
-			Slack Standup Bot
+			Slack Daily Standup Bot
 		</div>
 	</nav>
-
-	<section class="separator">
-	</section>
-	<section class="second-separator">
-	</section>
 
 	<section class="main-page-body">
         {% if message %}
