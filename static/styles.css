@@ -107,7 +107,11 @@ p {
 }
 
 .header-image-quotes {
-  padding-top: 50px;
+  padding-top: 100px;
+}
+
+.header-image-quotes li:first-child {
+  display: none;
 }
 
 .second-separator {
