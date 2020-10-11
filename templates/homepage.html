@@ -10,8 +10,8 @@
 	<script>
 		$(document).ready(function(){
 			function fadeInAndOut(item) {
+				item.hide();
 				item.fadeIn(1000).delay(5000).fadeOut(1000, function() {
-					console.log("I'm called!")
 					if (item.next().length) {
 						fadeInAndOut(item.next());
 					} else {
