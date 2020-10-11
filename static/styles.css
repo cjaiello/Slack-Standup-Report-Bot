@@ -110,7 +110,7 @@ p {
   padding-top: 100px;
 }
 
-.header-image-quotes li:first-child {
+.header-image-quotes li {
   display: none;
 }
 
