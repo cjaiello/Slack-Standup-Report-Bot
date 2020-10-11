@@ -9,17 +9,16 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script>
 		$(document).ready(function(){
-			function fadeOutAndIn(item) {
-				item.fadeOut(1000).delay(5000).fadeIn(1000, function() {
+			function fadeInAndOut(item) {
+				item.fadeIn(1000).delay(5000).fadeOut(1000, function() {
 					console.log("I'm called!")
 					if (item.next().length) {
-						fadeOutAndIn(item.next());
+						fadeInAndOut(item.next());
 					} else {
-						fadeOutAndIn(item.siblings(':first'));
+						fadeInAndOut(firstItem);
 					}
 				});
 			};
-			var firstItem2 = $(".header-image-quotes");
 			var firstItem = $(".header-image-quotes li:first-child");
 			fadeOutAndIn(firstItem);
 		});
