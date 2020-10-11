@@ -109,8 +109,7 @@ p {
 
 .header-image-quotes {
   text-align: center;
-  vertical-align: middle;
-  line-height: 425px;
+  margin-top: -200px;
   list-style: none;
   font-size: 25px;
   color: #ffffff; 
