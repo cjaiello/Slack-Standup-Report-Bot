@@ -5,24 +5,45 @@
 <head>
 	<title>Slack Daily Standup Bot</title>
 	<link rel="stylesheet" href="../static/styles.css" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script>
+		$(document).ready(function(){
+			function fadeInAndOut(item) {
+				item.fadeIn(1000).delay(5000).fadeOut(1000, function() {
+					if (item.next().length) {
+						fadeInAndOut(item.next());
+					} else {
+						fadeInAndOut(firstItem);
+					}
+				});
+			};
+			var firstItem = $(".header-image-quotes li:first-child");
+			fadeInAndOut(firstItem);
+		});
+	</script>
 </head>
 
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
 
-<body bgcolor="#181818">
+<body>
 
 	<nav class="navigation">
-		<div class="header-text">
+		<div class="page-header">
 			Slack Daily Standup Bot
 		</div>
 	</nav>
 
-	<section class="separator_line">
-	</section>
-	<section class="second_separator_line">
-	</section>
 
-	<section class="white_textbox">
+	<section class="main-page-body">
+		<div class="header-image">
+			<ul class="header-image-quotes">
+				<li>"What are you doing today? Any blockers or impediments?"</li>
+				<li>"What did you do yesterday? What are you going to do today? Do you have any blockers?"</li>
+				<li>"Standup time! Drop your standup report here."</li>
+			</ul>
+		</div>
+
 		<form action="" method="post" class="form">
 			{{ form.csrf_token }}
 			<div class="directions">
@@ -37,7 +58,7 @@
 				{% endif %}
 			</div>
 
-			<div class="input text">
+			<div class="input text channel-name-div">
 				Channel:<br>
 				<select name="channel_name" method="GET" action="/">
 				    {% for option in form.channel_name %}
@@ -46,7 +67,7 @@
 				</select>
 			</div>
 
-			<div class="input text">
+			<div class="time-div input text">
 				Standup Time:<br>{{ form.standup_hour(class_="time", placeholder="00") }} {{ form.standup_minute(class_="time", placeholder="00") }}
 				<select name="am_or_pm" method="GET" action="/">
 				    {% for option in form.am_or_pm %}
@@ -63,7 +84,7 @@
 				{% endif %}
 				{% if form.standup_minute.errors %}
 					<div class="error-box">
-						<span class="error error_details bold {% if form.standup_hour.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
+						<span class="error error_details bold {% if form.standup_hour.errors %}additional-margin{% endif %}">Minutes Error{% if form.standup_minute.errors |length > 1 %}s{% endif %}</span>
 						{% for error in form.standup_minute.errors %}
 							<span class="error error_details">{{ error }}</span>
 						{% endfor %}
@@ -76,7 +97,7 @@
 			</div>
 
 			<div class="input text">
-				Standup status submission deadline
+				Time until daily standup submission closes:
 				<br>
 				{{ form.hours_delay(class_="time", placeholder="00") }} hours and {{ form.minutes_delay(class_="time", placeholder="00") }} minutes
 				{% if form.hours_delay.errors %}
@@ -89,7 +110,7 @@
 				{% endif %}
 				{% if form.minutes_delay.errors %}
 					<div class="error-box">
-						<span class="error error_details bold {% if form.hours_delay.errors %}additional_5px_top_margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
+						<span class="error error_details bold {% if form.hours_delay.errors %}additional-margin{% endif %}">Minutes Error{% if form.minutes_delay.errors |length > 1 %}s{% endif %}</span>
 						{% for error in form.minutes_delay.errors %}
 							<span class="error error_details">{{ error }}</span>
 						{% endfor %}
@@ -117,23 +138,15 @@
 						{% endfor %}
 					</div>
 				{% endif %}
-				<input class="submitButton" type="submit" value="Submit" />
+				<input class="submit-button" type="submit" value="Submit" />
 			</div>
 			</div>
 		</form>
 	</section>
-	<!-- Closing tag for main white text box -->
 
-	<!-- Adds a bar across the page for colors -->
-	<section class="second_separator_line">
-	</section>
-	<section class="separator_line">
-	</section>
-
-	<!-- Bottom Bar -->
-	<footer class="footer">
+	<div class="footer">
 		<span class="footer_text">Standup bot by <a href="https://github.com/cjaiello" target="_blank">Christina Aiello</a></span>
-	</footer>
+	</div>
 </body>
 
 </html>
