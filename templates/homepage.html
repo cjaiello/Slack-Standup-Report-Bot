@@ -6,6 +6,19 @@
 	<title>DX Slack Standup Bot</title>
 	<link rel="stylesheet" href="../static/styles.css" />
 	<link href="https://fonts.googleapis.com/css?family=Montserrat|Ubuntu" rel="stylesheet"> 
+	<script>
+		function fadeOutAndIn(item) {
+			item.fadeOut(1000).delay(5000).fadeIn(1000, function() {
+				if (item.next().length) {
+					fadeOutAndIn(item.next());
+				} else {
+					fadeOutAndIn(item.siblings(':first'));
+				}
+			});
+		};
+
+		fadeOutAndIn($(".header-image-quotes li:first-child"));
+		</script>
 </head>
 
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
@@ -21,6 +34,11 @@
 
 	<section class="main-page-body">
 		<div class="header-image">
+			<ul class="header-image-quotes">
+			<li>"What are you doing today? Any blockers or impediments?"</li>
+			<li>"What did you do yesterday? What are you going to do today? Do you have any blockers?"</li>
+			<li>"Standup time! Drop your standup report here."</li>
+			</ul>
 		</div>
 
 		<form action="" method="post" class="form">
