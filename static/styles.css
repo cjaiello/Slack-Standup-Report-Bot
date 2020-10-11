@@ -126,7 +126,7 @@ p {
 .header-image {
   width: 100%;
   height: 425px;
-  background-image: url('standup-bot-demo-greyscale-70-percent-darker.gif');
+  background-image: url('standup-bot-demo-greyscale-darkest.gif');
   background-position: center;
 }
 
