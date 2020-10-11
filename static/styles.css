@@ -129,6 +129,10 @@ p {
   background-image: url('standup-bot-demo-greyscale-70-percent-darker.gif');
 }
 
+.email-confirm-form {
+  padding-top: 50px;
+}
+
 .main-page-body {
   background-color: #ffffff;
   margin-top: 55px;

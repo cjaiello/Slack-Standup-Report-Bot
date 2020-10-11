@@ -23,7 +23,7 @@
             <span class="message {% if form.errors %} error {% else %} success {% endif %}">{{ message }}</span>
         {% endif %}
 
-		<form action="" method="post" class="form">
+		<form action="" method="post" class="form email-confirm-form">
 			{{ form.csrf_token }}
 			<div class="input text">
 				{{ form.code(placeholder="Confirm Email with Code") }}
@@ -38,15 +38,7 @@
 			</div>
 		</form>
 	</section>
-	<!-- Closing tag for main white text box -->
 
-	<!-- Adds a bar across the page for colors -->
-	<section class="second-separator">
-	</section>
-	<section class="separator">
-	</section>
-
-	<!-- Bottom Bar -->
 	<footer class="footer">
 		<span class="footer_text">Standup bot by <a href="https://github.com/cjaiello" target="_blank">Christina Aiello</a></span>
 	</footer>
