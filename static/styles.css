@@ -288,3 +288,8 @@ input:-ms-input-placeholder {
 .footer_text {
   padding: 5px;
 }
+
+ul {
+  text-align: center;
+  list-style-position: inside;
+}
