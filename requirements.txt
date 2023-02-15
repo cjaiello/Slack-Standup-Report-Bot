@@ -4,7 +4,7 @@ Flask==1.0.4
 itsdangerous
 Jinja2
 MarkupSafe
-Werkzeug==0.15.5
+Werkzeug==2.2.3
 flask-sqlalchemy
 psycopg2
 slackclient
