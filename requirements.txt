@@ -1,6 +1,6 @@
 gunicorn==19.6.0
 click
-Flask==1.0.4
+Flask==2.3.2
 itsdangerous
 Jinja2
 MarkupSafe
